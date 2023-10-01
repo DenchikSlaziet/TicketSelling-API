@@ -59,11 +59,11 @@ namespace TicketSelling.Services.ReadServices
 
             foreach (var ticket in tickets)
             {
-                var cinema = tickets.FirstOrDefault(x => x.Id == ticket.CinemaId);
-                var client = tickets.FirstOrDefault(x => x.Id == ticket.ClientId);
-                var film = tickets.FirstOrDefault(x => x.Id == ticket.FilmId);
-                var hall = tickets.FirstOrDefault(x => x.Id == ticket.HallId);
-                var staff = tickets.FirstOrDefault(x => x.Id == ticket.StaffId);
+                var cinema = cinemas.FirstOrDefault(x => x.Id == ticket.CinemaId);
+                var client = clients.FirstOrDefault(x => x.Id == ticket.ClientId);
+                var film = films.FirstOrDefault(x => x.Id == ticket.FilmId);
+                var hall = halls.FirstOrDefault(x => x.Id == ticket.HallId);
+                var staff = staffs.FirstOrDefault(x => x.Id == ticket.StaffId);
 
                 result.Add(
                     new TicketModel
@@ -79,7 +79,7 @@ namespace TicketSelling.Services.ReadServices
                         Price = ticket.Price,
                         Row = ticket.Row
                     }
-                    );
+                );
             }
 
             return result;
@@ -94,12 +94,11 @@ namespace TicketSelling.Services.ReadServices
                 return null;
             }
 
-            var cinema = cinemaReadRepository.GetByIdAsync(item.CinemaId, cancellationToken);
-            var film = filmReadRepository.GetByIdAsync(item.FilmId, cancellationToken);
-            var hall = hallReadRepository.GetByIdAsync(item.HallId, cancellationToken);
-            var staff = staffReadRepository.GetByIdAsync(item.StaffId, cancellationToken);
-            var client = clientReadRepository.GetByIdAsync(item.ClientId, cancellationToken);
-
+            var cinema = await cinemaReadRepository.GetByIdAsync(item.CinemaId, cancellationToken);
+            var film = await filmReadRepository.GetByIdAsync(item.FilmId, cancellationToken);
+            var hall = await hallReadRepository.GetByIdAsync(item.HallId, cancellationToken);
+            var staff = await staffReadRepository.GetByIdAsync(item.StaffId, cancellationToken);
+            var client = await clientReadRepository.GetByIdAsync(item.ClientId, cancellationToken);
 
             return new TicketModel
             {

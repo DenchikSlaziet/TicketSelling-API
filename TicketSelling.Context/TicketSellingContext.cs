@@ -76,7 +76,23 @@ namespace TicketSelling.Context
                     Post = Contracts.Enums.Post.Manager
                 }
             };
-            tickets = new List<Ticket>();
+            tickets = new List<Ticket>()
+            {
+               new Ticket
+               {
+                   Id = Guid.NewGuid(),
+                   FilmId = films.First().Id,
+                   CinemaId = cinemas.First().Id,
+                   ClientId = clients.First().Id,
+                   Date = DateTime.Now,
+                   HallId = halls.First().Id,
+                   Place = 3,
+                   Price = 242142,
+                   Row = 3,
+                   StaffId = staffs.First().Id
+               }
+
+            };
         }
 
         IEnumerable<Cinema> ITicketSellingContext.Cinemas => cinemas;
