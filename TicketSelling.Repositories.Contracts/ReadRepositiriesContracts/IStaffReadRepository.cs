@@ -21,5 +21,10 @@ namespace TicketSelling.Repositories.Contracts.ReadInterfaces
         /// Получить <see cref="Staff"/> по идентификатору
         /// </summary>
         Task<Staff?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить <see cref="Staff"/> по идентификаторам
+        /// </summary>
+        Task<List<Staff>> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
     }
 }

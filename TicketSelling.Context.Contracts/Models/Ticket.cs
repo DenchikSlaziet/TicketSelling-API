@@ -37,6 +37,11 @@ namespace TicketSelling.Context.Contracts.Models
         public Guid ClientId { get; set; }
 
         /// <summary>
+        /// Идентификатор завхоза
+        /// </summary>
+        public Guid StaffId { get; set; }
+
+        /// <summary>
         /// Ряд
         /// </summary>
         public short Row { get; set; }

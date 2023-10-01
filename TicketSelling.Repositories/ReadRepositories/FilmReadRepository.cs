@@ -30,5 +30,8 @@ namespace TicketSelling.Repositories.ReadRepositories
 
         Task<Film?> IFilmReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
             Task.FromResult(context.Films.FirstOrDefault(x => x.Id == id));
+
+        Task<List<Film>> IFilmReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) =>
+            Task.FromResult(context.Films.Where(x=> ids.Contains(x.Id)).ToList());
     }
 }

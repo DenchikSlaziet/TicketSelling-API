@@ -1,8 +1,10 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
@@ -11,23 +13,20 @@ namespace TicketSelling.Services.ReadServices
 {
     public class CinemaService : ICinemaService
     {
-        private readonly ICinemaReadRepositiry cinemaReadRepositiry;
+        private readonly ICinemaReadRepository cinemaReadRepositiry;
+        private readonly IMapper mapper;
 
-        public CinemaService(ICinemaReadRepositiry cinemaReadRepositiry)
+        public CinemaService(ICinemaReadRepository cinemaReadRepositiry, IMapper mapper)
         {
             this.cinemaReadRepositiry = cinemaReadRepositiry;
+            this.mapper = mapper;
         }
 
         async Task<IEnumerable<CinemaModel>> ICinemaService.GetAllAsync(CancellationToken cancellationToken)
         {
             var result = await cinemaReadRepositiry.GetAllAsync(cancellationToken);
 
-            return result.Select(x => new CinemaModel
-            {
-                Id = x.Id,
-                Address = x.Address,
-                Title = x.Title
-            });
+            return result.Select(x => mapper.Map<CinemaModel>(x));
         }
 
         async Task<CinemaModel?> ICinemaService.GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -39,12 +38,7 @@ namespace TicketSelling.Services.ReadServices
                 return null;
            }
 
-           return new CinemaModel
-           {
-               Id = item.Id,
-               Address = item.Address, 
-               Title = item.Title
-           };
+            return mapper.Map<CinemaModel>(item);
         }
     }
 }

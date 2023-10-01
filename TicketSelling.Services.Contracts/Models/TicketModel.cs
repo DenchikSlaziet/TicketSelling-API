@@ -37,6 +37,11 @@ namespace TicketSelling.Services.Contracts.Models
         public ClientModel? Client { get; set; }
 
         /// <summary>
+        /// Идентификатор завхоза
+        /// </summary>
+        public StaffModel? Staff { get; set; }
+
+        /// <summary>
         /// Ряд
         /// </summary>
         public short Row { get; set; }

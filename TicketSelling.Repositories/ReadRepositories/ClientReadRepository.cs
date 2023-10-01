@@ -29,5 +29,8 @@ namespace TicketSelling.Repositories.ReadRepositories
 
         Task<Client?> IClientReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) => 
             Task.FromResult(context.Clients.FirstOrDefault(x => x.Id == id));
+
+        Task<List<Client>> IClientReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) =>
+            Task.FromResult(context.Clients.Where(x=> ids.Contains(x.Id)).ToList());
     }
 }

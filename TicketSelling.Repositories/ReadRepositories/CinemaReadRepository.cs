@@ -11,9 +11,9 @@ using TicketSelling.Repositories.Contracts.ReadInterfaces;
 namespace TicketSelling.Repositories.ReadRepositories
 {
     /// <summary>
-    /// Реализация <see cref="ICinemaReadRepositiry"/>
+    /// Реализация <see cref="ICinemaReadRepository"/>
     /// </summary>
-    public class CinemaReadRepository : ICinemaReadRepositiry
+    public class CinemaReadRepository : ICinemaReadRepository
     {
         /// <summary>
         /// Контекст для связи с бд
@@ -25,10 +25,14 @@ namespace TicketSelling.Repositories.ReadRepositories
             this.context = context;
         }
 
-        Task<List<Cinema>> ICinemaReadRepositiry.GetAllAsync(CancellationToken cancellationToken) =>
+        Task<List<Cinema>> ICinemaReadRepository.GetAllAsync(CancellationToken cancellationToken) =>
             Task.FromResult(context.Cinemas.ToList());
 
-        Task<Cinema?> ICinemaReadRepositiry.GetByIdAsync(Guid id, CancellationToken cancellationToken)=>
+        Task<Cinema?> ICinemaReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
             Task.FromResult(context.Cinemas.FirstOrDefault(x =>  x.Id == id));
+
+        Task<List<Cinema>> ICinemaReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) =>
+            Task.FromResult(context.Cinemas.Where(x=> ids.Contains(x.Id)).ToList());
+     
     }
 }
