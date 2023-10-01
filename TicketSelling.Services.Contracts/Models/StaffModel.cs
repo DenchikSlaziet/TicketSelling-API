@@ -11,8 +11,7 @@ namespace TicketSelling.Services.Contracts.Models
     /// Модель персонала
     /// </summary>
     public class StaffModel : PersonModel
-    {
-        // TODO может не работать преобразование в новое перечесление
-        //public Post Post { get; set; } 
+    {     
+        public Post Post { get; set; } 
     }
 }
