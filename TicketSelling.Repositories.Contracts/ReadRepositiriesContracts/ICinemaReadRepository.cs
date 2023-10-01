@@ -10,7 +10,7 @@ namespace TicketSelling.Repositories.Contracts.ReadInterfaces
     /// <summary>
     /// Репозиторий чтения <see cref="Cinema"/>
     /// </summary>
-    public interface ICinemaReadRepositiry
+    public interface ICinemaReadRepository
     {
         /// <summary>
         /// Получить список всех <see cref="Cinema"/>
@@ -21,5 +21,10 @@ namespace TicketSelling.Repositories.Contracts.ReadInterfaces
         /// Получить <see cref="Cinema"/> по идентификатору
         /// </summary>
         Task<Cinema?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить <see cref="Cinema"/> по идентификаторам
+        /// </summary>
+        Task<List<Cinema>> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
     }
 }

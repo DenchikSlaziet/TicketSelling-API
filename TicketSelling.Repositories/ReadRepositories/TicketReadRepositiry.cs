@@ -10,9 +10,9 @@ using TicketSelling.Repositories.Contracts.ReadInterfaces;
 namespace TicketSelling.Repositories.ReadRepositories
 {
     /// <summary>
-    /// Реализация <see cref="ITicketReadRepositiry"/>
+    /// Реализация <see cref="ITicketReadRepository"/>
     /// </summary>
-    public class TicketReadRepositiry : ITicketReadRepositiry
+    public class TicketReadRepositiry : ITicketReadRepository
     {
         /// <summary>
         /// Контекст для связи с бд
@@ -24,11 +24,11 @@ namespace TicketSelling.Repositories.ReadRepositories
             this.context = context;
         }
 
-        Task<List<Ticket>> ITicketReadRepositiry.GetAllAsync(CancellationToken cancellationToken) =>
+        Task<List<Ticket>> ITicketReadRepository.GetAllAsync(CancellationToken cancellationToken) =>
             Task.FromResult(context.Tickets.ToList());
 
 
-        Task<Ticket?> ITicketReadRepositiry.GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
+        Task<Ticket?> ITicketReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
             Task.FromResult(context.Tickets.FirstOrDefault(x => x.Id == id));
     }
 }

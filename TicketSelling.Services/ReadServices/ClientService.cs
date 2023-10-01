@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,24 +13,19 @@ namespace TicketSelling.Services.ReadServices
     public class ClientService : IClientService
     {
         private readonly IClientReadRepository clientReadRepository;
+        private readonly IMapper mapper;
 
-        public ClientService(IClientReadRepository clientReadRepository)
+        public ClientService(IClientReadRepository clientReadRepository, IMapper mapper)
         {
             this.clientReadRepository = clientReadRepository;
+            this.mapper = mapper;
         }
 
         async Task<IEnumerable<ClientModel>> IClientService.GetAllAsync(CancellationToken cancellationToken)
         {
             var result = await clientReadRepository.GetAllAsync(cancellationToken);
 
-            return result.Select(x => new ClientModel
-            {
-                Id = x.Id,
-                Age = x.Age,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Patronymic = x.Patronymic
-            });
+            return result.Select(x => mapper.Map<ClientModel>(x));
         }
 
         async Task<ClientModel?> IClientService.GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -41,14 +37,7 @@ namespace TicketSelling.Services.ReadServices
                 return null;
             }
 
-            return new ClientModel
-            {
-                Id = item.Id,
-                Age = item.Age,
-                FirstName = item.FirstName,
-                LastName = item.LastName,
-                Patronymic = item.Patronymic
-            };
+            return mapper.Map<ClientModel>(item);
         }
     }
 }

@@ -28,5 +28,8 @@ namespace TicketSelling.Repositories.ReadRepositories
 
         Task<Staff?> IStaffReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
             Task.FromResult(context.Staffs.FirstOrDefault(x => x.Id == id));
+
+        Task<List<Staff>> IStaffReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) =>
+            Task.FromResult(context.Staffs.Where(x => ids.Contains(x.Id)).ToList());
     }
 }

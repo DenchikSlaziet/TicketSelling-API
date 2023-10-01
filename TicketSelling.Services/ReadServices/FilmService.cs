@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,23 +13,19 @@ namespace TicketSelling.Services.ReadServices
     public class FilmService : IFilmService
     {
         private readonly IFilmReadRepository filmReadRepository;
+        private readonly IMapper mapper;
 
-        public FilmService(IFilmReadRepository filmReadRepository)
+        public FilmService(IFilmReadRepository filmReadRepository, IMapper mapper)
         {
             this.filmReadRepository = filmReadRepository;
+            this.mapper = mapper;
         }
 
         async Task<IEnumerable<FilmModel>> IFilmService.GetAllAsync(CancellationToken cancellationToken)
         {
             var result = await filmReadRepository.GetAllAsync(cancellationToken);
 
-            return result.Select(x => new FilmModel
-            {
-                Id = x.Id,
-                Description = x.Description,
-                Limitation = x.Limitation,
-                Title = x.Title
-            });
+            return result.Select(x => mapper.Map<FilmModel>(x));
         }
 
         async Task<FilmModel?> IFilmService.GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -40,13 +37,7 @@ namespace TicketSelling.Services.ReadServices
                 return null;
             }
 
-            return new FilmModel
-            {
-                Id = item.Id,
-                Description = item.Description,
-                Limitation = item.Limitation,
-                Title = item.Title
-            };
+            return mapper.Map<FilmModel>(item);
         }
     }
 }

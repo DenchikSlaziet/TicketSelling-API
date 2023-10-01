@@ -10,7 +10,7 @@ namespace TicketSelling.Repositories.Contracts.ReadInterfaces
     /// <summary>
     /// Репозиторий чтения <see cref="Ticket"/>
     /// </summary>
-    public interface ITicketReadRepositiry
+    public interface ITicketReadRepository
     {
         /// <summary>
         /// Получить список всех <see cref="Ticket"/>

@@ -15,13 +15,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ITicketService, TicketService>();
-builder.Services.AddScoped<ITicketReadRepositiry, TicketReadRepositiry>();
+builder.Services.AddScoped<ITicketReadRepository, TicketReadRepositiry>();
 
 builder.Services.AddScoped<IFilmService, FilmService>();
 builder.Services.AddScoped<IFilmReadRepository, FilmReadRepository>();
 
 builder.Services.AddScoped<ICinemaService, CinemaService>();
-builder.Services.AddScoped<ICinemaReadRepositiry, CinemaReadRepository>();
+builder.Services.AddScoped<ICinemaReadRepository, CinemaReadRepository>();
 
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IClientReadRepository, ClientReadRepository>();
