@@ -21,7 +21,8 @@ namespace TicketSelling.API.AutoMappers
                 ForMember(x => x.Post, opt => opt.MapFrom(src => (Post)(int)src.Post));
 
             CreateMap<TicketModel, TicketResponse>(MemberList.Destination).
-                ForMember(x => x.StuffPost, opt => opt.MapFrom(src => src.Staff == null ? null : src.Staff.Post.ToString())).
+                ForMember(x => x.Date, opt => opt.MapFrom(src => src.Date.ToString("MM.dd-yyyy h:m"))).
+                ForMember(x => x.StuffPost, opt => opt.MapFrom(src => src.Staff == null ? null : src.Staff.Post)).
                 ForMember(x => x.NameStuff, opt => opt.MapFrom(src => src.Staff == null ? null : $"{src.Staff.LastName} " +
                 $"{src.Staff.FirstName} {src.Staff.Patronymic}")).
                 ForMember(x => x.NumberHall, opt => opt.MapFrom(src => src.Hall == null ? 0 : src.Hall.Number)).
