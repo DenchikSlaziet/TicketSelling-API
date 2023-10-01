@@ -7,6 +7,5 @@ namespace TicketSelling.API.Models
     /// </summary>
     public class ClientResponse : PersonResponse
     {
-
     }
 }

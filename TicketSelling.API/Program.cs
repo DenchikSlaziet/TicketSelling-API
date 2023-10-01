@@ -1,7 +1,9 @@
+using TicketSelling.API.AutoMappers;
 using TicketSelling.Context;
 using TicketSelling.Context.Contracts;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.ReadRepositories;
+using TicketSelling.Services.AutoMappers;
 using TicketSelling.Services.Contracts.ReadServices;
 using TicketSelling.Services.ReadServices;
 
@@ -33,6 +35,8 @@ builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IStaffReadRepository, StaffReadRepository>();
 
 builder.Services.AddSingleton<ITicketSellingContext, TicketSellingContext>();
+
+builder.Services.AddAutoMapper(typeof(APIMappers), typeof(ServiceMapper));
 
 var app = builder.Build();
 

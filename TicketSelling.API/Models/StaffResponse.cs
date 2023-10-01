@@ -1,4 +1,4 @@
-﻿
+﻿using TicketSelling.API.Enums;
 
 namespace TicketSelling.API.Models
 {
@@ -7,7 +7,9 @@ namespace TicketSelling.API.Models
     /// </summary>
     public class StaffResponse : PersonResponse
     {
-        // TODO может не работать преобразование в новое перечесление
-        //public Post Post { get; set; }
+        /// <summary>
+        /// Должность
+        /// </summary>
+        public Post Post { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using TicketSelling.API.Models;
 using TicketSelling.Services.Contracts.ReadServices;
 
@@ -12,22 +13,19 @@ namespace TicketSelling.API.Controllers
     public class CinemaController : ControllerBase
     {
         private readonly ICinemaService cinemaService;
+        private readonly IMapper mapper;
 
-        public CinemaController(ICinemaService cinemaService)
+        public CinemaController(ICinemaService cinemaService, IMapper mapper)
         {
             this.cinemaService = cinemaService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             var result = await cinemaService.GetAllAsync(cancellationToken);
-            return Ok(result.Select(x => new CinemaResponse
-            {
-                Id = x.Id,
-                Address = x.Address,
-                Title = x.Title
-            }));
+            return Ok(result.Select(x => mapper.Map<CinemaResponse>(x)));
         }
 
         [HttpGet("{id:guid}")]
@@ -40,12 +38,7 @@ namespace TicketSelling.API.Controllers
                 return NotFound("Кинотеатра с таким Id нет!");
             }
 
-            return Ok(new CinemaResponse
-            {
-                Id = item.Id,
-                Address = item.Address, 
-                Title = item.Title
-            });
+            return Ok(mapper.Map<CinemaResponse>(item));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using TicketSelling.API.Models;
 using TicketSelling.Services.Contracts.ReadServices;
 using TicketSelling.Services.ReadServices;
@@ -13,24 +14,19 @@ namespace TicketSelling.API.Controllers
     public class ClientController : ControllerBase
     {
         private readonly IClientService clientService;
+        private readonly IMapper mapper;
 
-        public ClientController(IClientService clientService)
+        public ClientController(IClientService clientService, IMapper mapper)
         {
             this.clientService = clientService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             var result = await clientService.GetAllAsync(cancellationToken);
-            return Ok(result.Select(x => new ClientResponse
-            {
-                Id = x.Id,
-                FirstName = x.FirstName,
-                Age = x.Age,
-                LastName = x.LastName,
-                Patronymic = x.Patronymic
-            }));
+            return Ok(result.Select(x => mapper.Map<ClientResponse>(x)));
         }
 
         [HttpGet("{id:guid}")]
@@ -43,14 +39,7 @@ namespace TicketSelling.API.Controllers
                 return NotFound("Клиента с таким Id нет!");
             }
 
-            return Ok(new ClientResponse
-            {
-                Id = item.Id,
-                FirstName= item.FirstName,
-                Age = item.Age,
-                LastName = item.LastName,
-                Patronymic= item.Patronymic
-            });
+            return Ok(mapper.Map<ClientResponse>(item));
         }
     }
 }

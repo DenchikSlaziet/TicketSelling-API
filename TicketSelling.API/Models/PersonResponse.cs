@@ -11,24 +11,10 @@
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Фамилия
+        /// ФИО
         /// </summary>
-        public string LastName { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Имя
-        /// </summary>
-        public string FirstName { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Отчество
-        /// </summary>
-        public string Patronymic { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Возраст
-        /// </summary>
-        public short Age { get; set; }
     }
 }
 

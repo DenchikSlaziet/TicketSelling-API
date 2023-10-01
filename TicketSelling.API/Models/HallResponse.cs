@@ -3,7 +3,7 @@
     /// <summary>
     /// Модель ответа сущности зала
     /// </summary>
-    public class HailResponse
+    public class HallResponse
     {
         /// <summary>
         /// Идентификатор
