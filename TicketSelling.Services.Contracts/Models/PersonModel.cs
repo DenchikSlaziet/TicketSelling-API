@@ -30,10 +30,5 @@ namespace TicketSelling.Services.Contracts.Models
         /// Отчество
         /// </summary>
         public string Patronymic { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Возраст
-        /// </summary>
-        public short Age { get; set; }
     }
 }

@@ -19,22 +19,22 @@ namespace TicketSelling.Services.Contracts.Models
         /// <summary>
         /// Идентификатор Зала
         /// </summary>
-        public Guid HallId { get; set; }
+        public HallModel? Hall { get; set; }
 
         /// <summary>
         /// Идентификатор Кинотеатра
         /// </summary>
-        public Guid CinemaId { get; set; }
+        public CinemaModel? Cinema { get; set; }
 
         /// <summary>
         /// Идентификатор Фильма
         /// </summary>
-        public Guid FilmId { get; set; }
+        public FilmModel? Film{ get; set; }
 
         /// <summary>
         /// Идентификатор Клиента
         /// </summary>
-        public Guid ClientId { get; set; }
+        public ClientModel? Client { get; set; }
 
         /// <summary>
         /// Ряд
