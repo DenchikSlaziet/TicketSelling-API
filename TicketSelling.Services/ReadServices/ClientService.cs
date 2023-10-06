@@ -24,7 +24,6 @@ namespace TicketSelling.Services.ReadServices
         async Task<IEnumerable<ClientModel>> IClientService.GetAllAsync(CancellationToken cancellationToken)
         {
             var result = await clientReadRepository.GetAllAsync(cancellationToken);
-
             return result.Select(x => mapper.Map<ClientModel>(x));
         }
 
@@ -36,7 +35,6 @@ namespace TicketSelling.Services.ReadServices
             {
                 return null;
             }
-
             return mapper.Map<ClientModel>(item);
         }
     }

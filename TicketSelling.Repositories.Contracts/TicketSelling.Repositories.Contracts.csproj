@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="WriteRepositoriesContracts\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TicketSelling.Context.Contracts\TicketSelling.Context.Contracts.csproj" />
   </ItemGroup>
 

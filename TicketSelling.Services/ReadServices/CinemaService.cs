@@ -25,7 +25,6 @@ namespace TicketSelling.Services.ReadServices
         async Task<IEnumerable<CinemaModel>> ICinemaService.GetAllAsync(CancellationToken cancellationToken)
         {
             var result = await cinemaReadRepositiry.GetAllAsync(cancellationToken);
-
             return result.Select(x => mapper.Map<CinemaModel>(x));
         }
 
@@ -37,8 +36,7 @@ namespace TicketSelling.Services.ReadServices
            { 
                 return null;
            }
-
-            return mapper.Map<CinemaModel>(item);
+           return mapper.Map<CinemaModel>(item);
         }
     }
 }

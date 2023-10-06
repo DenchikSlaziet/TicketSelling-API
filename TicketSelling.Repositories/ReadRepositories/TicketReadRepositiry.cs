@@ -24,11 +24,10 @@ namespace TicketSelling.Repositories.ReadRepositories
             this.context = context;
         }
 
-        Task<List<Ticket>> ITicketReadRepository.GetAllAsync(CancellationToken cancellationToken) =>
-            Task.FromResult(context.Tickets.ToList());
+        Task<List<Ticket>> ITicketReadRepository.GetAllAsync(CancellationToken cancellationToken) 
+            => Task.FromResult(context.Tickets.ToList());
 
-
-        Task<Ticket?> ITicketReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
-            Task.FromResult(context.Tickets.FirstOrDefault(x => x.Id == id));
+        Task<Ticket?> ITicketReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
+            => Task.FromResult(context.Tickets.FirstOrDefault(x => x.Id == id));
     }
 }

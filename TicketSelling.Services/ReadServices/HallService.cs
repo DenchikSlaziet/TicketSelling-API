@@ -25,7 +25,6 @@ namespace TicketSelling.Services.ReadServices
         async Task<IEnumerable<HallModel>> IHallService.GetAllAsync(CancellationToken cancellationToken)
         {
             var result = await hallReadRepository.GetAllAsync(cancellationToken);
-
             return result.Select(x => mapper.Map<HallModel>(x));
         }
 
@@ -37,7 +36,6 @@ namespace TicketSelling.Services.ReadServices
             {
                 return null;
             }
-
             return mapper.Map<HallModel>(item);
         }
     }
