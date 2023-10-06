@@ -24,14 +24,13 @@ namespace TicketSelling.Repositories.ReadRepositories
             this.context = context;
         }
 
-        Task<List<Film>> IFilmReadRepository.GetAllAsync(CancellationToken cancellationToken) =>
-            Task.FromResult(context.Films.ToList());
+        Task<List<Film>> IFilmReadRepository.GetAllAsync(CancellationToken cancellationToken) 
+            => Task.FromResult(context.Films.ToList());
 
+        Task<Film?> IFilmReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
+            => Task.FromResult(context.Films.FirstOrDefault(x => x.Id == id));
 
-        Task<Film?> IFilmReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
-            Task.FromResult(context.Films.FirstOrDefault(x => x.Id == id));
-
-        Task<List<Film>> IFilmReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) =>
-            Task.FromResult(context.Films.Where(x=> ids.Contains(x.Id)).ToList());
+        Task<List<Film>> IFilmReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
+            => Task.FromResult(context.Films.Where(x=> ids.Contains(x.Id)).ToList());
     }
 }

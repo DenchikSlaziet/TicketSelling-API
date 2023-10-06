@@ -10,6 +10,6 @@ namespace TicketSelling.API.Models
         /// <summary>
         /// Должность
         /// </summary>
-        public Post Post { get; set; }
+        public string Post { get; set; } = string.Empty;
     }
 }

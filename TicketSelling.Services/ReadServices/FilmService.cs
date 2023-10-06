@@ -24,7 +24,6 @@ namespace TicketSelling.Services.ReadServices
         async Task<IEnumerable<FilmModel>> IFilmService.GetAllAsync(CancellationToken cancellationToken)
         {
             var result = await filmReadRepository.GetAllAsync(cancellationToken);
-
             return result.Select(x => mapper.Map<FilmModel>(x));
         }
 
@@ -36,7 +35,6 @@ namespace TicketSelling.Services.ReadServices
             {
                 return null;
             }
-
             return mapper.Map<FilmModel>(item);
         }
     }

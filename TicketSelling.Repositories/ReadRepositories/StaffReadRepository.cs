@@ -23,13 +23,13 @@ namespace TicketSelling.Repositories.ReadRepositories
         {
             this.context = context;
         }
-        Task<List<Staff>> IStaffReadRepository.GetAllAsync(CancellationToken cancellationToken) =>
-            Task.FromResult(context.Staffs.ToList());
+        Task<List<Staff>> IStaffReadRepository.GetAllAsync(CancellationToken cancellationToken) 
+            => Task.FromResult(context.Staffs.ToList());
 
-        Task<Staff?> IStaffReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
-            Task.FromResult(context.Staffs.FirstOrDefault(x => x.Id == id));
+        Task<Staff?> IStaffReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
+            => Task.FromResult(context.Staffs.FirstOrDefault(x => x.Id == id));
 
-        Task<List<Staff>> IStaffReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) =>
-            Task.FromResult(context.Staffs.Where(x => ids.Contains(x.Id)).ToList());
+        Task<List<Staff>> IStaffReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
+            => Task.FromResult(context.Staffs.Where(x => ids.Contains(x.Id)).ToList());
     }
 }

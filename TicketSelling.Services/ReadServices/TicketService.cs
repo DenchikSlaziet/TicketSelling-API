@@ -40,20 +40,20 @@ namespace TicketSelling.Services.ReadServices
         async Task<IEnumerable<TicketModel>> ITicketService.GetAllAsync(CancellationToken cancellationToken)
         {
             var tickets = await ticketReadRepository.GetAllAsync(cancellationToken);
-            var cinemas = await cinemaReadRepository.
-                GetByIdsAsync(tickets.Select(x => x.CinemaId).Distinct(), cancellationToken);
+            var cinemas = await cinemaReadRepository
+                .GetByIdsAsync(tickets.Select(x => x.CinemaId).Distinct(), cancellationToken);
 
-            var clients = await clientReadRepository.
-                GetByIdsAsync(tickets.Select(x => x.ClientId).Distinct(), cancellationToken);
+            var clients = await clientReadRepository
+                .GetByIdsAsync(tickets.Select(x => x.ClientId).Distinct(), cancellationToken);
 
-            var films = await filmReadRepository.
-                GetByIdsAsync(tickets.Select(x => x.FilmId).Distinct(), cancellationToken);
+            var films = await filmReadRepository
+                .GetByIdsAsync(tickets.Select(x => x.FilmId).Distinct(), cancellationToken);
 
-            var halls = await hallReadRepository.
-                GetByIdsAsync(tickets.Select(x => x.HallId).Distinct(), cancellationToken);
+            var halls = await hallReadRepository
+                .GetByIdsAsync(tickets.Select(x => x.HallId).Distinct(), cancellationToken);
 
-            var staffs = await staffReadRepository.
-                GetByIdsAsync(tickets.Select(x => x.StaffId).Distinct(), cancellationToken);
+            var staffs = await staffReadRepository
+                .GetByIdsAsync(tickets.Select(x => x.StaffId).Distinct(), cancellationToken);
 
             var result = new List<TicketModel>();
 
@@ -81,7 +81,6 @@ namespace TicketSelling.Services.ReadServices
                     }
                 );
             }
-
             return result;
         }
 

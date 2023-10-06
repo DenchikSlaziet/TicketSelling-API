@@ -38,7 +38,6 @@ namespace TicketSelling.API.Controllers
             {
                 return NotFound("Клиента с таким Id нет!");
             }
-
             return Ok(mapper.Map<ClientResponse>(item));
         }
     }

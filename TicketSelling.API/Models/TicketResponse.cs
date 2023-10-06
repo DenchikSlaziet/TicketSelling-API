@@ -72,6 +72,6 @@ namespace TicketSelling.API.Models
         /// <summary>
         /// Дата и врремя проведения фильма
         /// </summary>
-        public DateTimeOffset Date { get; set; }
+        public string Date { get; set; } = string.Empty;
     }
 }

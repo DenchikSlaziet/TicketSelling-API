@@ -19,8 +19,8 @@ namespace TicketSelling.Services.AutoMappers
             CreateMap<Film, FilmModel>(MemberList.Destination);
             CreateMap<Client, ClientModel>(MemberList.Destination);
             CreateMap<Cinema, CinemaModel>(MemberList.Destination);
-            CreateMap<Staff, StaffModel>(MemberList.Destination).
-                ForMember(x => x.Post, opt => opt.MapFrom(src => (Post)(int)src.Post));
+            CreateMap<Staff, StaffModel>(MemberList.Destination)
+                .ForMember(x => x.Post, opt => opt.MapFrom(src => (Post)(int)src.Post));
         }
     }
 }

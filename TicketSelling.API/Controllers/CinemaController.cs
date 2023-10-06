@@ -37,7 +37,6 @@ namespace TicketSelling.API.Controllers
             {
                 return NotFound("Кинотеатра с таким Id нет!");
             }
-
             return Ok(mapper.Map<CinemaResponse>(item));
         }
     }
