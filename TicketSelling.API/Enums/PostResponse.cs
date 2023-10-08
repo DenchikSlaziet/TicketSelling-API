@@ -3,7 +3,7 @@
     /// <summary>
     /// Должности
     /// </summary>
-    public enum Post
+    public enum PostResponse
     {
         /// <summary>
         /// Кассир
@@ -13,6 +13,11 @@
         /// <summary>
         /// Менеджер
         /// </summary>
-        Manager
+        Manager,
+
+        /// <summary>
+        /// Нет поста
+        /// </summary>
+        None      
     }
 }

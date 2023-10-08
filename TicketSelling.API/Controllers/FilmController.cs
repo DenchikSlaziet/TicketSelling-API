@@ -11,6 +11,7 @@ namespace TicketSelling.API.Controllers
     /// </summary>
     [ApiController]
     [Route("[Controller]")]
+    [ApiExplorerSettings(GroupName = "Film")]
     public class FilmController : ControllerBase
     {
         private readonly IFilmService filmService;

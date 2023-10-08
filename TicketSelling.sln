@@ -3,23 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketSelling.API", "TicketSelling.API\TicketSelling.API.csproj", "{0101A41A-E85C-431D-8AC3-90378484BB9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketSelling.API", "TicketSelling.API\TicketSelling.API.csproj", "{0101A41A-E85C-431D-8AC3-90378484BB9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketSelling.Context", "TicketSelling.Context\TicketSelling.Context.csproj", "{E69AC4E8-B5AF-4AC6-B43F-C3290E3C03FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketSelling.Context", "TicketSelling.Context\TicketSelling.Context.csproj", "{E69AC4E8-B5AF-4AC6-B43F-C3290E3C03FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketSelling.Context.Contracts", "TicketSelling.Context.Contracts\TicketSelling.Context.Contracts.csproj", "{10A1FFC6-EF0F-41EA-B7E1-3853FBF2CC15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketSelling.Context.Contracts", "TicketSelling.Context.Contracts\TicketSelling.Context.Contracts.csproj", "{10A1FFC6-EF0F-41EA-B7E1-3853FBF2CC15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketSelling.Repositories", "TicketSelling.Repositories\TicketSelling.Repositories.csproj", "{C84B8479-0E12-481A-9E6E-652C5DADEB73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketSelling.Repositories", "TicketSelling.Repositories\TicketSelling.Repositories.csproj", "{C84B8479-0E12-481A-9E6E-652C5DADEB73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketSelling.Repositories.Contracts", "TicketSelling.Repositories.Contracts\TicketSelling.Repositories.Contracts.csproj", "{BC1F76DD-7267-4562-8CD3-2A37C43D16F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketSelling.Repositories.Contracts", "TicketSelling.Repositories.Contracts\TicketSelling.Repositories.Contracts.csproj", "{BC1F76DD-7267-4562-8CD3-2A37C43D16F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketSelling.Services", "TicketSelling.Services\TicketSelling.Services.csproj", "{631DDA6C-3466-4038-8440-1558DA1BA78D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketSelling.Services", "TicketSelling.Services\TicketSelling.Services.csproj", "{631DDA6C-3466-4038-8440-1558DA1BA78D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketSelling.Services.Contracts", "TicketSelling.Services.Contracts\TicketSelling.Services.Contracts.csproj", "{E8DF77EC-7C54-407F-9E21-A3FDFF98EECC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketSelling.Services.Contracts", "TicketSelling.Services.Contracts\TicketSelling.Services.Contracts.csproj", "{E8DF77EC-7C54-407F-9E21-A3FDFF98EECC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketSelling.Services.Tests", "TicketSelling.Services.Tests\TicketSelling.Services.Tests.csproj", "{C38A46E4-58CA-4766-989C-C8BD566540E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketSelling.Services.Tests", "TicketSelling.Services.Tests\TicketSelling.Services.Tests.csproj", "{C38A46E4-58CA-4766-989C-C8BD566540E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketSelling.Repositories.Tests", "TicketSelling.Repositories.Tests\TicketSelling.Repositories.Tests.csproj", "{3BBDA927-4709-4843-98F4-4E7516FE2D7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicketSelling.Repositories.Tests", "TicketSelling.Repositories.Tests\TicketSelling.Repositories.Tests.csproj", "{3BBDA927-4709-4843-98F4-4E7516FE2D7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicketSelling.API.Tests", "TicketSelling.API.Tests\TicketSelling.API.Tests.csproj", "{C3B3D8CC-3B8B-4325-BF67-68E530BE53F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{3BBDA927-4709-4843-98F4-4E7516FE2D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BBDA927-4709-4843-98F4-4E7516FE2D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BBDA927-4709-4843-98F4-4E7516FE2D7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3B3D8CC-3B8B-4325-BF67-68E530BE53F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3B3D8CC-3B8B-4325-BF67-68E530BE53F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3B3D8CC-3B8B-4325-BF67-68E530BE53F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3B3D8CC-3B8B-4325-BF67-68E530BE53F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

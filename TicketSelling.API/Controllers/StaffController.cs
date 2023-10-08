@@ -11,6 +11,7 @@ namespace TicketSelling.API.Controllers
     /// </summary>
     [ApiController]
     [Route("[Controller]")]
+    [ApiExplorerSettings(GroupName = "Staff")]
     public class StaffController : ControllerBase
     {
         private readonly IStaffService staffService;

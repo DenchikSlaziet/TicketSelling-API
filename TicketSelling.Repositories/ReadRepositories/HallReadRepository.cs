@@ -30,7 +30,7 @@ namespace TicketSelling.Repositories.ReadRepositories
         Task<Hall?> IHallReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
             => Task.FromResult(context.Halls.FirstOrDefault(x => x.Id == id));
 
-        Task<List<Hall>> IHallReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
-            => Task.FromResult(context.Halls.Where(x => ids.Contains(x.Id)).ToList());
+        Task<Dictionary<Guid ,Hall>> IHallReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
+            => Task.FromResult(context.Halls.Where(x => ids.Contains(x.Id)).ToDictionary(x => x.Id));
     }
 }

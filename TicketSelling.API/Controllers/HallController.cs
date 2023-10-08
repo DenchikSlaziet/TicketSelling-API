@@ -11,6 +11,7 @@ namespace TicketSelling.API.Controllers
     /// </summary>
     [ApiController]
     [Route("[Controller]")]
+    [ApiExplorerSettings(GroupName = "Hall")]
     public class HallController : ControllerBase
     {
         private readonly IHallService hallService;

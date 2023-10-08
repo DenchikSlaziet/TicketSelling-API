@@ -12,6 +12,6 @@ namespace TicketSelling.Services.Contracts.Models
     /// </summary>
     public class StaffModel : PersonModel
     {     
-        public Post Post { get; set; } 
+        public PostModel Post { get; set; } 
     }
 }

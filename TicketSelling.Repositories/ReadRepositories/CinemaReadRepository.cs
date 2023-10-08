@@ -31,7 +31,7 @@ namespace TicketSelling.Repositories.ReadRepositories
         Task<Cinema?> ICinemaReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
             => Task.FromResult(context.Cinemas.FirstOrDefault(x =>  x.Id == id));
 
-        Task<List<Cinema>> ICinemaReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
-            => Task.FromResult(context.Cinemas.Where(x=> ids.Contains(x.Id)).ToList());
+        Task<Dictionary<Guid, Cinema>> ICinemaReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
+            => Task.FromResult(context.Cinemas.Where(x=> ids.Contains(x.Id)).ToDictionary(x => x.Id));
     }
 }

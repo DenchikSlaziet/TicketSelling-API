@@ -10,6 +10,7 @@ namespace TicketSelling.API.Controllers
     /// </summary>
     [ApiController]
     [Route("[Controller]")]
+    [ApiExplorerSettings(GroupName = "Cinema")]
     public class CinemaController : ControllerBase
     {
         private readonly ICinemaService cinemaService;

@@ -11,6 +11,7 @@ namespace TicketSelling.API.Controllers
     /// </summary>
     [ApiController]
     [Route("[Controller]")]
+    [ApiExplorerSettings(GroupName = "Client")]
     public class ClientController : ControllerBase
     {
         private readonly IClientService clientService;

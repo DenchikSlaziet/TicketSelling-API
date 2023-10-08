@@ -9,7 +9,7 @@ namespace TicketSelling.Services.Contracts.Enums
     /// <summary>
     /// Должности
     /// </summary>
-    public enum Post
+    public enum PostModel
     {
         /// <summary>
         /// Кассир
@@ -19,7 +19,11 @@ namespace TicketSelling.Services.Contracts.Enums
         /// <summary>
         /// Менеджер
         /// </summary>
-        Manager
-    
+        Manager,
+
+        /// <summary>
+        /// Нет поста
+        /// </summary>
+        None
     }
 }
