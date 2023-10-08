@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicketSelling.Context;
-using TicketSelling.Context.Contracts;
+﻿using TicketSelling.Context.Contracts;
 using TicketSelling.Context.Contracts.Models;
+using TicketSelling.Repositories.Anchors;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
 
 namespace TicketSelling.Repositories.ReadRepositories
@@ -13,7 +8,7 @@ namespace TicketSelling.Repositories.ReadRepositories
     /// <summary>
     /// Реализация <see cref="ICinemaReadRepository"/>
     /// </summary>
-    public class CinemaReadRepository : ICinemaReadRepository
+    public class CinemaReadRepository : ICinemaReadRepository, IRepositoryAnchor
     {
         /// <summary>
         /// Контекст для связи с бд

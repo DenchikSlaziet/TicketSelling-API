@@ -1,13 +1,11 @@
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using TicketSelling.API.AutoMappers;
-using TicketSelling.Context;
-using TicketSelling.Context.Contracts;
-using TicketSelling.Repositories.Contracts.ReadInterfaces;
-using TicketSelling.Repositories.ReadRepositories;
+using TicketSelling.Context.Contracts.Anchors;
+using TicketSelling.Repositories.Anchors;
+using TicketSelling.ServiceExstansion;
+using TicketSelling.Services.Anchors;
 using TicketSelling.Services.AutoMappers;
-using TicketSelling.Services.Contracts.ReadServices;
-using TicketSelling.Services.ReadServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,26 +30,9 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("Ticket", new OpenApiInfo { Title = "Билеты", Version = "v1" });
 });
 
-builder.Services.AddScoped<ITicketService, TicketService>();
-builder.Services.AddScoped<ITicketReadRepository, TicketReadRepositiry>();
-
-builder.Services.AddScoped<IFilmService, FilmService>();
-builder.Services.AddScoped<IFilmReadRepository, FilmReadRepository>();
-
-builder.Services.AddScoped<ICinemaService, CinemaService>();
-builder.Services.AddScoped<ICinemaReadRepository, CinemaReadRepository>();
-
-builder.Services.AddScoped<IClientService, ClientService>();
-builder.Services.AddScoped<IClientReadRepository, ClientReadRepository>();
-
-builder.Services.AddScoped<IHallService, HallService>();
-builder.Services.AddScoped<IHallReadRepository, HallReadRepository>();
-
-builder.Services.AddScoped<IStaffService, StaffService>();
-builder.Services.AddScoped<IStaffReadRepository, StaffReadRepository>();
-
-builder.Services.AddSingleton<ITicketSellingContext, TicketSellingContext>();
-
+builder.Services.RegistrationOnInterface<IContextAnchor>(ServiceLifetime.Singleton);
+builder.Services.RegistrationOnInterface<IRepositoryAnchor>(ServiceLifetime.Scoped);
+builder.Services.RegistrationOnInterface<IServiceAnchor>(ServiceLifetime.Scoped);
 builder.Services.AddAutoMapper(typeof(APIMappers), typeof(ServiceMapper));
 
 var app = builder.Build();

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TicketSelling.API.Models;
 using TicketSelling.Services.Contracts.ReadServices;
-using TicketSelling.Services.ReadServices;
 
 namespace TicketSelling.API.Controllers
 {

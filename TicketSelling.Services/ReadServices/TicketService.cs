@@ -1,19 +1,12 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
+using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
 
 namespace TicketSelling.Services.ReadServices
 {
-    public class TicketService : ITicketService
+    public class TicketService : ITicketService, IServiceAnchor
     {
         private readonly ITicketReadRepository ticketReadRepository;
         private readonly ICinemaReadRepository cinemaReadRepository;

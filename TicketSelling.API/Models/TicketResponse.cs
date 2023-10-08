@@ -1,5 +1,4 @@
 ﻿using TicketSelling.API.Enums;
-using TicketSelling.Services.Contracts.Models;
 
 namespace TicketSelling.API.Models
 {

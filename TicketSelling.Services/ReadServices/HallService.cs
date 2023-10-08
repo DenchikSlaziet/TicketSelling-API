@@ -1,17 +1,12 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
+using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
 
 namespace TicketSelling.Services.ReadServices
 {
-    public class HallService : IHallService
+    public class HallService : IHallService, IServiceAnchor
     {
         private readonly IHallReadRepository hallReadRepository;
         private readonly IMapper mapper;

@@ -1,14 +1,9 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoMapper.Extensions.EnumMapping;
 using TicketSelling.Context.Contracts.Enums;
 using TicketSelling.Context.Contracts.Models;
-using TicketSelling.Services.Contracts.Models;
-using AutoMapper.Extensions.EnumMapping;
 using TicketSelling.Services.Contracts.Enums;
+using TicketSelling.Services.Contracts.Models;
 
 namespace TicketSelling.Services.AutoMappers
 {

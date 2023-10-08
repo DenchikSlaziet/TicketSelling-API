@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicketSelling.Context.Contracts.Enums;
+﻿using TicketSelling.Context.Contracts.Enums;
 
 namespace TicketSelling.Context.Contracts.Models
 {
