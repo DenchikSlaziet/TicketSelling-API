@@ -1,9 +1,9 @@
-﻿namespace TicketSelling.API.Enums
+﻿namespace TicketSelling.Services.Contracts.Enums
 {
     /// <summary>
     /// Должности
     /// </summary>
-    public enum Post
+    public enum PostModel
     {
         /// <summary>
         /// Кассир
@@ -13,6 +13,11 @@
         /// <summary>
         /// Менеджер
         /// </summary>
-        Manager
+        Manager,
+
+        /// <summary>
+        /// Нет поста
+        /// </summary>
+        None
     }
 }

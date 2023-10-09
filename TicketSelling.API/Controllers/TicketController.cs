@@ -10,6 +10,7 @@ namespace TicketSelling.API.Controllers
     /// </summary>
     [ApiController]
     [Route("[Controller]")]
+    [ApiExplorerSettings(GroupName = "Ticket")]
     public class TicketController : ControllerBase
     {
         private readonly ITicketService ticketService;
@@ -25,7 +26,8 @@ namespace TicketSelling.API.Controllers
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             var result = await ticketService.GetAllAsync(cancellationToken);
-            return Ok(result.Select(x => mapper.Map<TicketResponse>(x)));
+            var result2 = result.Select(x => mapper.Map<TicketResponse>(x));
+            return Ok(result2);
         }
 
         [HttpGet("{id:guid}")]

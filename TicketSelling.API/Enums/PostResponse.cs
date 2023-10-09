@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TicketSelling.Services.Contracts.Enums
+﻿namespace TicketSelling.API.Enums
 {
     /// <summary>
     /// Должности
     /// </summary>
-    public enum Post
+    public enum PostResponse
     {
         /// <summary>
         /// Кассир
@@ -19,7 +13,11 @@ namespace TicketSelling.Services.Contracts.Enums
         /// <summary>
         /// Менеджер
         /// </summary>
-        Manager
-    
+        Manager,
+
+        /// <summary>
+        /// Нет поста
+        /// </summary>
+        None      
     }
 }

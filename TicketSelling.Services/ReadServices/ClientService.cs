@@ -1,16 +1,12 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
+using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
 
 namespace TicketSelling.Services.ReadServices
 {
-    public class ClientService : IClientService
+    public class ClientService : IClientService, IServiceAnchor
     {
         private readonly IClientReadRepository clientReadRepository;
         private readonly IMapper mapper;

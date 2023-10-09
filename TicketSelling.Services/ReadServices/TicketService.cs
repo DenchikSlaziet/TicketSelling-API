@@ -1,19 +1,12 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
+using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
 
 namespace TicketSelling.Services.ReadServices
 {
-    public class TicketService : ITicketService
+    public class TicketService : ITicketService, IServiceAnchor
     {
         private readonly ITicketReadRepository ticketReadRepository;
         private readonly ICinemaReadRepository cinemaReadRepository;
@@ -59,27 +52,21 @@ namespace TicketSelling.Services.ReadServices
 
             foreach (var ticket in tickets)
             {
-                var cinema = cinemas.FirstOrDefault(x => x.Id == ticket.CinemaId);
-                var client = clients.FirstOrDefault(x => x.Id == ticket.ClientId);
-                var film = films.FirstOrDefault(x => x.Id == ticket.FilmId);
-                var hall = halls.FirstOrDefault(x => x.Id == ticket.HallId);
-                var staff = staffs.FirstOrDefault(x => x.Id == ticket.StaffId);
+                cinemas.TryGetValue(ticket.CinemaId, out var cinema);
+                clients.TryGetValue(ticket.ClientId, out var client);
+                films.TryGetValue(ticket.FilmId, out var film);
+                halls.TryGetValue(ticket.HallId, out var hall);
+                staffs.TryGetValue(ticket.StaffId, out var staff);
 
-                result.Add(
-                    new TicketModel
-                    {
-                        Id = ticket.Id,
-                        Cinema = cinema == null ? null : mapper.Map<CinemaModel>(cinema),
-                        Hall = hall == null ? null : mapper.Map<HallModel>(hall),
-                        Film = film == null ? null : mapper.Map<FilmModel>(film),
-                        Client = client == null ? null : mapper.Map<ClientModel>(client),
-                        Staff = staff == null ? null : mapper.Map<StaffModel>(staff),
-                        Date = ticket.Date,
-                        Place = ticket.Place,
-                        Price = ticket.Price,
-                        Row = ticket.Row
-                    }
-                );
+                var ticketModel = mapper.Map<TicketModel>(ticket);
+
+                ticketModel.Hall = mapper.Map<HallModel>(hall);
+                ticketModel.Film = mapper.Map<FilmModel>(film);
+                ticketModel.Staff = mapper.Map<StaffModel>(staff);
+                ticketModel.Cinema = mapper.Map<CinemaModel>(cinema);
+                ticketModel.Client = mapper.Map<ClientModel>(client);
+
+                result.Add(ticketModel);
             }
             return result;
         }
@@ -98,20 +85,15 @@ namespace TicketSelling.Services.ReadServices
             var hall = await hallReadRepository.GetByIdAsync(item.HallId, cancellationToken);
             var staff = await staffReadRepository.GetByIdAsync(item.StaffId, cancellationToken);
             var client = await clientReadRepository.GetByIdAsync(item.ClientId, cancellationToken);
+            var ticketModel = mapper.Map<TicketModel>(item);
 
-            return new TicketModel
-            {
-                Id = item.Id,
-                Cinema = cinema == null ? null : mapper.Map<CinemaModel>(cinema),
-                Hall = hall == null ? null : mapper.Map<HallModel>(hall),
-                Film = film == null ? null : mapper.Map<FilmModel>(film),
-                Client = client == null ? null : mapper.Map<ClientModel>(client),
-                Staff = staff == null ? null : mapper.Map<StaffModel>(staff),
-                Date = item.Date,
-                Place = item.Place,
-                Price = item.Price,
-                Row = item.Row
-            };
+            ticketModel.Hall = mapper.Map<HallModel>(hall);
+            ticketModel.Film = mapper.Map<FilmModel>(film);
+            ticketModel.Staff = mapper.Map<StaffModel>(staff);
+            ticketModel.Cinema = mapper.Map<CinemaModel>(cinema);
+            ticketModel.Client = mapper.Map<ClientModel>(client);
+
+            return ticketModel;
         }
     }
 }

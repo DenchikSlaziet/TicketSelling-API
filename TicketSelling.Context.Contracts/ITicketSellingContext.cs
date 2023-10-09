@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicketSelling.Context.Contracts.Models;
+﻿using TicketSelling.Context.Contracts.Models;
 
 namespace TicketSelling.Context.Contracts
 {

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using TicketSelling.Context.Contracts;
+﻿using TicketSelling.Context.Contracts;
+using TicketSelling.Context.Contracts.Anchors;
 using TicketSelling.Context.Contracts.Models;
 
 namespace TicketSelling.Context
 {
-    public class TicketSellingContext : ITicketSellingContext
+    public class TicketSellingContext : ITicketSellingContext, IContextAnchor
     {
         private readonly List<Cinema> cinemas;
         private readonly List<Ticket> tickets;

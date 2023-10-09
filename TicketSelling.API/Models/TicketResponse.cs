@@ -1,4 +1,4 @@
-﻿using TicketSelling.Services.Contracts.Models;
+﻿using TicketSelling.API.Enums;
 
 namespace TicketSelling.API.Models
 {
@@ -52,7 +52,7 @@ namespace TicketSelling.API.Models
         /// <summary>
         /// Должность персоны
         /// </summary>
-        public string StuffPost { get; set; } = string.Empty;
+        public PostResponse Post { get; set; }
 
         /// <summary>
         /// Ряд

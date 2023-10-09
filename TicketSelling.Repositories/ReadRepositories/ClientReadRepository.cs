@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicketSelling.Context.Contracts;
+﻿using TicketSelling.Context.Contracts;
 using TicketSelling.Context.Contracts.Models;
+using TicketSelling.Repositories.Anchors;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
 
 namespace TicketSelling.Repositories.ReadRepositories
@@ -12,7 +8,7 @@ namespace TicketSelling.Repositories.ReadRepositories
     /// <summary>
     /// Реализация <see cref="IClientReadRepository"/>
     /// </summary>
-    public class ClientReadRepository : IClientReadRepository
+    public class ClientReadRepository : IClientReadRepository, IRepositoryAnchor
     {
         /// <summary>
         /// Контекст для связи с бд
@@ -30,7 +26,7 @@ namespace TicketSelling.Repositories.ReadRepositories
         Task<Client?> IClientReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
             => Task.FromResult(context.Clients.FirstOrDefault(x => x.Id == id));
 
-        Task<List<Client>> IClientReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
-            => Task.FromResult(context.Clients.Where(x=> ids.Contains(x.Id)).ToList());
+        Task<Dictionary<Guid, Client>> IClientReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
+            => Task.FromResult(context.Clients.Where(x => ids.Contains(x.Id)).ToDictionary(x => x.Id));
     }
 }

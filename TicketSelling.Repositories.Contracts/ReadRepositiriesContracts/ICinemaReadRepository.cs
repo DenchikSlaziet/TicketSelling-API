@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicketSelling.Context.Contracts.Models;
+﻿using TicketSelling.Context.Contracts.Models;
 
 namespace TicketSelling.Repositories.Contracts.ReadInterfaces
 {
@@ -25,6 +20,6 @@ namespace TicketSelling.Repositories.Contracts.ReadInterfaces
         /// <summary>
         /// Получить <see cref="Cinema"/> по идентификаторам
         /// </summary>
-        Task<List<Cinema>> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
+        Task<Dictionary<Guid,Cinema>> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
     }
 }
