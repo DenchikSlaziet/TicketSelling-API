@@ -6,11 +6,6 @@
     public class HallResponse
     {
         /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
         /// Номер зала
         /// </summary>
         public short Number { get; set; }

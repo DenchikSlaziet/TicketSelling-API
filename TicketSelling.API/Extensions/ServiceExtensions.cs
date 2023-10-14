@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Converters;
 using TicketSelling.API.AutoMappers;
 using TicketSelling.Context;
-using TicketSelling.Context.Contracts;
 using TicketSelling.Repositories;
 using TicketSelling.Services;
 using TicketSelling.Services.AutoMappers;
@@ -13,7 +12,7 @@ namespace TicketSelling.API.Extensions
     {
         public static void RegistrationSRC(this IServiceCollection services)
         {
-            services.RegistrationServices();
+            services.RegistrationService();
             services.RegistrationRepository();
             services.RegistrationContext();
             services.AddAutoMapper(typeof(APIMappers), typeof(ServiceMapper));

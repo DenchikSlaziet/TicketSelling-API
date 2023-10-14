@@ -6,11 +6,6 @@
     public class CinemaResponse
     {
         /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
         /// Название
         /// </summary>
         public string Title { get; set; } = string.Empty;

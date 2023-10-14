@@ -5,54 +5,29 @@ namespace TicketSelling.API.Models
     public class TicketResponse
     {
         /// <summary>
-        /// Идентификатор
+        /// Сущность кинотеатра
         /// </summary>
-        public Guid Id { get; set; }
+        public CinemaResponse? Cinema { get; set; }
 
         /// <summary>
-        /// Номер зала
+        /// Сущность клиента
         /// </summary>
-        public short NumberHall { get; set; }
+        public ClientResponse? Client { get; set; }
 
         /// <summary>
-        /// Кол-во мест
+        /// Сущность фильма
         /// </summary>
-        public short CountHall { get; set; }
+        public FilmResponse? Film { get; set; }
 
         /// <summary>
-        /// Название
+        /// Сущность зала
         /// </summary>
-        public string FilmName { get; set; } = string.Empty;   
+        public HallResponse? Hall { get; set; }
 
         /// <summary>
-        /// Ограничение по возрасту
+        /// Сущность персонала
         /// </summary>
-        public short LimitationFilm { get; set; }
-
-        /// <summary>
-        /// Название кинотетра
-        /// </summary>
-        public string CinemaName { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Адрес кинотетра
-        /// </summary>
-        public string CinemaAdress { get; set; } = string.Empty;
-
-        /// <summary>
-        /// ФИО Клиента
-        /// </summary>
-        public string NameClient { get; set; } = string.Empty;
-
-        // <summary>
-        /// ФИО Персоны
-        /// </summary>
-        public string NameStuff { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Должность персоны
-        /// </summary>
-        public PostResponse Post { get; set; }
+        public StaffResponse? Staff { get; set; }
 
         /// <summary>
         /// Ряд

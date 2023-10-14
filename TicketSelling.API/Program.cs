@@ -1,5 +1,3 @@
-using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Converters;
 using TicketSelling.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
