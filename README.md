@@ -3,58 +3,60 @@
 
 ```mermaid
     classDiagram
-    Animal <|-- Duck
-    note for Duck "can fly\ncan swim\ncan dive\ncan help in debugging"
-    Animal <|-- Fish
-    Animal <|-- Zebra
-    Animal : +int age
-    Animal : +String gender
-    Animal: +isMammal()
-    Animal: +mate()
+    Ticket <|-- Hall
+    Ticket <|-- Cinema
+    Ticket <|-- Client
+    Ticket <|-- Film
+    Ticket <|-- Staff
+    Staff .. Post
     class Hall{
-        Guid Id
-        short Number
-        short NumberOfSeats
+        +Guid Id
+        +short Number
+        +short NumberOfSeats
     }
     class Cinema{
-        Guid Id
-        string Title
-        string Address
+        +Guid Id
+        +string Title
+        +string Address
     }
     class Client {
-        Guid Id
-        string LastName
-        string FirstName
-        string Patronymic
-        short Age
-        string? Email
+        +Guid Id
+        +string LastName
+        +string FirstName
+        +string Patronymic
+        +short Age
+        +string? Email
     }
     class Film {
-        Guid Id
-        string Title
-        string Description
-        short Limitation
+        +Guid Id
+        +string Title
+        +string Description
+        +short Limitation
     }
 
     class Staff {
-        Guid Id
-        string LastName
-        string FirstName
-        string Patronymic
-        short Age
-        Post Post
+        +Guid Id
+        +string LastName
+        +string FirstName
+        +string Patronymic
+        +short Age
+        +Post Post
     }
     class Ticket {
-        Guid Id 
-        Guid HallId 
-        Guid CinemaId
-        Guid FilmId
-        Guid ClientId
-        Guid StaffId
-        short Row
-        short Place
-        decimal Price
-        DateTimeOffset Date
+        +Guid Id 
+        +Guid HallId 
+        +Guid CinemaId
+        +Guid FilmId
+        +Guid ClientId
+        +Guid StaffId
+        +short Row
+        +short Place
+        +decimal Price
+        +DateTimeOffset Date
+    }
+    class Post{
+        Cashier(Кассир)
+        Manager(Менеджер)
     }
 
 ```
