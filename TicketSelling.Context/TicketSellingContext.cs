@@ -1,104 +1,29 @@
-﻿using TicketSelling.Context.Contracts;
-using TicketSelling.Context.Contracts.Anchors;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using TicketSelling.Context.Contracts;
+using TicketSelling.Context.Contracts.Configuration.Configurations;
 using TicketSelling.Context.Contracts.Models;
+
 
 namespace TicketSelling.Context
 {
-    public class TicketSellingContext : ITicketSellingContext, IContextAnchor
+    public class TicketSellingContext : DbContext, ITicketSellingContext
     {
-        private readonly List<Cinema> cinemas;
-        private readonly List<Ticket> tickets;
-        private readonly List<Client> clients;
-        private readonly List<Film> films;
-        private readonly List<Hall> halls;
-        private readonly List<Staff> staffs;
+        public DbSet<Cinema> Cinemas { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Client> Clients { get; set; }
+        public DbSet<Film> Films { get; set; }
+        public DbSet<Hall> Halls { get; set; }
+        public DbSet<Staff> Staffs { get; set; }
 
-        public TicketSellingContext()
+        public TicketSellingContext(DbContextOptions<TicketSellingContext> options) : base(options)
         {
-            cinemas = new List<Cinema>()
-            {
-                new Cinema
-                {
-                    Id = Guid.NewGuid(),
-                    Address = "ПКГХ",
-                    Title = "СиниемаГолд"
-                }
-            };
-
-            films = new List<Film>()
-            {
-                new Film
-                {
-                    Id = Guid.NewGuid(),
-                    Description = "Фильм говно",
-                    Limitation = 12,
-                    Title = "Барби"
-                }
-            };
-            clients = new List<Client>()
-            {
-                new Client
-                {
-                    Id = Guid.NewGuid(),
-                    FirstName = "Денис",
-                    LastName = "Кочетков",
-                    Patronymic = "Александрович",
-                    Age = 19,
-                    Email = "fdsffasas"
-                }
-            };
-
-            halls = new List<Hall>()
-            {
-                new Hall
-                {
-                    Id = Guid.NewGuid(),
-                    Number = 1,
-                    NumberOfSeats = 12
-                }
-            };
-
-            staffs = new List<Staff>()
-            {
-                new Staff
-                {
-                    Id = Guid.NewGuid(),
-                    FirstName = "Денис",
-                    LastName = "Кочетков",
-                    Patronymic = "Александрович",
-                    Age = 19,
-                    Post = Contracts.Enums.Post.Manager
-                }
-            };
-            tickets = new List<Ticket>()
-            {
-               new Ticket
-               {
-                   Id = Guid.NewGuid(),
-                   FilmId = films.First().Id,
-                   CinemaId = cinemas.First().Id,
-                   ClientId = clients.First().Id,
-                   Date = DateTime.Now,
-                   HallId = halls.First().Id,
-                   Place = 3,
-                   Price = 242142,
-                   Row = 3,
-                   StaffId = staffs.First().Id
-               }
-
-            };
+            
         }
 
-        IEnumerable<Cinema> ITicketSellingContext.Cinemas => cinemas;
-
-        IEnumerable<Ticket> ITicketSellingContext.Tickets => tickets;
-
-        IEnumerable<Client> ITicketSellingContext.Clients => clients;
-
-        IEnumerable<Film> ITicketSellingContext.Films => films;
-
-        IEnumerable<Hall> ITicketSellingContext.Halls => halls;
-
-        IEnumerable<Staff> ITicketSellingContext.Staffs => staffs;
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(CinemaEntityTypeConfiguration).Assembly);
+        }
     }
 }

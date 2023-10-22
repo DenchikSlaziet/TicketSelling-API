@@ -24,5 +24,7 @@
         /// Ограничение по возросту
         /// </summary>
         public short Limitation { get; set; }
+
+        public ICollection<Ticket> Tickets { get; set; }
     }
 }

@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using TicketSelling.API.Extensions;
+using TicketSelling.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,8 @@ builder.Services.RegistrationControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.RegistrationSwagger();
+builder.Services.AddDbContextFactory<TicketSellingContext>(options
+    => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.RegistrationSRC();
 
 var app = builder.Build();

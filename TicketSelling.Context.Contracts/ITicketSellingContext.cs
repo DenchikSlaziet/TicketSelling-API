@@ -1,4 +1,5 @@
-﻿using TicketSelling.Context.Contracts.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using TicketSelling.Context.Contracts.Models;
 
 namespace TicketSelling.Context.Contracts
 {
@@ -10,32 +11,32 @@ namespace TicketSelling.Context.Contracts
         /// <summary>
         /// Кинотеатры
         /// </summary>
-        IEnumerable<Cinema> Cinemas { get; }
+        DbSet<Cinema> Cinemas { get; }
 
         /// <summary>
         /// Билеты
         /// </summary>
-        IEnumerable<Ticket> Tickets { get; }
+        DbSet<Ticket> Tickets { get; }
 
         /// <summary>
         /// Клиенты
         /// </summary>
-        IEnumerable<Client> Clients { get; }
+        DbSet<Client> Clients { get; }
 
         /// <summary>
         /// Фильмы
         /// </summary>
-        IEnumerable<Film> Films { get; }
+        DbSet<Film> Films { get; }
 
         /// <summary>
         /// Залы
         /// </summary>
-        IEnumerable <Hall> Halls { get; }
+        DbSet<Hall> Halls { get; }
 
         /// <summary>
         /// Персонал
         /// </summary>
-        IEnumerable<Staff> Staffs { get; }
+        DbSet<Staff> Staffs { get; }
 
     }
 }

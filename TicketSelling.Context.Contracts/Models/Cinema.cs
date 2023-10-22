@@ -19,5 +19,7 @@
         /// Адрес
         /// </summary>
         public string Address { get; set; } = string.Empty;
+
+        public ICollection<Ticket> Tickets { get; set; }
     }
 }

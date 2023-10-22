@@ -19,5 +19,7 @@
         /// Кол-во мест
         /// </summary>
         public short NumberOfSeats { get; set; }
+
+        public ICollection<Ticket> Tickets { get; set; }
     }
 }

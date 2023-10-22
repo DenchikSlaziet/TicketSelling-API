@@ -9,5 +9,7 @@
         /// Адрес электронной почты
         /// </summary>
         public string? Email { get; set; } = string.Empty;
+
+        public ICollection<Ticket> Tickets { get; set; }
     }
 }

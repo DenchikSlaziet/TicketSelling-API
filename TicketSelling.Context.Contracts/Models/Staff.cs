@@ -11,5 +11,7 @@ namespace TicketSelling.Context.Contracts.Models
         /// Должность
         /// </summary>
         public Post Post { get; set; }
+
+        public ICollection<Ticket> Tickets { get; set; }
     }
 }
