@@ -9,10 +9,14 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
         void IEntityTypeConfiguration<Client>.Configure(EntityTypeBuilder<Client> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).HasDefaultValueSql("NEWID()").IsRequired();
             builder.Property(x => x.FirstName).HasMaxLength(40).IsRequired();
             builder.Property(x => x.LastName).HasMaxLength(50).IsRequired();
             builder.Property(x => x.Patronymic).HasMaxLength(50).IsRequired();
             builder.Property(x => x.Email).HasMaxLength(100);
+            builder.HasIndex(x => x.Email)
+                .IsUnique()
+                .HasDatabaseName(nameof(Client.Email));
             builder.Property(x => x.Age).HasMaxLength(2).IsRequired();
             builder.HasMany(x => x.Tickets).WithOne(x => x.Client).HasForeignKey(x => x.ClientId);
         }

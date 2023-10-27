@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using TicketSelling.Context.Contracts;
 using TicketSelling.Context.Contracts.Configuration.Configurations;
 using TicketSelling.Context.Contracts.Models;

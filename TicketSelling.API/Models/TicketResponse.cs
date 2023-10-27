@@ -1,6 +1,4 @@
-﻿using TicketSelling.API.Enums;
-
-namespace TicketSelling.API.Models
+﻿namespace TicketSelling.API.Models
 {
     public class TicketResponse
     {

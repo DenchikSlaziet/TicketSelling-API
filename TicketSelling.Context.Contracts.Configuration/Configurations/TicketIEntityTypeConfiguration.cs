@@ -9,6 +9,7 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
         void IEntityTypeConfiguration<Ticket>.Configure(EntityTypeBuilder<Ticket> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).HasDefaultValueSql("NEWID()").IsRequired();
             builder.Property(x => x.Date).IsRequired();
             builder.Property(x => x.Place).HasMaxLength(2).IsRequired();
             builder.Property(x => x.Row).HasMaxLength(2).IsRequired();
