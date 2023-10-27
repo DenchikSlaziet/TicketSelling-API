@@ -9,7 +9,13 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
         void IEntityTypeConfiguration<Film>.Configure(EntityTypeBuilder<Film> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).
+               ValueGeneratedOnAdd().
+               UseIdentityColumn();
             builder.Property(x => x.Title).HasMaxLength(50).IsRequired();
+            builder.HasIndex(x => x.Title)
+                .IsUnique()
+                .HasDatabaseName(nameof(Film.Title));
             builder.Property(x => x.Description).HasMaxLength(100);
             builder.Property(x => x.Limitation).HasMaxLength(2).IsRequired();
             builder.HasMany(x => x.Tickets).WithOne(x => x.Film).HasForeignKey(x => x.FilmId);

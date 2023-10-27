@@ -9,6 +9,9 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
         void IEntityTypeConfiguration<Cinema>.Configure(EntityTypeBuilder<Cinema> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).
+                ValueGeneratedOnAdd().
+                UseIdentityColumn();
             builder.Property(x => x.Title).HasMaxLength(50).IsRequired();
             builder.Property(x => x.Address).HasMaxLength(100).IsRequired();
             builder.HasMany(x => x.Tickets).WithOne(x => x.Cinema).HasForeignKey(x => x.CinemaId);
