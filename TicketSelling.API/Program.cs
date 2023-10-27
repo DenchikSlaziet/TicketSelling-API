@@ -11,7 +11,7 @@ builder.Services.RegistrationControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.RegistrationSwagger();
 builder.Services.AddDbContextFactory<TicketSellingContext>(options
-    => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
 builder.Services.RegistrationSRC();
 
 var app = builder.Build();
