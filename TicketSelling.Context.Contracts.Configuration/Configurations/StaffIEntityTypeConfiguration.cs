@@ -8,6 +8,7 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
     {
         void IEntityTypeConfiguration<Staff>.Configure(EntityTypeBuilder<Staff> builder)
         {
+            builder.ToTable("Staffs");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).IsRequired();
             builder.Property(x => x.Post).HasMaxLength(1);

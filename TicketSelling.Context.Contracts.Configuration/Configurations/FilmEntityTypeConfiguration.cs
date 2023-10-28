@@ -8,6 +8,7 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
     {
         void IEntityTypeConfiguration<Film>.Configure(EntityTypeBuilder<Film> builder)
         {
+            builder.ToTable("Films");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).IsRequired();
             builder.Property(x => x.Title).HasMaxLength(50).IsRequired();

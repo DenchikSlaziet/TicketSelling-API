@@ -1,4 +1,5 @@
-﻿using TicketSelling.Context.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using TicketSelling.Context.Contracts.Interfaces;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Anchors;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
@@ -13,17 +14,17 @@ namespace TicketSelling.Repositories.ReadRepositories
         /// <summary>
         /// Контекст для связи с бд
         /// </summary>
-        private ITicketSellingContext context;
+        private IReader reader;
 
-        public TicketReadRepositiry(ITicketSellingContext context)
+        public TicketReadRepositiry(IReader reader)
         {
-            this.context = context;
+            this.reader = reader;
         }
 
         Task<List<Ticket>> ITicketReadRepository.GetAllAsync(CancellationToken cancellationToken) 
-            => Task.FromResult(context.Tickets.ToList());
+            => reader.Read<Ticket>().ToListAsync();
 
         Task<Ticket?> ITicketReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
-            => Task.FromResult(context.Tickets.FirstOrDefault(x => x.Id == id));
+            => reader.Read<Ticket>().FirstOrDefaultAsync(x => x.Id == id);
     }
 }

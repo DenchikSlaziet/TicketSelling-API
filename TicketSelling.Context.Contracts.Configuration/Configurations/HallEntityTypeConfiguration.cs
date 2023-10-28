@@ -8,6 +8,7 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
     {
         void IEntityTypeConfiguration<Hall>.Configure(EntityTypeBuilder<Hall> builder)
         {
+            builder.ToTable("Halls");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).IsRequired();
             builder.Property(x => x.Number).HasMaxLength(2).IsRequired();

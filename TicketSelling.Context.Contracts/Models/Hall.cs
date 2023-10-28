@@ -1,9 +1,11 @@
-﻿namespace TicketSelling.Context.Contracts.Models
+﻿using TicketSelling.Context.Contracts.Interfaces;
+
+namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Зал
     /// </summary>
-    public class Hall
+    public class Hall : IEntity
     {
         /// <summary>
         /// Идентификатор

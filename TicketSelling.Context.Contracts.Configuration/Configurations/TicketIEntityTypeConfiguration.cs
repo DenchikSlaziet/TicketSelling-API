@@ -8,6 +8,7 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
     {
         void IEntityTypeConfiguration<Ticket>.Configure(EntityTypeBuilder<Ticket> builder)
         {
+            builder.ToTable("Tickets");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).IsRequired();
             builder.Property(x => x.Date).IsRequired();

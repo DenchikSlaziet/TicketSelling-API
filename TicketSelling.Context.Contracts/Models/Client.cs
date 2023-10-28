@@ -1,9 +1,11 @@
-﻿namespace TicketSelling.Context.Contracts.Models
+﻿using TicketSelling.Context.Contracts.Interfaces;
+
+namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Клиент
     /// </summary>
-    public class Client : Person
+    public class Client : Person, IEntity
     {
         /// <summary>
         /// Адрес электронной почты

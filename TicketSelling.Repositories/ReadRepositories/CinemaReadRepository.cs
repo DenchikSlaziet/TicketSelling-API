@@ -1,4 +1,5 @@
-﻿using TicketSelling.Context.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using TicketSelling.Context.Contracts.Interfaces;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Anchors;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
@@ -11,22 +12,22 @@ namespace TicketSelling.Repositories.ReadRepositories
     public class CinemaReadRepository : ICinemaReadRepository, IRepositoryAnchor
     {
         /// <summary>
-        /// Контекст для связи с бд
+        /// Reader для связи с бд
         /// </summary>
-        private ITicketSellingContext context;
+        private IReader reader;
 
-        public CinemaReadRepository(ITicketSellingContext context)
+        public CinemaReadRepository(IReader reader)
         {
-            this.context = context;
+            this.reader = reader;
         }
 
-        Task<List<Cinema>> ICinemaReadRepository.GetAllAsync(CancellationToken cancellationToken) 
-            => Task.FromResult(context.Cinemas.ToList());
+        Task<List<Cinema>> ICinemaReadRepository.GetAllAsync(CancellationToken cancellationToken)
+            => reader.Read<Cinema>().ToListAsync();
 
-        Task<Cinema?> ICinemaReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
-            => Task.FromResult(context.Cinemas.FirstOrDefault(x =>  x.Id == id));
+        Task<Cinema?> ICinemaReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
+            => reader.Read<Cinema>().FirstOrDefaultAsync(x => x.Id == id);
 
-        Task<Dictionary<Guid, Cinema>> ICinemaReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
-            => Task.FromResult(context.Cinemas.Where(x=> ids.Contains(x.Id)).ToDictionary(x => x.Id));
+        Task<Dictionary<Guid, Cinema>> ICinemaReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
+            => reader.Read<Cinema>().Where(x => ids.Contains(x.Id)).ToDictionaryAsync(x => x.Id);
     }
 }

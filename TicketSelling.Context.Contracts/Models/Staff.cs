@@ -1,11 +1,12 @@
 ﻿using TicketSelling.Context.Contracts.Enums;
+using TicketSelling.Context.Contracts.Interfaces;
 
 namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Кассир
     /// </summary>
-    public class Staff : Person
+    public class Staff : Person, IEntity
     {
         /// <summary>
         /// Должность

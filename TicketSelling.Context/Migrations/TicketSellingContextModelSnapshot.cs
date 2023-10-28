@@ -47,7 +47,7 @@ namespace TicketSelling.Context.Migrations
                     b.HasIndex("Title")
                         .HasDatabaseName("Cinema_Title");
 
-                    b.ToTable("Cinemas");
+                    b.ToTable("Cinemas", (string)null);
                 });
 
             modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Client", b =>
@@ -86,7 +86,7 @@ namespace TicketSelling.Context.Migrations
                         .IsUnique()
                         .HasDatabaseName("Client_Email");
 
-                    b.ToTable("Clients");
+                    b.ToTable("Clients", (string)null);
                 });
 
             modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Film", b =>
@@ -115,7 +115,7 @@ namespace TicketSelling.Context.Migrations
                         .IsUnique()
                         .HasDatabaseName("Film_Title");
 
-                    b.ToTable("Films");
+                    b.ToTable("Films", (string)null);
                 });
 
             modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Hall", b =>
@@ -138,7 +138,7 @@ namespace TicketSelling.Context.Migrations
                         .IsUnique()
                         .HasDatabaseName("Hall_Number");
 
-                    b.ToTable("Halls");
+                    b.ToTable("Halls", (string)null);
                 });
 
             modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Staff", b =>
@@ -175,7 +175,7 @@ namespace TicketSelling.Context.Migrations
                     b.HasIndex("Post")
                         .HasDatabaseName("Staff_Post");
 
-                    b.ToTable("Staffs");
+                    b.ToTable("Staffs", (string)null);
                 });
 
             modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Ticket", b =>
@@ -229,7 +229,7 @@ namespace TicketSelling.Context.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("Tickets");
+                    b.ToTable("Tickets", (string)null);
                 });
 
             modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Ticket", b =>
