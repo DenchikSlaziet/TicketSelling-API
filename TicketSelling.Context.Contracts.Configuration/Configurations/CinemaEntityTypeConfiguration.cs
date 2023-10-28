@@ -9,10 +9,11 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
         void IEntityTypeConfiguration<Cinema>.Configure(EntityTypeBuilder<Cinema> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).HasDefaultValueSql("NEWID()").IsRequired();
+            builder.Property(x => x.Id).IsRequired();
             builder.Property(x => x.Title).HasMaxLength(50).IsRequired();
-            builder.HasIndex(x => x.Title).IsUnique().HasDatabaseName(nameof(Cinema.Title));
+            builder.HasIndex(x => x.Title).HasDatabaseName($"{nameof(Cinema)}_{nameof(Cinema.Title)}");
             builder.Property(x => x.Address).HasMaxLength(100).IsRequired();
+            builder.HasIndex(x => x.Address).HasDatabaseName($"{nameof(Cinema)}_{nameof(Cinema.Address)}").IsUnique();
             builder.HasMany(x => x.Tickets).WithOne(x => x.Cinema).HasForeignKey(x => x.CinemaId);
         }
     }

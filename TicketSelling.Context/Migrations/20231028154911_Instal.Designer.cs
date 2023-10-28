@@ -12,8 +12,8 @@ using TicketSelling.Context;
 namespace TicketSelling.Context.Migrations
 {
     [DbContext(typeof(TicketSellingContext))]
-    [Migration("20231022121254_Initial Migratioin")]
-    partial class InitialMigratioin
+    [Migration("20231028154911_Instal")]
+    partial class Instal
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,6 +42,13 @@ namespace TicketSelling.Context.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Address")
+                        .IsUnique()
+                        .HasDatabaseName("Cinema_Address");
+
+                    b.HasIndex("Title")
+                        .HasDatabaseName("Cinema_Title");
+
                     b.ToTable("Cinemas");
                 });
 
@@ -56,6 +63,7 @@ namespace TicketSelling.Context.Migrations
                         .HasColumnType("smallint");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -76,6 +84,10 @@ namespace TicketSelling.Context.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("Client_Email");
+
                     b.ToTable("Clients");
                 });
 
@@ -87,8 +99,8 @@ namespace TicketSelling.Context.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<short>("Limitation")
                         .HasMaxLength(2)
@@ -100,6 +112,10 @@ namespace TicketSelling.Context.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Title")
+                        .IsUnique()
+                        .HasDatabaseName("Film_Title");
 
                     b.ToTable("Films");
                 });
@@ -119,6 +135,10 @@ namespace TicketSelling.Context.Migrations
                         .HasColumnType("smallint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Number")
+                        .IsUnique()
+                        .HasDatabaseName("Hall_Number");
 
                     b.ToTable("Halls");
                 });
@@ -153,6 +173,9 @@ namespace TicketSelling.Context.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Post")
+                        .HasDatabaseName("Staff_Post");
 
                     b.ToTable("Staffs");
                 });
@@ -198,6 +221,9 @@ namespace TicketSelling.Context.Migrations
                     b.HasIndex("CinemaId");
 
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("Date")
+                        .HasDatabaseName("Ticket_Date");
 
                     b.HasIndex("FilmId");
 

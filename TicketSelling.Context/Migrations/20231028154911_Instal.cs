@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TicketSelling.Context.Migrations
 {
-    public partial class InitialMigratioin : Migration
+    public partial class Instal : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,7 +27,7 @@ namespace TicketSelling.Context.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
                     Patronymic = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -44,7 +44,7 @@ namespace TicketSelling.Context.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Limitation = table.Column<short>(type: "smallint", maxLength: 2, nullable: false)
                 },
                 constraints: table =>
@@ -132,6 +132,40 @@ namespace TicketSelling.Context.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "Cinema_Address",
+                table: "Cinemas",
+                column: "Address",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "Cinema_Title",
+                table: "Cinemas",
+                column: "Title");
+
+            migrationBuilder.CreateIndex(
+                name: "Client_Email",
+                table: "Clients",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "Film_Title",
+                table: "Films",
+                column: "Title",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "Hall_Number",
+                table: "Halls",
+                column: "Number",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "Staff_Post",
+                table: "Staffs",
+                column: "Post");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tickets_CinemaId",
                 table: "Tickets",
                 column: "CinemaId");
@@ -155,6 +189,11 @@ namespace TicketSelling.Context.Migrations
                 name: "IX_Tickets_StaffId",
                 table: "Tickets",
                 column: "StaffId");
+
+            migrationBuilder.CreateIndex(
+                name: "Ticket_Date",
+                table: "Tickets",
+                column: "Date");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -26,8 +26,7 @@ namespace TicketSelling.Context.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -41,9 +40,12 @@ namespace TicketSelling.Context.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Title")
+                    b.HasIndex("Address")
                         .IsUnique()
-                        .HasDatabaseName("Title");
+                        .HasDatabaseName("Cinema_Address");
+
+                    b.HasIndex("Title")
+                        .HasDatabaseName("Cinema_Title");
 
                     b.ToTable("Cinemas");
                 });
@@ -52,14 +54,14 @@ namespace TicketSelling.Context.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<short>("Age")
                         .HasMaxLength(2)
                         .HasColumnType("smallint");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -82,8 +84,7 @@ namespace TicketSelling.Context.Migrations
 
                     b.HasIndex("Email")
                         .IsUnique()
-                        .HasDatabaseName("Email")
-                        .HasFilter("[Email] IS NOT NULL");
+                        .HasDatabaseName("Client_Email");
 
                     b.ToTable("Clients");
                 });
@@ -92,13 +93,12 @@ namespace TicketSelling.Context.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<short>("Limitation")
                         .HasMaxLength(2)
@@ -113,7 +113,7 @@ namespace TicketSelling.Context.Migrations
 
                     b.HasIndex("Title")
                         .IsUnique()
-                        .HasDatabaseName("Title");
+                        .HasDatabaseName("Film_Title");
 
                     b.ToTable("Films");
                 });
@@ -122,8 +122,7 @@ namespace TicketSelling.Context.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<short>("Number")
                         .HasMaxLength(2)
@@ -137,7 +136,7 @@ namespace TicketSelling.Context.Migrations
 
                     b.HasIndex("Number")
                         .IsUnique()
-                        .HasDatabaseName("Number");
+                        .HasDatabaseName("Hall_Number");
 
                     b.ToTable("Halls");
                 });
@@ -146,8 +145,7 @@ namespace TicketSelling.Context.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<short>("Age")
                         .HasMaxLength(2)
@@ -174,6 +172,9 @@ namespace TicketSelling.Context.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Post")
+                        .HasDatabaseName("Staff_Post");
+
                     b.ToTable("Staffs");
                 });
 
@@ -181,8 +182,7 @@ namespace TicketSelling.Context.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CinemaId")
                         .HasColumnType("uniqueidentifier");
@@ -219,6 +219,9 @@ namespace TicketSelling.Context.Migrations
                     b.HasIndex("CinemaId");
 
                     b.HasIndex("ClientId");
+
+                    b.HasIndex("Date")
+                        .HasDatabaseName("Ticket_Date");
 
                     b.HasIndex("FilmId");
 
