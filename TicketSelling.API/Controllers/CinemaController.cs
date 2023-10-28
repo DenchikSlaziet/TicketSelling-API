@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TicketSelling.API.Models;
+using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
 
 namespace TicketSelling.API.Controllers
@@ -39,6 +40,15 @@ namespace TicketSelling.API.Controllers
                 return NotFound("Кинотеатра с таким Id нет!");
             }
             return Ok(mapper.Map<CinemaResponse>(item));
+        }
+
+        [HttpPost]
+        public IActionResult Add([FromBody] CinemaResponse model, CancellationToken cancellationToken)
+        {
+            var map = mapper.Map<CinemaModel>(model);
+
+            cinemaService.AddCinema(map, cancellationToken);
+            return NoContent();
         }
     }
 }

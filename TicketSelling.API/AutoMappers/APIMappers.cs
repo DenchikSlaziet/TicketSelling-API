@@ -12,7 +12,7 @@ namespace TicketSelling.API.AutoMappers
         public APIMappers()
         {
             CreateMap<PostModel, PostResponse>().ConvertUsingEnumMapping(opt => opt.MapByName()).ReverseMap();
-            CreateMap<CinemaModel, CinemaResponse>(MemberList.Destination);
+            CreateMap<CinemaModel, CinemaResponse>(MemberList.Destination).ReverseMap();
             CreateMap<ClientModel, ClientResponse>(MemberList.Destination)
                 .ForMember(x => x.Name, opt => opt.MapFrom(src => $"{src.LastName} {src.FirstName} {src.Patronymic}"));
 

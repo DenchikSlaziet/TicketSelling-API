@@ -32,9 +32,9 @@ namespace TicketSelling.Context
         void IWriter.Delete<TEntity>([NotNull] TEntity entity)
             => base.Entry(entity).State = EntityState.Deleted;
 
-        async void IUnitOfWork.SaveChangesAsync(CancellationToken cancellationToken)
+        void IUnitOfWork.SaveChangesAsync(CancellationToken cancellationToken)
         {
-            await base.SaveChangesAsync(cancellationToken);
+            base.SaveChangesAsync(cancellationToken);
             foreach (var entry in base.ChangeTracker.Entries().ToArray())
             {
                 entry.State = EntityState.Detached;

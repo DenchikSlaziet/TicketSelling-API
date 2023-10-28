@@ -13,5 +13,7 @@ namespace TicketSelling.Services.Contracts.ReadServices
         /// Получить <see cref="CinemaModel"/> по идентификатору
         /// </summary>
         Task<CinemaModel?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+
+        void AddCinema (CinemaModel model, CancellationToken cancellationToken);
     }
 }

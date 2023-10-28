@@ -17,7 +17,7 @@ namespace TicketSelling.Services.AutoMappers
             CreateMap<Person, PersonModel>(MemberList.Destination);
             CreateMap<Film, FilmModel>(MemberList.Destination);
             CreateMap<Client, ClientModel>(MemberList.Destination);
-            CreateMap<Cinema, CinemaModel>(MemberList.Destination);
+            CreateMap<Cinema, CinemaModel>(MemberList.Destination).ReverseMap();
             CreateMap<Staff, StaffModel>(MemberList.Destination);
             CreateMap<Ticket, TicketModel>(MemberList.Destination)
                 .ForMember(x => x.Hall, opt => opt.Ignore())

@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using TicketSelling.Context.Contracts.Interfaces;
+using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
+using TicketSelling.Repositories.Contracts.WriteRepositoriesContracts;
 using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
@@ -9,12 +12,28 @@ namespace TicketSelling.Services.ReadServices
     public class CinemaService : ICinemaService, IServiceAnchor
     {
         private readonly ICinemaReadRepository cinemaReadRepositiry;
+        private readonly ICinemaWriteRepository cinemaWriteRepository;
+        private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
 
-        public CinemaService(ICinemaReadRepository cinemaReadRepositiry, IMapper mapper)
+        public CinemaService(ICinemaReadRepository cinemaReadRepositiry, IMapper mapper, ICinemaWriteRepository cinemaWriteRepository, IUnitOfWork unitOfWork)
         {
             this.cinemaReadRepositiry = cinemaReadRepositiry;
             this.mapper = mapper;
+            this.cinemaWriteRepository = cinemaWriteRepository;
+            this.unitOfWork = unitOfWork;
+        }
+
+        void ICinemaService.AddCinema(CinemaModel model, CancellationToken cancellationToken)
+        {
+            var cinema = new Cinema
+            {
+                Id = Guid.NewGuid(),
+                Title = model.Title,
+                Address = model.Address
+            };
+            cinemaWriteRepository.AddCinema(cinema);
+            unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
         async Task<IEnumerable<CinemaModel>> ICinemaService.GetAllAsync(CancellationToken cancellationToken)
@@ -33,5 +52,7 @@ namespace TicketSelling.Services.ReadServices
            }
            return mapper.Map<CinemaModel>(item);
         }
+
+        
     }
 }
