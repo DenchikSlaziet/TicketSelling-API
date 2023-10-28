@@ -52,21 +52,26 @@ namespace TicketSelling.Services.ReadServices
 
             foreach (var ticket in tickets)
             {
-                cinemas.TryGetValue(ticket.CinemaId, out var cinema);
-                clients.TryGetValue(ticket.ClientId, out var client);
-                films.TryGetValue(ticket.FilmId, out var film);
-                halls.TryGetValue(ticket.HallId, out var hall);
-                staffs.TryGetValue(ticket.StaffId, out var staff);
+                if (!cinemas.TryGetValue(ticket.CinemaId, out var cinema) ||
+                !clients.TryGetValue(ticket.ClientId, out var client) ||
+                !films.TryGetValue(ticket.FilmId, out var film) ||
+                !halls.TryGetValue(ticket.HallId, out var hall) ||
+                !staffs.TryGetValue(ticket.StaffId, out var staff))
+                {
+                    continue;
+                }
+                else
+                {
+                    var ticketModel = mapper.Map<TicketModel>(ticket);
 
-                var ticketModel = mapper.Map<TicketModel>(ticket);
+                    ticketModel.Hall = mapper.Map<HallModel>(hall);
+                    ticketModel.Film = mapper.Map<FilmModel>(film);
+                    ticketModel.Staff = mapper.Map<StaffModel>(staff);
+                    ticketModel.Cinema = mapper.Map<CinemaModel>(cinema);
+                    ticketModel.Client = mapper.Map<ClientModel>(client);
 
-                ticketModel.Hall = mapper.Map<HallModel>(hall);
-                ticketModel.Film = mapper.Map<FilmModel>(film);
-                ticketModel.Staff = mapper.Map<StaffModel>(staff);
-                ticketModel.Cinema = mapper.Map<CinemaModel>(cinema);
-                ticketModel.Client = mapper.Map<ClientModel>(client);
-
-                result.Add(ticketModel);
+                    result.Add(ticketModel);
+                }
             }
             return result;
         }
