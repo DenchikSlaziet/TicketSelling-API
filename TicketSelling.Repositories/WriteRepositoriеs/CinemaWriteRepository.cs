@@ -17,7 +17,7 @@ namespace TicketSelling.Repositories.WriteRepositoriеs
 
         void ICinemaWriteRepository.AddCinema([NotNull] Cinema cinema)
         {     
-            writer.Add<Cinema>(cinema);
+            writer.Add(cinema);
         }
     }
 }

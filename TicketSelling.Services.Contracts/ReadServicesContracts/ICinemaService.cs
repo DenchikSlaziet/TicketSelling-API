@@ -14,6 +14,6 @@ namespace TicketSelling.Services.Contracts.ReadServices
         /// </summary>
         Task<CinemaModel?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-        void AddCinema (CinemaModel model, CancellationToken cancellationToken);
+        Task AddCinema (CinemaModel model, CancellationToken cancellationToken);
     }
 }

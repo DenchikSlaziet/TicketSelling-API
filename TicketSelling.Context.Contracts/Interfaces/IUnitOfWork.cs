@@ -8,6 +8,6 @@
         /// <summary>
         /// Сохраняет все изменения контекста
         /// </summary>
-        void SaveChangesAsync(CancellationToken cancellationToken = default);
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

@@ -24,7 +24,7 @@ namespace TicketSelling.Services.ReadServices
             this.unitOfWork = unitOfWork;
         }
 
-        void ICinemaService.AddCinema(CinemaModel model, CancellationToken cancellationToken)
+        async Task ICinemaService.AddCinema(CinemaModel model, CancellationToken cancellationToken)
         {
             var cinema = new Cinema
             {
@@ -33,7 +33,7 @@ namespace TicketSelling.Services.ReadServices
                 Address = model.Address
             };
             cinemaWriteRepository.AddCinema(cinema);
-            unitOfWork.SaveChangesAsync(cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
         async Task<IEnumerable<CinemaModel>> ICinemaService.GetAllAsync(CancellationToken cancellationToken)
