@@ -43,11 +43,11 @@ namespace TicketSelling.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody] CinemaResponse model, CancellationToken cancellationToken)
+        public async Task<IActionResult> Add([FromBody] CinemaResponse model, CancellationToken cancellationToken)
         {
             var map = mapper.Map<CinemaModel>(model);
 
-            cinemaService.AddCinema(map, cancellationToken);
+            await cinemaService.AddCinema(map, cancellationToken);
             return NoContent();
         }
     }
