@@ -1,7 +1,12 @@
-﻿namespace TicketSelling.API.Models
+﻿namespace TicketSelling.API.Models.Response
 {
     public class TicketResponse
     {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
         /// <summary>
         /// Сущность кинотеатра
         /// </summary>

@@ -13,5 +13,20 @@ namespace TicketSelling.Services.Contracts.ReadServices
         /// Получить <see cref="ClientModel"/> по идентификатору
         /// </summary>
         Task<ClientModel?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Добавляет нового клиента
+        /// </summary>
+        Task<ClientModel> AddAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Редактирует существующего клиента
+        /// </summary>
+        Task<ClientModel> EditAsync(ClientModel source, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Удаляет существующего клиента
+        /// </summary>
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
     }
 }

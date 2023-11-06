@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TicketSelling.Common.Entity\TicketSelling.Common.Entity.csproj" />
     <ProjectReference Include="..\TicketSelling.Context.Contracts.Configuration\TicketSelling.Context.Contracts.Configuration.csproj" />
     <ProjectReference Include="..\TicketSelling.Context.Contracts\TicketSelling.Context.Contracts.csproj" />
   </ItemGroup>

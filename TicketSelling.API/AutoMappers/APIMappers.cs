@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.Extensions.EnumMapping;
 using TicketSelling.API.Enums;
-using TicketSelling.API.Models;
+using TicketSelling.API.Models.Response;
 using TicketSelling.Services.Contracts.Enums;
 using TicketSelling.Services.Contracts.Models;
 

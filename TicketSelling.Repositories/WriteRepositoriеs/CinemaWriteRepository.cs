@@ -1,23 +1,16 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using TicketSelling.Context.Contracts.Interfaces;
+﻿using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Anchors;
 using TicketSelling.Repositories.Contracts.WriteRepositoriesContracts;
 
 namespace TicketSelling.Repositories.WriteRepositoriеs
 {
-    internal class CinemaWriteRepository : ICinemaWriteRepository, IRepositoryAnchor
+    public class CinemaWriteRepository : BaseWriteRepository<Cinema>, ICinemaWriteRepository, IRepositoryAnchor
     {
-        private IWriter writer;
-
-        public CinemaWriteRepository(IWriter writer)
+        public CinemaWriteRepository(IDbWriterContext writerContext)
+            : base(writerContext)
         {
-            this.writer = writer;
-        }
 
-        void ICinemaWriteRepository.AddCinema([NotNull] Cinema cinema)
-        {     
-            writer.Add(cinema);
         }
     }
 }

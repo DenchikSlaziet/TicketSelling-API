@@ -13,5 +13,20 @@ namespace TicketSelling.Services.Contracts.ReadServices
         /// Получить <see cref="StaffModel"/> по идентификатору
         /// </summary>
         Task<StaffModel?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Добавляет нового работника
+        /// </summary>
+        Task<StaffModel> AddAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Редактирует существующего работника
+        /// </summary>
+        Task<StaffModel> EditAsync(StaffModel source, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Удаляет существующего работника
+        /// </summary>
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
     }
 }

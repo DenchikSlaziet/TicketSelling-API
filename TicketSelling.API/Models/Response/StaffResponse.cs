@@ -1,6 +1,6 @@
 ﻿using TicketSelling.API.Enums;
 
-namespace TicketSelling.API.Models
+namespace TicketSelling.API.Models.Response
 {
     /// <summary>
     /// Модель ответа сущности персонала

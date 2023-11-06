@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TicketSelling.Context.Contracts.Interfaces;
+using TicketSelling.Common.Entity.InterfaceDB;
+using TicketSelling.Common.Entity.Repositories;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Anchors;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
@@ -14,19 +15,19 @@ namespace TicketSelling.Repositories.ReadRepositories
         /// <summary>
         /// Контекст для связи с бд
         /// </summary>
-        private IReader reader;
+        private IDbRead reader;
 
-        public StaffReadRepository(IReader reader)
+        public StaffReadRepository(IDbRead reader)
         {
             this.reader = reader;
         }
-        Task<List<Staff>> IStaffReadRepository.GetAllAsync(CancellationToken cancellationToken) 
-            => reader.Read<Staff>().ToListAsync();
+        Task<IReadOnlyCollection<Staff>> IStaffReadRepository.GetAllAsync(CancellationToken cancellationToken)
+            => reader.Read<Staff>().OrderBy(x => x.FirstName).ToReadOnlyCollectionAsync(cancellationToken);
 
         Task<Staff?> IStaffReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
-            => reader.Read<Staff>().FirstOrDefaultAsync(x => x.Id == id);
+            => reader.Read<Staff>().ById(id).FirstOrDefaultAsync(cancellationToken);
 
         Task<Dictionary<Guid, Staff>> IStaffReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
-            => reader.Read<Staff>().Where(x => ids.Contains(x.Id)).ToDictionaryAsync(x => x.Id);
+            => reader.Read<Staff>().ByIds(ids).OrderBy(x => x.FirstName).ToDictionaryAsync(x => x.Id, cancellationToken);
     }
 }

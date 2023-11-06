@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using TicketSelling.API.Models;
+using TicketSelling.API.Models.Response;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
 
@@ -43,12 +43,10 @@ namespace TicketSelling.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] CinemaResponse model, CancellationToken cancellationToken)
+        public async Task<IActionResult> Add(CinemaResponse model, CancellationToken cancellationToken)
         {
-            var map = mapper.Map<CinemaModel>(model);
-
-            await cinemaService.AddCinema(map, cancellationToken);
-            return NoContent();
+            var result = await cinemaService.AddAsync(model.Address, model.Title, cancellationToken);
+            return Ok(mapper.Map<CinemaResponse>(result));
         }
     }
 }

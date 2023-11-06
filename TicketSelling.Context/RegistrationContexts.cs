@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts;
-using TicketSelling.Context.Contracts.Interfaces;
 
 namespace TicketSelling.Context
 {
@@ -8,9 +9,10 @@ namespace TicketSelling.Context
     {
         public static void RegistrationContext(this IServiceCollection service)
         {
-            service.AddScoped<IWriter, TicketSellingContext>();
-            service.AddScoped<IReader, TicketSellingContext>();
-            service.AddScoped<IUnitOfWork, TicketSellingContext>();
+            service.TryAddScoped<ITicketSellingContext>(provider => provider.GetRequiredService<TicketSellingContext>());
+            service.TryAddScoped<IDbRead>(provider => provider.GetRequiredService<TicketSellingContext>());
+            service.TryAddScoped<IDbWriter>(provider => provider.GetRequiredService<TicketSellingContext>());
+            service.TryAddScoped<IUnitOfWork>(provider => provider.GetRequiredService<TicketSellingContext>());
         }
     }
 }

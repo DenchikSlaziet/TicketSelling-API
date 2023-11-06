@@ -1,10 +1,15 @@
-﻿namespace TicketSelling.API.Models
+﻿namespace TicketSelling.API.Models.Response
 {
     /// <summary>
     /// Модель ответа сущности фильма
     /// </summary>
     public class FilmResponse
     {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
         /// <summary>
         /// Название
         /// </summary>

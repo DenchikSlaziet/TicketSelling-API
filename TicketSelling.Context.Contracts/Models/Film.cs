@@ -1,11 +1,11 @@
-﻿using TicketSelling.Context.Contracts.Interfaces;
+﻿using TicketSelling.Common.Entity.EntityInterface;
 
 namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Фильм
     /// </summary>
-    public class Film : IEntity
+    public class Film : IEntity, IEntityWithId
     {
         /// <summary>
         /// Идентификатор

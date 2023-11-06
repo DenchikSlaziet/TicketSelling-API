@@ -1,11 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using TicketSelling.Context.Contracts.Interfaces;
-using TicketSelling.Context.Contracts.Models;
+﻿using TicketSelling.Context.Contracts.Models;
 
 namespace TicketSelling.Repositories.Contracts.WriteRepositoriesContracts
 {
-    public interface ICinemaWriteRepository
+    public interface ICinemaWriteRepository : IRepositoryWriter<Cinema>
     {
-        void AddCinema([NotNull] Cinema entity);
     }
 }

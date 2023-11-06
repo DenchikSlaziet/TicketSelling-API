@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TicketSelling.Context.Contracts.Interfaces;
+using TicketSelling.Common.Entity.InterfaceDB;
+using TicketSelling.Common.Entity.Repositories;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Anchors;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
@@ -14,20 +15,20 @@ namespace TicketSelling.Repositories.ReadRepositories
         /// <summary>
         /// Контекст для связи с бд
         /// </summary>
-        private IReader reader;
+        private IDbRead reader;
 
-        public FilmReadRepository(IReader reader)
+        public FilmReadRepository(IDbRead reader)
         {
             this.reader = reader;
         }
 
-        Task<List<Film>> IFilmReadRepository.GetAllAsync(CancellationToken cancellationToken) 
-            => reader.Read<Film>().ToListAsync();
+        Task<IReadOnlyCollection<Film>> IFilmReadRepository.GetAllAsync(CancellationToken cancellationToken) 
+            => reader.Read<Film>().OrderBy(x => x.Title).ToReadOnlyCollectionAsync(cancellationToken);
 
         Task<Film?> IFilmReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
-            => reader.Read<Film>().FirstOrDefaultAsync(x => x.Id == id);
+            => reader.Read<Film>().ById(id).FirstOrDefaultAsync(cancellationToken);
 
         Task<Dictionary<Guid, Film>> IFilmReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
-            => reader.Read<Film>().Where(x => ids.Contains(x.Id)).ToDictionaryAsync(x => x.Id);
+            => reader.Read<Film>().ByIds(ids).OrderBy(x => x.Title).ToDictionaryAsync(x => x.Id, cancellationToken);
     }
 }

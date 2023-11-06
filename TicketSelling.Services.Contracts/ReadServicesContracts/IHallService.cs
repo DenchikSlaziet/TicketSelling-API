@@ -13,5 +13,21 @@ namespace TicketSelling.Services.Contracts.ReadServices
         /// Получить <see cref="HallModel"/> по идентификатору
         /// </summary>
         Task<HallModel?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Добавляет новый зал
+        /// </summary>
+        Task<HallModel> AddAsync(short number, short numberOfSeats, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Редактирует существующий зал
+        /// </summary>
+        Task<HallModel> EditAsync(HallModel source, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Удаляет существующий зал
+        /// </summary>
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+
     }
 }

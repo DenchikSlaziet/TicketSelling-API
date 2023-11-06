@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using TicketSelling.API.Models;
+using TicketSelling.API.Models.Response;
 using TicketSelling.Services.Contracts.ReadServices;
 
 namespace TicketSelling.API.Controllers

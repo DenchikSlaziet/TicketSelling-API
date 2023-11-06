@@ -13,5 +13,21 @@ namespace TicketSelling.Services.Contracts.ReadServices
         /// Получить <see cref="FilmModel"/> по идентификатору
         /// </summary>
         Task<FilmModel?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Добавляет новый фильм
+        /// </summary>
+        Task<FilmModel> AddAsync(string title, short limitation, string discription = "", CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Редактирует существующий фильм
+        /// </summary>
+        Task<FilmModel> EditAsync(FilmModel source, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Удаляет существующий фильм
+        /// </summary>
+        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+
     }
 }

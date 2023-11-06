@@ -1,11 +1,11 @@
-﻿using TicketSelling.Context.Contracts.Interfaces;
+﻿using TicketSelling.Common.Entity.EntityInterface;
 
 namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Билет
     /// </summary>
-    public class Ticket : IEntity
+    public class Ticket : IEntity, IEntityWithId
     {
         /// <summary>
         /// Идентификатор

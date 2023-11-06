@@ -1,10 +1,15 @@
-﻿namespace TicketSelling.API.Models
+﻿namespace TicketSelling.API.Models.Response
 {
     /// <summary>
     /// Абстракция
     /// </summary>
     public abstract class PersonResponse
     {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
         /// <summary>
         /// ФИО
         /// </summary>
