@@ -5,13 +5,8 @@ namespace TicketSelling.Context.Contracts.Models
     /// <summary>
     /// Зал
     /// </summary>
-    public class Hall : IEntity, IEntityWithId
+    public class Hall : BaseAuditEntity, IEntity, IEntityWithId
     {
-        /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid Id { get; set; }
-
         /// <summary>
         /// Номер зала
         /// </summary>

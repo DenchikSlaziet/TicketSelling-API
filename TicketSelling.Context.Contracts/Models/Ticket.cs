@@ -5,13 +5,8 @@ namespace TicketSelling.Context.Contracts.Models
     /// <summary>
     /// Билет
     /// </summary>
-    public class Ticket : IEntity, IEntityWithId
+    public class Ticket : BaseAuditEntity, IEntity, IEntityWithId
     {
-        /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid Id { get; set; }
-
         /// <summary>
         /// Идентификатор Зала
         /// </summary>

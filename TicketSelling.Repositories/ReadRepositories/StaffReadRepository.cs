@@ -22,12 +22,25 @@ namespace TicketSelling.Repositories.ReadRepositories
             this.reader = reader;
         }
         Task<IReadOnlyCollection<Staff>> IStaffReadRepository.GetAllAsync(CancellationToken cancellationToken)
-            => reader.Read<Staff>().OrderBy(x => x.FirstName).ToReadOnlyCollectionAsync(cancellationToken);
+            => reader.Read<Staff>()
+                .NotDeletedAt()
+                .OrderBy(x => x.FirstName)
+                .ThenBy(x => x.LastName)
+                .ThenBy(x => x.Patronymic)
+                .ToReadOnlyCollectionAsync(cancellationToken);
 
         Task<Staff?> IStaffReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
-            => reader.Read<Staff>().ById(id).FirstOrDefaultAsync(cancellationToken);
+            => reader.Read<Staff>()
+                .ById(id)
+                .FirstOrDefaultAsync(cancellationToken);
 
         Task<Dictionary<Guid, Staff>> IStaffReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
-            => reader.Read<Staff>().ByIds(ids).OrderBy(x => x.FirstName).ToDictionaryAsync(x => x.Id, cancellationToken);
+            => reader.Read<Staff>()
+                .NotDeletedAt()
+                .ByIds(ids)
+                .OrderBy(x => x.FirstName)
+                .ThenBy(x => x.LastName)
+                .ThenBy(x => x.Patronymic)
+                .ToDictionaryAsync(x => x.Id, cancellationToken);
     }
 }

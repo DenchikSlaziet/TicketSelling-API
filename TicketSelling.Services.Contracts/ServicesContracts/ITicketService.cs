@@ -14,19 +14,19 @@ namespace TicketSelling.Services.Contracts.ReadServices
         /// </summary>
         Task<TicketModel?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-        /// <summary>
-        /// Добавляет новый билет
-        /// </summary>
-        Task<TicketModel> AddAsync(CancellationToken cancellationToken);
+        ///// <summary>
+        ///// Добавляет новый билет
+        ///// </summary>
+        //Task<TicketModel> AddAsync(CancellationToken cancellationToken);
 
-        /// <summary>
-        /// Редактирует существующий билет
-        /// </summary>
-        Task<TicketModel> EditAsync(TicketModel source, CancellationToken cancellationToken);
+        ///// <summary>
+        ///// Редактирует существующий билет
+        ///// </summary>
+        //Task<TicketModel> EditAsync(TicketModel source, CancellationToken cancellationToken);
 
-        /// <summary>
-        /// Удаляет существующий билет
-        /// </summary>
-        Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+        ///// <summary>
+        ///// Удаляет существующий билет
+        ///// </summary>
+        //Task DeleteAsync(Guid id, CancellationToken cancellationToken);
     }
 }

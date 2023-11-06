@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using TicketSelling.Context.Contracts.Models;
 
 namespace TicketSelling.Repositories.Contracts.WriteRepositoriesContracts
 {

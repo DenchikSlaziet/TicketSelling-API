@@ -17,7 +17,8 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
             builder.Property(x => x.Email).HasMaxLength(100).IsRequired();
             builder.HasIndex(x => x.Email)
                 .IsUnique()
-                .HasDatabaseName($"{nameof(Client)}_{nameof(Client.Email)}");
+                .HasDatabaseName($"{nameof(Client)}_{nameof(Client.Email)}")
+                .HasFilter($"{nameof(Client.DeletedAt)} is null");
             builder.Property(x => x.Age).HasMaxLength(2).IsRequired();
             builder.HasMany(x => x.Tickets).WithOne(x => x.Client).HasForeignKey(x => x.ClientId);
         }

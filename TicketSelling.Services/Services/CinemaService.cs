@@ -4,6 +4,7 @@ using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.Contracts.WriteRepositoriesContracts;
 using TicketSelling.Services.Anchors;
+using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
 
@@ -39,14 +40,39 @@ namespace TicketSelling.Services.ReadServices
             return mapper.Map<CinemaModel>(item);
         }
 
-        Task ICinemaService.DeleteAsync(Guid id, CancellationToken cancellationToken)
+        async Task ICinemaService.DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var targetCinema = await cinemaReadRepositiry.GetByIdAsync(id, cancellationToken);
+            if (targetCinema == null)
+            {
+                throw new TimeTableEntityNotFoundException<Cinema>(id);
+            }
+
+
+            if (targetCinema.DeletedAt.HasValue)
+            {
+                throw new TimeTableInvalidOperationException($"Кинотеатр с идентификатором {id} уже удален");
+            }
+
+            cinemaWriteRepository.Delete(targetCinema);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        Task<CinemaModel> ICinemaService.EditAsync(CinemaModel source, CancellationToken cancellationToken)
+        async Task<CinemaModel> ICinemaService.EditAsync(CinemaModel source, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var targetCinema = await cinemaReadRepositiry.GetByIdAsync(source.Id, cancellationToken);
+            if (targetCinema == null)
+            {
+                throw new TimeTableEntityNotFoundException<Cinema>(source.Id);
+            }
+
+            targetCinema.Title = source.Title;
+            targetCinema.Address = source.Address;
+
+            cinemaWriteRepository.Update(targetCinema);
+
+            await unitOfWork.SaveChangesAsync(cancellationToken);
+            return mapper.Map<CinemaModel>(targetCinema);
         }
 
         async Task<IEnumerable<CinemaModel>> ICinemaService.GetAllAsync(CancellationToken cancellationToken)
@@ -60,12 +86,10 @@ namespace TicketSelling.Services.ReadServices
            var item = await cinemaReadRepositiry.GetByIdAsync(id, cancellationToken);
 
            if(item == null) 
-           { 
-                return null;
-           }
+           {
+                throw new TimeTableEntityNotFoundException<Cinema>(id);
+            }
            return mapper.Map<CinemaModel>(item);
-        }
-
-        
+        } 
     }
 }

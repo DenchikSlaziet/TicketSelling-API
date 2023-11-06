@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using TicketSelling.API.Models.CreateRequest;
+using TicketSelling.API.Models.Request;
 using TicketSelling.API.Models.Response;
+using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
 
 namespace TicketSelling.API.Controllers
@@ -23,6 +26,7 @@ namespace TicketSelling.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(ICollection<StaffResponse>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             var result = await staffService.GetAllAsync(cancellationToken);
@@ -30,6 +34,7 @@ namespace TicketSelling.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(StaffResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
         {
             var item = await staffService.GetByIdAsync(id, cancellationToken);
@@ -39,6 +44,31 @@ namespace TicketSelling.API.Controllers
                 return NotFound("Персонала с таким Id нет!");
             }
             return Ok(mapper.Map<StaffResponse>(item));
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(StaffResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Add(CreateStaffRequest model, CancellationToken cancellationToken)
+        {
+            var result = await staffService.AddAsync(model.FirstName, model.LastName, model.Patronymic, model.Age, model.Post, cancellationToken);
+            return Ok(mapper.Map<StaffResponse>(result));
+        }
+
+        [HttpPut]
+        [ProducesResponseType(typeof(StaffResponse), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Edit(StaffRequest request, CancellationToken cancellationToken)
+        {
+            var model = mapper.Map<StaffModel>(request);
+            var result = await staffService.EditAsync(model, cancellationToken);
+            return Ok(mapper.Map<StaffResponse>(result));
+        }
+
+        [HttpDelete("{id:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+        {
+            await staffService.DeleteAsync(id, cancellationToken);
+            return Ok();
         }
     }
 }

@@ -5,13 +5,8 @@ namespace TicketSelling.Context.Contracts.Models
     /// <summary>
     /// Кинотеатр
     /// </summary>
-    public class Cinema : IEntity, IEntityWithId
+    public class Cinema : BaseAuditEntity, IEntity, IEntityWithId
     {
-        /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid Id { get; set; }
-
         /// <summary>
         /// Название
         /// </summary>

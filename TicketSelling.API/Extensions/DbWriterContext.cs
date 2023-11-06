@@ -1,4 +1,5 @@
-﻿using TicketSelling.Common.Entity.InterfaceDB;
+﻿using TicketSelling.Common.Entity;
+using TicketSelling.Common.Entity.InterfaceDB;
 
 namespace TicketSelling.API.Extensions
 {
@@ -10,6 +11,12 @@ namespace TicketSelling.API.Extensions
         /// <inheritdoc/>
         public IUnitOfWork UnitOfWork { get; }
 
+        /// <inheritdoc/>
+        public IDateTimeProvider DateTimeProvider { get; }
+
+        /// <inheritdoc/>
+        public string UserName { get; } = "TimeTable203.Api";
+
         /// <summary>
         /// Инициализирует новый экземпляр <see cref="DbWriterContext"/>
         /// </summary>
@@ -17,10 +24,11 @@ namespace TicketSelling.API.Extensions
         /// информации об авторизации</remarks>
         public DbWriterContext(
             IDbWriter writer,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, IDateTimeProvider provider)
         {
             Writer = writer;
             UnitOfWork = unitOfWork;
+            DateTimeProvider = provider;
         }
     }
 }

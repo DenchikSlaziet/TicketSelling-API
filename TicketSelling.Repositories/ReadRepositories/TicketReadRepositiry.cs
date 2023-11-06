@@ -23,9 +23,14 @@ namespace TicketSelling.Repositories.ReadRepositories
         }
 
         Task<IReadOnlyCollection<Ticket>> ITicketReadRepository.GetAllAsync(CancellationToken cancellationToken)
-            => reader.Read<Ticket>().OrderBy(x => x.Date).ToReadOnlyCollectionAsync(cancellationToken);
+            => reader.Read<Ticket>()
+                .NotDeletedAt()
+                .OrderBy(x => x.Date)
+                .ToReadOnlyCollectionAsync(cancellationToken);
 
         Task<Ticket?> ITicketReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
-            => reader.Read<Ticket>().ById(id).FirstOrDefaultAsync(cancellationToken);
+            => reader.Read<Ticket>()
+                .ById(id)
+                .FirstOrDefaultAsync(cancellationToken);
     }
 }

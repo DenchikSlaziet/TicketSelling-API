@@ -14,7 +14,8 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
             builder.Property(x => x.Number).HasMaxLength(2).IsRequired();
             builder.HasIndex(x => x.Number)
                 .IsUnique()
-                .HasDatabaseName($"{nameof(Hall)}_{nameof(Hall.Number)}");
+                .HasDatabaseName($"{nameof(Hall)}_{nameof(Hall.Number)}")
+                .HasFilter($"{nameof(Hall.DeletedAt)} is null");
             builder.Property(x => x.NumberOfSeats).HasMaxLength(3);
             builder.HasMany(x => x.Tickets).WithOne(x => x.Hall).HasForeignKey(x => x.HallId);
         }

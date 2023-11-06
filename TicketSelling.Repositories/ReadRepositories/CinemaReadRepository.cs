@@ -23,12 +23,20 @@ namespace TicketSelling.Repositories.ReadRepositories
         }
 
         Task<IReadOnlyCollection<Cinema>> ICinemaReadRepository.GetAllAsync(CancellationToken cancellationToken)
-            => reader.Read<Cinema>().OrderBy(x=> x.Title).ToReadOnlyCollectionAsync(cancellationToken);
+            => reader.Read<Cinema>()
+                .NotDeletedAt()
+                .OrderBy(x=> x.Title)
+                .ToReadOnlyCollectionAsync(cancellationToken);
 
         Task<Cinema?> ICinemaReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
-            => reader.Read<Cinema>().ById(id).FirstOrDefaultAsync(cancellationToken);
+            => reader.Read<Cinema>()
+                .ById(id)
+                .FirstOrDefaultAsync(cancellationToken);
 
         Task<Dictionary<Guid, Cinema>> ICinemaReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
-            => reader.Read<Cinema>().ByIds(ids).OrderBy(x => x.Title).ToDictionaryAsync(x => x.Id, cancellationToken);
+            => reader.Read<Cinema>()
+                .ByIds(ids)
+                .OrderBy(x => x.Title)
+                .ToDictionaryAsync(x => x.Id, cancellationToken);
     }
 }

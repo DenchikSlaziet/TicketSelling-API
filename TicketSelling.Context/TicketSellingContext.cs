@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.CodeAnalysis;
+using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts;
 using TicketSelling.Context.Contracts.Configuration.Configurations;
 using TicketSelling.Context.Contracts.Models;
-using TicketSelling.Common.Entity.InterfaceDB;
 
 namespace TicketSelling.Context
 {

@@ -2,6 +2,9 @@
 
 namespace TicketSelling.Common.Entity.InterfaceDB
 {
+    /// <summary>
+    /// Интерфейс записи в БД
+    /// </summary>
     public interface IDbWriter
     {
         /// <summary>

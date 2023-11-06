@@ -23,12 +23,20 @@ namespace TicketSelling.Repositories.ReadRepositories
         }
 
         Task<IReadOnlyCollection<Hall>> IHallReadRepository.GetAllAsync(CancellationToken cancellationToken) 
-            => reader.Read<Hall>().OrderBy(x => x.Number).ToReadOnlyCollectionAsync(cancellationToken);
+            => reader.Read<Hall>()
+                .NotDeletedAt()
+                .OrderBy(x => x.Number)
+                .ToReadOnlyCollectionAsync(cancellationToken);
 
         Task<Hall?> IHallReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
-            => reader.Read<Hall>().ById(id).FirstOrDefaultAsync(cancellationToken);
+            => reader.Read<Hall>()
+                .ById(id)
+                .FirstOrDefaultAsync(cancellationToken);
 
         Task<Dictionary<Guid ,Hall>> IHallReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
-            => reader.Read<Hall>().ByIds(ids).OrderBy(x => x.Number).ToDictionaryAsync(x => x.Id, cancellationToken);
+            => reader.Read<Hall>()
+                .NotDeletedAt()
+                .ByIds(ids)
+                .OrderBy(x => x.Number).ToDictionaryAsync(x => x.Id, cancellationToken);
     }
 }

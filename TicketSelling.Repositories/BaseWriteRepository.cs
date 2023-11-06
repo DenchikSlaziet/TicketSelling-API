@@ -26,19 +26,57 @@ namespace TicketSelling.Repositories
             {
                 entityWithId.Id = Guid.NewGuid();
             }
+            AuditForCreate(entity);
+            AuditForUpdate(entity);
             writerContext.Writer.Add(entity);
         }
 
         /// <inheritdoc cref="IRepositoryWriter{T}"/>
-        public virtual void Update([NotNull] T entity)
+        public void Update([NotNull] T entity)
         {
+            AuditForUpdate(entity);
             writerContext.Writer.Update(entity);
         }
 
         /// <inheritdoc cref="IRepositoryWriter{T}"/>
-        public virtual void Delete([NotNull] T entity)
-        {          
-            writerContext.Writer.Delete(entity);           
-        }    
+        public void Delete([NotNull] T entity)
+        {
+            AuditForUpdate(entity);
+            AuditForDelete(entity);
+            if (entity is IEntityAuditDeleted)
+            {
+                writerContext.Writer.Update(entity);
+            }
+            else
+            {
+                writerContext.Writer.Delete(entity);
+            }
+        }
+
+        private void AuditForCreate([NotNull] T entity)
+        {
+            if (entity is IEntityAuditCreated auditCreated)
+            {
+                auditCreated.CreatedAt = writerContext.DateTimeProvider.UtcNow;
+                auditCreated.CreatedBy = writerContext.UserName;
+            }
+        }
+
+        private void AuditForUpdate([NotNull] T entity)
+        {
+            if (entity is IEntityAuditUpdated auditUpdate)
+            {
+                auditUpdate.UpdatedAt = writerContext.DateTimeProvider.UtcNow;
+                auditUpdate.UpdatedBy = writerContext.UserName;
+            }
+        }
+
+        private void AuditForDelete([NotNull] T entity)
+        {
+            if (entity is IEntityAuditDeleted auditDeleted)
+            {
+                auditDeleted.DeletedAt = writerContext.DateTimeProvider.UtcNow;
+            }
+        }
     }
 }

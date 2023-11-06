@@ -1,9 +1,12 @@
-﻿using TicketSelling.Common.Entity.EntityInterface;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
-using Microsoft.EntityFrameworkCore;
+using TicketSelling.Common.Entity.EntityInterface;
 
 namespace TicketSelling.Common.Entity.Repositories
 {
+    /// <summary>
+    /// Вспомогательные методв расширения
+    /// </summary>
     public static class CommonSpecs
     {
         /// <summary>
@@ -28,6 +31,12 @@ namespace TicketSelling.Common.Entity.Repositories
                     return query.Where(x => ids.Contains(x.Id));
             }
         }
+
+        /// <summary>
+        /// Не удаленные записи
+        /// </summary>
+        public static IQueryable<TEntity> NotDeletedAt<TEntity>(this IQueryable<TEntity> query) where TEntity : class, IEntityAuditDeleted
+            => query.Where(x => x.DeletedAt == null);
 
         /// <summary>
         /// Возвращает <see cref="IReadOnlyCollection{TEntity}"/>

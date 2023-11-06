@@ -1,6 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using TicketSelling.API.AutoMappers;
+using TicketSelling.Common.Entity;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context;
 using TicketSelling.Repositories;
@@ -13,6 +14,7 @@ namespace TicketSelling.API.Extensions
     {
         public static void RegistrationSRC(this IServiceCollection services)
         {
+            services.AddTransient<IDateTimeProvider, DateTimeProvider>();
             services.AddTransient<IDbWriterContext, DbWriterContext>();
             services.RegistrationService();
             services.RegistrationRepository();

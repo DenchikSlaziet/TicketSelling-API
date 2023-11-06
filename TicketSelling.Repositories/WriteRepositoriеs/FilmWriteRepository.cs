@@ -7,7 +7,8 @@ namespace TicketSelling.Repositories.WriteRepositoriеs
 {
     public class FilmWriteRepository : BaseWriteRepository<Film>, IFilmWriteRepository, IRepositoryAnchor
     {
-        public FilmWriteRepository(IDbWriterContext writerContext) : base(writerContext)
+        public FilmWriteRepository(IDbWriterContext writerContext) 
+            : base(writerContext)
         {
             
         }

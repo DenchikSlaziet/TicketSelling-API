@@ -14,5 +14,10 @@
         /// Ограничение по возросту
         /// </summary>
         public short Limitation { get; set; }
+
+        /// <summary>
+        /// Описание
+        /// </summary>
+        public string Description { get; set; } = string.Empty;
     }
 }

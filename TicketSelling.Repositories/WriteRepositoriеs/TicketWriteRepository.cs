@@ -7,7 +7,8 @@ namespace TicketSelling.Repositories.WriteRepositoriеs
 {
     public class TicketWriteRepository : BaseWriteRepository<Ticket>, ITicketWriteRepository, IRepositoryAnchor
     {
-        public TicketWriteRepository(IDbWriterContext writerContext) : base(writerContext)
+        public TicketWriteRepository(IDbWriterContext writerContext) 
+            : base(writerContext)
         {
 
         }

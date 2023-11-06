@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TicketSelling.Context.Contracts\TicketSelling.Context.Contracts.csproj" />
     <ProjectReference Include="..\TicketSelling.General\TicketSelling.General.csproj" />
     <ProjectReference Include="..\TicketSelling.Repositories.Contracts\TicketSelling.Repositories.Contracts.csproj" />
     <ProjectReference Include="..\TicketSelling.Services.Contracts\TicketSelling.Services.Contracts.csproj" />
