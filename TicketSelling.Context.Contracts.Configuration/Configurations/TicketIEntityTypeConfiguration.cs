@@ -17,7 +17,7 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
             builder.Property(x => x.Place).HasMaxLength(2).IsRequired();
             builder.Property(x => x.Row).HasMaxLength(2).IsRequired();
             builder.Property(x => x.Price).HasMaxLength(5).IsRequired();
-            builder.Property(x => x.StaffId).IsRequired();
+            builder.Property(x => x.StaffId);
             builder.Property(x => x.HallId).IsRequired();
             builder.Property(x => x.CinemaId).IsRequired();
             builder.Property(x => x.ClientId).IsRequired();

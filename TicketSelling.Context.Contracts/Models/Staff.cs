@@ -33,6 +33,6 @@ namespace TicketSelling.Context.Contracts.Models
         /// </summary>
         public Post Post { get; set; }
 
-        public ICollection<Ticket> Tickets { get; set; }
+        public ICollection<Ticket>? Tickets { get; set; }
     }
 }
