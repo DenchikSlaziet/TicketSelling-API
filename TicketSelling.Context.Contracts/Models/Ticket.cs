@@ -1,39 +1,41 @@
-﻿namespace TicketSelling.Context.Contracts.Models
+﻿using TicketSelling.Common.Entity.EntityInterface;
+
+namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Билет
     /// </summary>
-    public class Ticket
+    public class Ticket : BaseAuditEntity, IEntity, IEntityWithId
     {
-        /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid Id { get; set; }
-
         /// <summary>
         /// Идентификатор Зала
         /// </summary>
         public Guid HallId { get; set; }
+        public Hall Hall { get; set; }
 
         /// <summary>
         /// Идентификатор Кинотеатра
         /// </summary>
         public Guid CinemaId { get; set; }
+        public Cinema Cinema { get; set; }
 
         /// <summary>
         /// Идентификатор Фильма
         /// </summary>
         public Guid FilmId { get; set; }
+        public Film Film { get; set; }
 
         /// <summary>
         /// Идентификатор Клиента
         /// </summary>
         public Guid ClientId { get; set; }
+        public Client Client { get; set; }
 
         /// <summary>
         /// Идентификатор завхоза
         /// </summary>
-        public Guid StaffId { get; set; }
+        public Guid? StaffId { get; set; }
+        public Staff? Staff { get; set; }
 
         /// <summary>
         /// Ряд

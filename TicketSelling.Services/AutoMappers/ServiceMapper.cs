@@ -14,7 +14,6 @@ namespace TicketSelling.Services.AutoMappers
             CreateMap<Post, PostModel>().ConvertUsingEnumMapping(opt => opt.MapByName()).ReverseMap();
 
             CreateMap<Hall, HallModel>(MemberList.Destination);
-            CreateMap<Person, PersonModel>(MemberList.Destination);
             CreateMap<Film, FilmModel>(MemberList.Destination);
             CreateMap<Client, ClientModel>(MemberList.Destination);
             CreateMap<Cinema, CinemaModel>(MemberList.Destination);

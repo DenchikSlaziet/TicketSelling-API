@@ -13,6 +13,11 @@
         /// <summary>
         /// Менеджер
         /// </summary>
-        Manager
+        Manager,
+
+        /// <summary>
+        /// Неизвестно
+        /// </summary>
+        None,
     }
 }

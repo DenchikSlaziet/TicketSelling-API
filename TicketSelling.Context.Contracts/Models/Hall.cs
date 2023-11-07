@@ -1,15 +1,12 @@
-﻿namespace TicketSelling.Context.Contracts.Models
+﻿using TicketSelling.Common.Entity.EntityInterface;
+
+namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Зал
     /// </summary>
-    public class Hall
+    public class Hall : BaseAuditEntity, IEntity, IEntityWithId
     {
-        /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid Id { get; set; }
-
         /// <summary>
         /// Номер зала
         /// </summary>
@@ -19,5 +16,7 @@
         /// Кол-во мест
         /// </summary>
         public short NumberOfSeats { get; set; }
+
+        public ICollection<Ticket> Tickets { get; set; }
     }
 }

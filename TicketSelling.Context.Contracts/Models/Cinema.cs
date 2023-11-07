@@ -1,15 +1,12 @@
-﻿namespace TicketSelling.Context.Contracts.Models
+﻿using TicketSelling.Common.Entity.EntityInterface;
+
+namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Кинотеатр
     /// </summary>
-    public class Cinema
+    public class Cinema : BaseAuditEntity, IEntity, IEntityWithId
     {
-        /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid Id { get; set; }
-
         /// <summary>
         /// Название
         /// </summary>
@@ -19,5 +16,7 @@
         /// Адрес
         /// </summary>
         public string Address { get; set; } = string.Empty;
+
+        public ICollection<Ticket> Tickets { get; set; }
     }
 }

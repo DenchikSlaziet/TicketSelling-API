@@ -1,15 +1,12 @@
-﻿namespace TicketSelling.Context.Contracts.Models
+﻿using TicketSelling.Common.Entity.EntityInterface;
+
+namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Фильм
     /// </summary>
-    public class Film
+    public class Film : BaseAuditEntity, IEntity, IEntityWithId
     {
-        /// <summary>
-        /// Идентификатор
-        /// </summary>
-        public Guid Id { get; set; }
-
         /// <summary>
         /// Название
         /// </summary>
@@ -24,5 +21,7 @@
         /// Ограничение по возросту
         /// </summary>
         public short Limitation { get; set; }
+
+        public ICollection<Ticket> Tickets { get; set; }
     }
 }

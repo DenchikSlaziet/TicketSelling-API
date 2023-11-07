@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.Extensions.EnumMapping;
 using TicketSelling.API.Enums;
-using TicketSelling.API.Models;
+using TicketSelling.API.Models.Request;
+using TicketSelling.API.Models.Response;
 using TicketSelling.Services.Contracts.Enums;
 using TicketSelling.Services.Contracts.Models;
 
@@ -13,6 +14,18 @@ namespace TicketSelling.API.AutoMappers
         {
             CreateMap<PostModel, PostResponse>().ConvertUsingEnumMapping(opt => opt.MapByName()).ReverseMap();
             CreateMap<CinemaModel, CinemaResponse>(MemberList.Destination);
+            CreateMap<CinemaRequest, CinemaModel>(MemberList.Destination);
+            CreateMap<FilmRequest, FilmModel>(MemberList.Destination);
+            CreateMap<HallRequest, HallModel>(MemberList.Destination);
+            CreateMap<ClientRequest, ClientModel>(MemberList.Destination);
+            CreateMap<StaffRequest, StaffModel>(MemberList.Destination);
+            CreateMap<TicketRequest, TicketModel>(MemberList.Destination)
+                .ForMember(x => x.Hall, opt => opt.Ignore())
+                .ForMember(x => x.Cinema, opt => opt.Ignore())
+                .ForMember(x => x.Client, opt => opt.Ignore())
+                .ForMember(x => x.Film, opt => opt.Ignore())
+                .ForMember(x => x.Staff, opt => opt.Ignore());
+
             CreateMap<ClientModel, ClientResponse>(MemberList.Destination)
                 .ForMember(x => x.Name, opt => opt.MapFrom(src => $"{src.LastName} {src.FirstName} {src.Patronymic}"));
 
@@ -21,18 +34,7 @@ namespace TicketSelling.API.AutoMappers
             CreateMap<StaffModel, StaffResponse>(MemberList.Destination)
                 .ForMember(x => x.Name, opt => opt.MapFrom(src => $"{src.LastName} {src.FirstName} {src.Patronymic}"));
 
-            CreateMap<TicketModel, TicketResponse>(MemberList.Destination)                
-                .ForMember(x => x.NameStuff, opt => opt.MapFrom(src => src.Staff != null ? $"{src.Staff.LastName} " +
-                $"{src.Staff.FirstName} {src.Staff.Patronymic}" : string.Empty))
-                .ForMember(x => x.Post, opt => opt.MapFrom(src => src.Staff != null ? src.Staff.Post : PostModel.None))
-                .ForMember(x => x.NumberHall, opt => opt.MapFrom(src => src.Hall != null ? src.Hall.Number : 0))
-                .ForMember(x => x.CinemaAdress, opt => opt.MapFrom(src => src.Cinema != null ? src.Cinema.Address : string.Empty))
-                .ForMember(x => x.CinemaName, opt => opt.MapFrom(src => src.Cinema != null ? src.Cinema.Title : string.Empty))
-                .ForMember(x => x.CountHall, opt => opt.MapFrom(src => src.Hall != null ? src.Hall.NumberOfSeats : 0))
-                .ForMember(x => x.FilmName, opt => opt.MapFrom(src => src.Film != null ? src.Film.Title : string.Empty))
-                .ForMember(x => x.LimitationFilm, opt => opt.MapFrom(src => src.Film != null ? src.Film.Limitation : 0))
-                .ForMember(x => x.NameClient, opt => opt.MapFrom(src => src.Client != null ? $"{src.Client.LastName} " +
-                $"{src.Client.FirstName} {src.Client.Patronymic}" : string.Empty));
+            CreateMap<TicketModel, TicketResponse>(MemberList.Destination);    
         }
     }
 }

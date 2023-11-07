@@ -10,7 +10,7 @@ namespace TicketSelling.Repositories.Contracts.ReadInterfaces
         /// <summary>
         /// Получить список всех <see cref="Client"/>
         /// </summary>
-        Task<List<Client>> GetAllAsync(CancellationToken cancellationToken);
+        Task<IReadOnlyCollection<Client>> GetAllAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Получить <see cref="Client"/> по идентификатору

@@ -1,4 +1,6 @@
-﻿using TicketSelling.Context.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using TicketSelling.Common.Entity.InterfaceDB;
+using TicketSelling.Common.Entity.Repositories;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Anchors;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
@@ -13,19 +15,32 @@ namespace TicketSelling.Repositories.ReadRepositories
         /// <summary>
         /// Контекст для связи с бд
         /// </summary>
-        private ITicketSellingContext context;
+        private IDbRead reader;
 
-        public StaffReadRepository(ITicketSellingContext context)
+        public StaffReadRepository(IDbRead reader)
         {
-            this.context = context;
+            this.reader = reader;
         }
-        Task<List<Staff>> IStaffReadRepository.GetAllAsync(CancellationToken cancellationToken) 
-            => Task.FromResult(context.Staffs.ToList());
+        Task<IReadOnlyCollection<Staff>> IStaffReadRepository.GetAllAsync(CancellationToken cancellationToken)
+            => reader.Read<Staff>()
+                .NotDeletedAt()
+                .OrderBy(x => x.FirstName)
+                .ThenBy(x => x.LastName)
+                .ThenBy(x => x.Patronymic)
+                .ToReadOnlyCollectionAsync(cancellationToken);
 
         Task<Staff?> IStaffReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
-            => Task.FromResult(context.Staffs.FirstOrDefault(x => x.Id == id));
+            => reader.Read<Staff>()
+                .ById(id)
+                .FirstOrDefaultAsync(cancellationToken);
 
         Task<Dictionary<Guid, Staff>> IStaffReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
-            => Task.FromResult(context.Staffs.Where(x => ids.Contains(x.Id)).ToDictionary(x => x.Id));
+            => reader.Read<Staff>()
+                .NotDeletedAt()
+                .ByIds(ids)
+                .OrderBy(x => x.FirstName)
+                .ThenBy(x => x.LastName)
+                .ThenBy(x => x.Patronymic)
+                .ToDictionaryAsync(x => x.Id, cancellationToken);
     }
 }
