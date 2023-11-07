@@ -15,6 +15,32 @@
     BaseAuditEntity --|> Film
     BaseAuditEntity --|> Ticket
     BaseAuditEntity --|> Staff
+    IEntity ..|> BaseAuditEntity
+    IEntityAuditCreated ..|> BaseAuditEntity
+    IEntityAuditDeleted ..|> BaseAuditEntity
+    IEntityAuditUpdated ..|> BaseAuditEntity
+    IEntityWithId ..|> BaseAuditEntity
+    class IEntity{
+        <<interface>>
+    }
+    class IEntityAuditCreated{
+        <<interface>>
+        +DateTimeOffset CreatedAt
+        +string CreatedBy
+    }
+    class IEntityAuditDeleted{
+        <<interface>>
+        +DateTimeOffset? DeletedAt
+    }
+    class IEntityAuditUpdated{
+        <<interface>>
+        +DateTimeOffset UpdatedAt
+        +string UpdatedBy
+    }
+    class IEntityWithId{
+        <<interface>>
+        +Guid Id
+    }        
     class Hall{
         +short Number
         +short NumberOfSeats
@@ -54,18 +80,13 @@
         +decimal Price
         +DateTimeOffset Date
     }
-    class Post{
+    class Post {
+        <<enumeration>>
         Cashier(Кассир)
         Manager(Менеджер)
         None(Неизвестно)
     }
     class BaseAuditEntity {
-        +Guid Id
-        +DateTimeOffset CreatedAt
-        +string CreatedBy
-        +DateTimeOffset UpdatedAt
-        +string UpdatedBy
-        +DateTimeOffset? DeletedAt
+        <<Abstract>>        
     }
-
 ```
