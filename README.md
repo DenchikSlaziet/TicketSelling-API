@@ -57,6 +57,7 @@
     class Post{
         Cashier(Кассир)
         Manager(Менеджер)
+        None(Неизвестно)
     }
 
 ```
