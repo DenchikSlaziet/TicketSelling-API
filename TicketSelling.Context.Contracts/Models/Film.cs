@@ -1,11 +1,9 @@
-﻿using TicketSelling.Common.Entity.EntityInterface;
-
-namespace TicketSelling.Context.Contracts.Models
+﻿namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Фильм
     /// </summary>
-    public class Film : BaseAuditEntity, IEntity, IEntityWithId
+    public class Film : BaseAuditEntity
     {
         /// <summary>
         /// Название
@@ -15,7 +13,7 @@ namespace TicketSelling.Context.Contracts.Models
         /// <summary>
         /// Описание
         /// </summary>
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; }
 
         /// <summary>
         /// Ограничение по возросту

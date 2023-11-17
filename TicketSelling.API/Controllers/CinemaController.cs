@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TicketSelling.API.Models.CreateRequest;
-using TicketSelling.API.Models.Request;
 using TicketSelling.API.Models.Response;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
@@ -25,14 +24,20 @@ namespace TicketSelling.API.Controllers
             this.mapper = mapper;
         }
 
+        /// <summary>
+        /// Получить список кинотеатров
+        /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<CinemaResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<CinemaResponse>), StatusCodes.Status200OK)]      
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             var result = await cinemaService.GetAllAsync(cancellationToken);
             return Ok(result.Select(x => mapper.Map<CinemaResponse>(x)));
         }
 
+        /// <summary>
+        /// Получить кинотетар по Id
+        /// </summary>
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(CinemaResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetById(Guid id,CancellationToken cancellationToken)
@@ -46,6 +51,9 @@ namespace TicketSelling.API.Controllers
             return Ok(mapper.Map<CinemaResponse>(item));
         }
 
+        /// <summary>
+        /// Добавить кинотеатр
+        /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(CinemaResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> Add(CreateCinemaRequest model, CancellationToken cancellationToken)
@@ -54,15 +62,22 @@ namespace TicketSelling.API.Controllers
             return Ok(mapper.Map<CinemaResponse>(result));
         }
 
-        [HttpPut]
+        /// <summary>
+        /// Изменить кинотеатр
+        /// </summary>
+        [HttpPut("{id:guid}")]
         [ProducesResponseType(typeof(CinemaResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Edit(CinemaRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(Guid id, CreateCinemaRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<CinemaModel>(request);
+            model.Id = id;
             var result = await cinemaService.EditAsync(model, cancellationToken);
             return Ok(mapper.Map<CinemaResponse>(result));
         }
 
+        /// <summary>
+        /// Удалить Кинотеатр по Id
+        /// </summary>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)

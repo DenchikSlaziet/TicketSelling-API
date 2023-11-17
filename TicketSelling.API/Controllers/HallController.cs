@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TicketSelling.API.Models.CreateRequest;
-using TicketSelling.API.Models.Request;
 using TicketSelling.API.Models.Response;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
@@ -25,6 +24,9 @@ namespace TicketSelling.API.Controllers
             this.mapper = mapper;
         }
 
+        /// <summary>
+        /// Получить список залов
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(ICollection<HallResponse>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
@@ -33,6 +35,9 @@ namespace TicketSelling.API.Controllers
             return Ok(result.Select(x => mapper.Map<HallResponse>(x)));
         }
 
+        /// <summary>
+        /// Получить зал по Id
+        /// </summary>
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(HallResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
@@ -46,6 +51,9 @@ namespace TicketSelling.API.Controllers
             return Ok(mapper.Map<HallResponse>(item));
         }
 
+        /// <summary>
+        /// Добавить зал
+        /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(HallResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> Add(CreateHallRequest model, CancellationToken cancellationToken)
@@ -54,15 +62,22 @@ namespace TicketSelling.API.Controllers
             return Ok(mapper.Map<HallResponse>(result));
         }
 
-        [HttpPut]
+        /// <summary>
+        /// Изменить зал по Id
+        /// </summary>
+        [HttpPut("{id:guid}")]
         [ProducesResponseType(typeof(HallResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Edit(HallRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(Guid id, CreateHallRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<HallModel>(request);
+            model.Id = id;
             var result = await hallService.EditAsync(model, cancellationToken);
             return Ok(mapper.Map<HallResponse>(result));
         }
 
+        /// <summary>
+        /// Удалить зал по Id
+        /// </summary>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)

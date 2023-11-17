@@ -22,8 +22,8 @@ namespace TicketSelling.Repositories.ReadRepositories
             this.reader = reader;
         }
 
-        Task<IReadOnlyCollection<Ticket>> ITicketReadRepository.GetAllAsync(CancellationToken cancellationToken)
-            => reader.Read<Ticket>()
+        Task<IReadOnlyCollection<Ticket>> ITicketReadRepository.GetAllAsync(CancellationToken cancellationToken)     
+            =>reader.Read<Ticket>()
                 .NotDeletedAt()
                 .OrderBy(x => x.Date)
                 .ToReadOnlyCollectionAsync(cancellationToken);

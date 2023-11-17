@@ -48,11 +48,6 @@ namespace TicketSelling.Services.ReadServices
                 throw new TimeTableEntityNotFoundException<Hall>(id);
             }
 
-            if (targetHall.DeletedAt.HasValue)
-            {
-                throw new TimeTableInvalidOperationException($"Зал с идентификатором {id} уже удален");
-            }
-
             hallWriteRepository.Delete(targetHall);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }

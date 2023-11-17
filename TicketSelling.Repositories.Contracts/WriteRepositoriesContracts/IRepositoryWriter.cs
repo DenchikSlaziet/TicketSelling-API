@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using TicketSelling.Common.Entity.EntityInterface;
 
 namespace TicketSelling.Repositories.Contracts.WriteRepositoriesContracts
 {
-    public interface IRepositoryWriter<in TEntity> where TEntity : class
+    public interface IRepositoryWriter<in TEntity> where TEntity : class, IEntity
     {
         /// <summary>
         /// Добавить новую запись

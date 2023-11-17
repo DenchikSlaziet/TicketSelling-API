@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.Extensions.EnumMapping;
 using TicketSelling.API.Enums;
-using TicketSelling.API.Models.Request;
+using TicketSelling.API.Models.CreateRequest;
 using TicketSelling.API.Models.Response;
 using TicketSelling.Services.Contracts.Enums;
 using TicketSelling.Services.Contracts.Models;
@@ -14,12 +14,12 @@ namespace TicketSelling.API.AutoMappers
         {
             CreateMap<PostModel, PostResponse>().ConvertUsingEnumMapping(opt => opt.MapByName()).ReverseMap();
             CreateMap<CinemaModel, CinemaResponse>(MemberList.Destination);
-            CreateMap<CinemaRequest, CinemaModel>(MemberList.Destination);
-            CreateMap<FilmRequest, FilmModel>(MemberList.Destination);
-            CreateMap<HallRequest, HallModel>(MemberList.Destination);
-            CreateMap<ClientRequest, ClientModel>(MemberList.Destination);
-            CreateMap<StaffRequest, StaffModel>(MemberList.Destination);
-            CreateMap<TicketRequest, TicketModel>(MemberList.Destination)
+            CreateMap<CreateCinemaRequest, CinemaModel>(MemberList.Destination);
+            CreateMap<CreateFilmRequest, FilmModel>(MemberList.Destination);
+            CreateMap<CreateHallRequest, HallModel>(MemberList.Destination);
+            CreateMap<CreateClientRequest, ClientModel>(MemberList.Destination);
+            CreateMap<CreateStaffRequest, StaffModel>(MemberList.Destination);
+            CreateMap<CreateTicketRequest, TicketModel>(MemberList.Destination)
                 .ForMember(x => x.Hall, opt => opt.Ignore())
                 .ForMember(x => x.Cinema, opt => opt.Ignore())
                 .ForMember(x => x.Client, opt => opt.Ignore())

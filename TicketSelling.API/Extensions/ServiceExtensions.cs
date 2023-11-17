@@ -43,6 +43,9 @@ namespace TicketSelling.API.Extensions
                 c.SwaggerDoc("Hall", new OpenApiInfo { Title = "Залы", Version = "v1" });
                 c.SwaggerDoc("Staff", new OpenApiInfo { Title = "Персонал", Version = "v1" });
                 c.SwaggerDoc("Ticket", new OpenApiInfo { Title = "Билеты", Version = "v1" });
+
+                var filePath = Path.Combine(AppContext.BaseDirectory, "TicketSelling.API.xml");
+                c.IncludeXmlComments(filePath);
             });
         }
 

@@ -5,7 +5,7 @@ namespace TicketSelling.Context.Contracts.Models
     /// <summary>
     /// Кинотеатр
     /// </summary>
-    public class Cinema : BaseAuditEntity, IEntity, IEntityWithId
+    public class Cinema : BaseAuditEntity
     {
         /// <summary>
         /// Название

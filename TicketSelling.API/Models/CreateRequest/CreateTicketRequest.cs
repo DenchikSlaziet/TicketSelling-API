@@ -2,6 +2,9 @@
 
 namespace TicketSelling.API.Models.CreateRequest
 {
+    /// <summary>
+    /// Модель запроса создания билета
+    /// </summary>
     public class CreateTicketRequest
     {
         /// <summary>
@@ -25,7 +28,7 @@ namespace TicketSelling.API.Models.CreateRequest
         public Guid ClientId { get; set; }
 
         /// <summary>
-        /// Идентификатор завхоза
+        /// Идентификатор сотрудника, продавшего билет 
         /// </summary>
         public Guid? StaffId { get; set; }
 

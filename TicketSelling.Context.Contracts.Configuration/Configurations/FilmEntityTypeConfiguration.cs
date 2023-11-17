@@ -16,7 +16,6 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
                 .IsUnique()
                 .HasDatabaseName($"{nameof(Film)}_{nameof(Film.Title)}")
                 .HasFilter($"{nameof(Film.DeletedAt)} is null");
-            builder.Property(x => x.Description).HasMaxLength(500);
             builder.Property(x => x.Limitation).HasMaxLength(2).IsRequired();
             builder.HasMany(x => x.Tickets).WithOne(x => x.Film).HasForeignKey(x => x.FilmId);
         }
