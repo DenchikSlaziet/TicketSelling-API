@@ -12,7 +12,7 @@ using TicketSelling.Context;
 namespace TicketSelling.Context.Migrations
 {
     [DbContext(typeof(TicketSellingContext))]
-    [Migration("20231117172313_UpdateConfiguration")]
+    [Migration("20231118154441_UpdateConfiguration")]
     partial class UpdateConfiguration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,7 +40,8 @@ namespace TicketSelling.Context.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
@@ -55,7 +56,8 @@ namespace TicketSelling.Context.Migrations
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -77,7 +79,6 @@ namespace TicketSelling.Context.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<short>("Age")
-                        .HasMaxLength(2)
                         .HasColumnType("smallint");
 
                     b.Property<DateTimeOffset>("CreatedAt")
@@ -85,7 +86,8 @@ namespace TicketSelling.Context.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
@@ -115,7 +117,8 @@ namespace TicketSelling.Context.Migrations
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -138,7 +141,8 @@ namespace TicketSelling.Context.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
@@ -147,7 +151,6 @@ namespace TicketSelling.Context.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<short>("Limitation")
-                        .HasMaxLength(2)
                         .HasColumnType("smallint");
 
                     b.Property<string>("Title")
@@ -160,7 +163,8 @@ namespace TicketSelling.Context.Migrations
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -183,17 +187,16 @@ namespace TicketSelling.Context.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<short>("Number")
-                        .HasMaxLength(2)
                         .HasColumnType("smallint");
 
                     b.Property<short>("NumberOfSeats")
-                        .HasMaxLength(3)
                         .HasColumnType("smallint");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
@@ -201,7 +204,8 @@ namespace TicketSelling.Context.Migrations
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -220,7 +224,6 @@ namespace TicketSelling.Context.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<short>("Age")
-                        .HasMaxLength(2)
                         .HasColumnType("smallint");
 
                     b.Property<DateTimeOffset>("CreatedAt")
@@ -228,7 +231,8 @@ namespace TicketSelling.Context.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
@@ -249,7 +253,6 @@ namespace TicketSelling.Context.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Post")
-                        .HasMaxLength(1)
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
@@ -257,7 +260,8 @@ namespace TicketSelling.Context.Migrations
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -285,7 +289,8 @@ namespace TicketSelling.Context.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTimeOffset>("Date")
                         .HasColumnType("datetimeoffset");
@@ -300,15 +305,12 @@ namespace TicketSelling.Context.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<short>("Place")
-                        .HasMaxLength(2)
                         .HasColumnType("smallint");
 
                     b.Property<decimal>("Price")
-                        .HasMaxLength(5)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<short>("Row")
-                        .HasMaxLength(2)
                         .HasColumnType("smallint");
 
                     b.Property<Guid?>("StaffId")
@@ -319,7 +321,8 @@ namespace TicketSelling.Context.Migrations
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
