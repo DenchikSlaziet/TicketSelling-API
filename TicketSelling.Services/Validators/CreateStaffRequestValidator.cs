@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using TicketSelling.API.Models.CreateRequest;
+using TicketSelling.Services.Contracts.Models;
 
 namespace TicketSelling.API.Validation.Validators
 {
-    public class CreateStaffRequestValidator : AbstractValidator<StaffRequest>
+    public class CreateStaffRequestValidator : AbstractValidator<StaffModel>
     {
         public CreateStaffRequestValidator()
         {
@@ -25,7 +25,7 @@ namespace TicketSelling.API.Validation.Validators
             RuleFor(x => (int)x.Age)
               .InclusiveBetween(18, 99).WithMessage(MessageForValidation.InclusiveBetweenMessage);
 
-            //RuleFor(x => x.Post)
+            RuleFor(x => x.Post).IsInEnum().WithMessage(MessageForValidation.DefaultMessage);
         }
     }
 }

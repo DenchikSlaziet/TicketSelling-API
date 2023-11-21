@@ -42,5 +42,8 @@ namespace TicketSelling.Repositories.ReadRepositories
                 .ThenBy(x => x.LastName)
                 .ThenBy(x => x.Patronymic)
                 .ToDictionaryAsync(x => x.Id, cancellationToken);
+
+        Task<bool> IStaffReadRepository.IsNotNullAsync(Guid id, CancellationToken cancellationToken)
+            => reader.Read<Staff>().AnyAsync(x => x.Id == id, cancellationToken);
     }
 }

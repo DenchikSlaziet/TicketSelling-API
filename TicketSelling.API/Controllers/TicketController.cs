@@ -75,7 +75,6 @@ namespace TicketSelling.API.Controllers
         {
             var model = mapper.Map<TicketRequestModel>(request);
             var result = await ticketService.EditAsync(model, cancellationToken);
-
             return Ok(mapper.Map<TicketResponse>(result));
         }
 

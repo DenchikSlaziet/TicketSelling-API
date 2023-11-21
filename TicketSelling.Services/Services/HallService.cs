@@ -74,11 +74,11 @@ namespace TicketSelling.Services.ReadServices
         {
             var item = await hallReadRepository.GetByIdAsync(id, cancellationToken);
 
-            if(item == null)
+            if (item == null)
             {
                 throw new TimeTableEntityNotFoundException<Hall>(id);
+            }
             
-
             return mapper.Map<HallModel>(item);
         }
     }

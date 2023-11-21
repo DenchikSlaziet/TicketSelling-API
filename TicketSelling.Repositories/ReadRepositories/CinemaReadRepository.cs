@@ -38,5 +38,8 @@ namespace TicketSelling.Repositories.ReadRepositories
                 .ByIds(ids)
                 .OrderBy(x => x.Title)
                 .ToDictionaryAsync(x => x.Id, cancellationToken);
+
+        Task<bool> ICinemaReadRepository.IsNotNullAsync(Guid id, CancellationToken cancellationToken)
+            => reader.Read<Cinema>().AnyAsync(x => x.Id == id, cancellationToken);
     }
 }

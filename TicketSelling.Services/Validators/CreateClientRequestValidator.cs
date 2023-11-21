@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
-using TicketSelling.API.Models.CreateRequest;
-
+using TicketSelling.Services.Contracts.Models;
 
 namespace TicketSelling.API.Validation.Validators
 {
-    public class CreateClientRequestValidator : AbstractValidator<ClientRequest>
+    public class CreateClientRequestValidator : AbstractValidator<ClientModel>
     {
         public CreateClientRequestValidator()
         {

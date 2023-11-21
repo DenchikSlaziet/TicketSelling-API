@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using TicketSelling.API.Models.CreateRequest;
+using TicketSelling.Services.Contracts.Models;
 
 namespace TicketSelling.API.Validation.Validators
 {
-    public class CreateFilmRequestValidator : AbstractValidator<FilmRequest>
+    public class CreateFilmRequestValidator : AbstractValidator<FilmModel>
     {
         public CreateFilmRequestValidator()
         {

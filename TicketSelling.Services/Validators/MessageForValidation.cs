@@ -20,5 +20,7 @@
         /// </summary>
         public static string InclusiveBetweenMessage = "Значение поля {PropertyName} должно находится в " +
             "диапозоне от {From} до {To} включительно. Тукущее значение равно {PropertyValue}";
+
+        public static string NotFoundGuidMessage = "Вы ввели несуществующий Guid в поле {PropertyName}";
     }
 }

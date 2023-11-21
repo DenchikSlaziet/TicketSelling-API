@@ -30,6 +30,6 @@ namespace TicketSelling.API.Models.CreateRequest
         /// <summary>
         /// Должность
         /// </summary>
-        public int Post { get; set; }
+        public PostResponse Post { get; set; }
     }
 }

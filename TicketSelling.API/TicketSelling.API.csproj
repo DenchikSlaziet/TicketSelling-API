@@ -10,7 +10,6 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.EnumMapping" Version="3.1.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="FluentValidation" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -21,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TicketSelling.API.Validators\TicketSelling.API.Validators.csproj" />
     <ProjectReference Include="..\TicketSelling.Context\TicketSelling.Context.csproj" />
     <ProjectReference Include="..\TicketSelling.General\TicketSelling.General.csproj" />
+    <ProjectReference Include="..\TicketSelling.Repositories.Contracts\TicketSelling.Repositories.Contracts.csproj" />
     <ProjectReference Include="..\TicketSelling.Repositories\TicketSelling.Repositories.csproj" />
     <ProjectReference Include="..\TicketSelling.Services\TicketSelling.Services.csproj" />
   </ItemGroup>

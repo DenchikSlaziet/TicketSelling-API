@@ -38,5 +38,8 @@ namespace TicketSelling.Repositories.ReadRepositories
                 .NotDeletedAt()
                 .ByIds(ids)
                 .OrderBy(x => x.Number).ToDictionaryAsync(x => x.Id, cancellationToken);
+
+        Task<bool> IHallReadRepository.IsNotNullAsync(Guid id, CancellationToken cancellationToken)
+            => reader.Read<Hall>().AnyAsync(x => x.Id == id, cancellationToken);
     }
 }
