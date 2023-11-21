@@ -1,4 +1,5 @@
 ﻿using TicketSelling.Services.Contracts.Models;
+using TicketSelling.Services.Contracts.ModelsRequest;
 
 namespace TicketSelling.Services.Contracts.ReadServices
 {
@@ -17,13 +18,12 @@ namespace TicketSelling.Services.Contracts.ReadServices
         /// <summary>
         /// Добавляет новый билет
         /// </summary>
-        Task<TicketModel> AddAsync(Guid hallId, Guid filmId, Guid cinemaId, Guid clientId,
-            Guid? staffId, short row, short place, decimal price, DateTimeOffset date, CancellationToken cancellationToken);
+        Task<TicketModel> AddAsync(TicketRequestModel model, CancellationToken cancellationToken);
 
         /// <summary>
         /// Редактирует существующий билет
         /// </summary>
-        Task<TicketModel> EditAsync(TicketModel source, CancellationToken cancellationToken);
+        Task<TicketModel> EditAsync(TicketRequestModel source, CancellationToken cancellationToken);
 
         /// <summary>
         /// Удаляет существующий билет

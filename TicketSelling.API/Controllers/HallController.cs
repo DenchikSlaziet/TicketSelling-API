@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using TicketSelling.API.Models.CreateRequest;
 using TicketSelling.API.Models.Response;
@@ -58,19 +59,19 @@ namespace TicketSelling.API.Controllers
         [ProducesResponseType(typeof(HallResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> Add(CreateHallRequest model, CancellationToken cancellationToken)
         {
-            var result = await hallService.AddAsync(model.Number, model.NumberOfSeats, cancellationToken);
+            var hallModel = mapper.Map<HallModel>(model);
+            var result = await hallService.AddAsync(hallModel, cancellationToken);
             return Ok(mapper.Map<HallResponse>(result));
         }
 
         /// <summary>
         /// Изменить зал по Id
         /// </summary>
-        [HttpPut("{id:guid}")]
+        [HttpPut]
         [ProducesResponseType(typeof(HallResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Edit(Guid id, CreateHallRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(HallRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<HallModel>(request);
-            model.Id = id;
             var result = await hallService.EditAsync(model, cancellationToken);
             return Ok(mapper.Map<HallResponse>(result));
         }

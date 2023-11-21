@@ -1,10 +1,15 @@
-﻿namespace TicketSelling.API.Models.CreateRequest
+﻿namespace TicketSelling.Services.Contracts.ModelsRequest
 {
     /// <summary>
     /// Модель запроса создания билета
     /// </summary>
-    public class CreateTicketRequest
+    public class TicketRequestModel
     {
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
+        public Guid Id { get; set; }
+
         /// <summary>
         /// Идентификатор Зала
         /// </summary>

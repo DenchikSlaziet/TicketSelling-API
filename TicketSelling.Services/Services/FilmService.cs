@@ -25,15 +25,9 @@ namespace TicketSelling.Services.ReadServices
             this.unitOfWork = unitOfWork;
         }
 
-        async Task<FilmModel> IFilmService.AddAsync(string title, short limitation, string description, CancellationToken cancellationToken)
+        async Task<FilmModel> IFilmService.AddAsync(FilmModel model, CancellationToken cancellationToken)
         {
-            var item = new Film
-            {
-                Id = Guid.NewGuid(),
-                Title = title,
-                Limitation = limitation,
-                Description = description             
-            };
+            var item = mapper.Map<Film>(model);
 
             filmWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);

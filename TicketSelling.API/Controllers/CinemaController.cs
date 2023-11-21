@@ -58,19 +58,20 @@ namespace TicketSelling.API.Controllers
         [ProducesResponseType(typeof(CinemaResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> Add(CreateCinemaRequest model, CancellationToken cancellationToken)
         {
-            var result = await cinemaService.AddAsync(model.Address, model.Title, cancellationToken);
+            var cinemaModel = mapper.Map<CinemaModel>(model);
+
+            var result = await cinemaService.AddAsync(cinemaModel, cancellationToken);
             return Ok(mapper.Map<CinemaResponse>(result));
         }
 
         /// <summary>
         /// Изменить кинотеатр
         /// </summary>
-        [HttpPut("{id:guid}")]
+        [HttpPut]
         [ProducesResponseType(typeof(CinemaResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Edit(Guid id, CreateCinemaRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(CinemaRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<CinemaModel>(request);
-            model.Id = id;
             var result = await cinemaService.EditAsync(model, cancellationToken);
             return Ok(mapper.Map<CinemaResponse>(result));
         }

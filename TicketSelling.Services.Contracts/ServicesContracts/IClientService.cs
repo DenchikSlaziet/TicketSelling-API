@@ -17,7 +17,7 @@ namespace TicketSelling.Services.Contracts.ReadServices
         /// <summary>
         /// Добавляет нового клиента
         /// </summary>
-        Task<ClientModel> AddAsync(string firstName, string lastName, string patronymic, short age, string email, CancellationToken cancellationToken);
+        Task<ClientModel> AddAsync(ClientModel model, CancellationToken cancellationToken);
 
         /// <summary>
         /// Редактирует существующего клиента

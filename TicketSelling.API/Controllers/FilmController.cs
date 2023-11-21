@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using TicketSelling.API.Models.CreateRequest;
 using TicketSelling.API.Models.Response;
@@ -58,19 +59,19 @@ namespace TicketSelling.API.Controllers
         [ProducesResponseType(typeof(FilmResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> Add(CreateFilmRequest model, CancellationToken cancellationToken)
         {
-            var result = await filmService.AddAsync(model.Title, model.Limitation, model.Description, cancellationToken);
+            var filmModel = mapper.Map<FilmModel>(model);
+            var result = await filmService.AddAsync(filmModel, cancellationToken);
             return Ok(mapper.Map<FilmResponse>(result));
         }
 
         /// <summary>
         /// Изменить фильм по Id
         /// </summary>
-        [HttpPut("{id:guid}")]
+        [HttpPut]
         [ProducesResponseType(typeof(FilmResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Edit(Guid id, CreateFilmRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(FilmRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<FilmModel>(request);
-            model.Id = id;
             var result = await filmService.EditAsync(model, cancellationToken);
             return Ok(mapper.Map<FilmResponse>(result));
         }

@@ -26,18 +26,9 @@ namespace TicketSelling.Services.ReadServices
             this.mapper = mapper;
         }
 
-        async Task<StaffModel> IStaffService.AddAsync(string firstName, string lastName, string patronymic, 
-            short age, int post, CancellationToken cancellationToken)
+        async Task<StaffModel> IStaffService.AddAsync(StaffModel model, CancellationToken cancellationToken)
         {
-            var item = new Staff
-            {
-                Id = Guid.NewGuid(),
-                FirstName = firstName,
-                LastName = lastName,
-                Patronymic = patronymic,
-                Age = age,
-                Post = (Post)post
-            };
+            var item = mapper.Map<Staff>(model);
 
             staffWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
@@ -93,10 +84,11 @@ namespace TicketSelling.Services.ReadServices
         {
             var item = await staffReadRepository.GetByIdAsync(id, cancellationToken);
 
-            if(item == null)
+            if (item == null)
             {
-                return null;
+                throw new TimeTableEntityNotFoundException<Ticket>(id);
             }
+
             return mapper.Map<StaffModel>(item);
         }
     }

@@ -17,7 +17,7 @@ namespace TicketSelling.Services.Contracts.ReadServices
         /// <summary>
         /// Добавляет новый фильм
         /// </summary>
-        Task<FilmModel> AddAsync(string title, short limitation, string description, CancellationToken cancellationToken);
+        Task<FilmModel> AddAsync(FilmModel model, CancellationToken cancellationToken);
 
         /// <summary>
         /// Редактирует существующий фильм

@@ -25,14 +25,9 @@ namespace TicketSelling.Services.ReadServices
             this.unitOfWork = unitOfWork;
         }
 
-        async Task<HallModel> IHallService.AddAsync(short number, short numberOfSeats, CancellationToken cancellationToken)
+        async Task<HallModel> IHallService.AddAsync(HallModel model, CancellationToken cancellationToken)
         {
-            var item = new Hall
-            {
-                Id = Guid.NewGuid(),
-                Number = number,
-                NumberOfSeats = numberOfSeats
-            };
+            var item = mapper.Map<Hall>(model);
 
             hallWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
@@ -61,11 +56,6 @@ namespace TicketSelling.Services.ReadServices
                 throw new TimeTableEntityNotFoundException<Hall>(source.Id);
             }
             
-            if(targetHall.Number > targetHall.NumberOfSeats)
-            {
-                throw new Exception("Номер места не может быть большем чем общее кол-во мест!");
-            }
-
             targetHall.Number = source.Number;
             targetHall.NumberOfSeats = source.NumberOfSeats;
             hallWriteRepository.Update(targetHall);
@@ -87,7 +77,8 @@ namespace TicketSelling.Services.ReadServices
             if(item == null)
             {
                 throw new TimeTableEntityNotFoundException<Hall>(id);
-            }
+            
+
             return mapper.Map<HallModel>(item);
         }
     }

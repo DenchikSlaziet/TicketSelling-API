@@ -25,18 +25,9 @@ namespace TicketSelling.Services.ReadServices
             this.unitOfWork = unitOfWork;
         }
 
-        async Task<ClientModel> IClientService.AddAsync(string firstName, string lastName, string patronymic, short age, 
-            string email, CancellationToken cancellationToken)
+        async Task<ClientModel> IClientService.AddAsync(ClientModel model, CancellationToken cancellationToken)
         {
-            var item = new Client
-            {
-                Id = Guid.NewGuid(),
-                FirstName = firstName,
-                LastName = lastName,
-                Patronymic = patronymic,
-                Age = age,
-                Email = email
-            };
+            var item = mapper.Map<Client>(model);
 
             clientWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
@@ -50,7 +41,6 @@ namespace TicketSelling.Services.ReadServices
             {
                 throw new TimeTableEntityNotFoundException<Client>(id);
             }
-
 
             if (targetClient.DeletedAt.HasValue)
             {
@@ -94,6 +84,7 @@ namespace TicketSelling.Services.ReadServices
             {
                 throw new TimeTableEntityNotFoundException<Client>(id);
             }
+
             return mapper.Map<ClientModel>(item);
         }
     }

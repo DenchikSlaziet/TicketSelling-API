@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using TicketSelling.API.Models.CreateRequest;
 using TicketSelling.API.Models.Response;
@@ -58,19 +59,19 @@ namespace TicketSelling.API.Controllers
         [ProducesResponseType(typeof(StaffResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> Add(CreateStaffRequest model, CancellationToken cancellationToken)
         {
-            var result = await staffService.AddAsync(model.FirstName, model.LastName, model.Patronymic, model.Age, model.Post, cancellationToken);
+            var staffModel = mapper.Map<StaffModel>(model);
+            var result = await staffService.AddAsync(staffModel, cancellationToken);
             return Ok(mapper.Map<StaffResponse>(result));
         }
 
         /// <summary>
         /// Изменить cотрудника по Id
         /// </summary>
-        [HttpPut("{id:guid}")]
+        [HttpPut]
         [ProducesResponseType(typeof(StaffResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Edit(Guid id, CreateStaffRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(StaffRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<StaffModel>(request);
-            model.Id = id;
             var result = await staffService.EditAsync(model, cancellationToken);
             return Ok(mapper.Map<StaffResponse>(result));
         }

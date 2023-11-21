@@ -58,19 +58,19 @@ namespace TicketSelling.API.Controllers
         [ProducesResponseType(typeof(ClientResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> Add(CreateClientRequest model, CancellationToken cancellationToken)
         {
-            var result = await clientService.AddAsync(model.FirstName, model.LastName, model.Patronymic, model.Age, model.Email, cancellationToken);
+            var clientModel = mapper.Map<ClientModel>(model);
+            var result = await clientService.AddAsync(clientModel, cancellationToken);
             return Ok(mapper.Map<ClientResponse>(result));
         }
 
         /// <summary>
         /// Изменить клиента по Id
         /// </summary>
-        [HttpPut("{id:guid}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ClientResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Edit(Guid id, CreateClientRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(ClientRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<ClientModel>(request);
-            model.Id = id;
             var result = await clientService.EditAsync(model, cancellationToken);
             return Ok(mapper.Map<ClientResponse>(result));
         }

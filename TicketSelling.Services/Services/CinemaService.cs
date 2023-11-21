@@ -26,15 +26,9 @@ namespace TicketSelling.Services.ReadServices
             this.unitOfWork = unitOfWork;
         }
 
-        async Task<CinemaModel> ICinemaService.AddAsync(string address, string title, CancellationToken cancellationToken)
+        async Task<CinemaModel> ICinemaService.AddAsync(CinemaModel model, CancellationToken cancellationToken)
         {
-            var item = new Cinema
-            {
-                Id = Guid.NewGuid(),
-                Address = address,
-                Title = title,
-            };
-
+            var item = mapper.Map<Cinema>(model); 
             cinemaWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             return mapper.Map<CinemaModel>(item);
@@ -43,6 +37,7 @@ namespace TicketSelling.Services.ReadServices
         async Task ICinemaService.DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
             var targetCinema = await cinemaReadRepositiry.GetByIdAsync(id, cancellationToken);
+
             if (targetCinema == null)
             {
                 throw new TimeTableEntityNotFoundException<Cinema>(id);
@@ -88,7 +83,8 @@ namespace TicketSelling.Services.ReadServices
            if(item == null) 
            {
                 throw new TimeTableEntityNotFoundException<Cinema>(id);
-            }
+           }
+
            return mapper.Map<CinemaModel>(item);
         } 
     }

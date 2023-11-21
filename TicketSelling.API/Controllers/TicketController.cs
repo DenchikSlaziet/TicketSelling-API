@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TicketSelling.API.Models.CreateRequest;
 using TicketSelling.API.Models.Response;
-using TicketSelling.Services.Contracts.Models;
+using TicketSelling.Services.Contracts.ModelsRequest;
 using TicketSelling.Services.Contracts.ReadServices;
 
 namespace TicketSelling.API.Controllers
@@ -15,22 +15,11 @@ namespace TicketSelling.API.Controllers
     [ApiExplorerSettings(GroupName = "Ticket")]
     public class TicketController : ControllerBase
     {
-        private readonly ICinemaService cinemaService;
-        private readonly IClientService clientService;
-        private readonly IFilmService filmService;
-        private readonly IStaffService staffService;
-        private readonly IHallService hallService;
         private readonly ITicketService ticketService;
         private readonly IMapper mapper;
 
-        public TicketController(ICinemaService cinemaService, IClientService clientService, IFilmService filmService, 
-            ITicketService ticketService, IStaffService staffService, IHallService hallService, IMapper mapper)
-        {
-            this.cinemaService = cinemaService;
-            this.clientService = clientService;
-            this.filmService = filmService;
-            this.staffService = staffService;
-            this.hallService = hallService;
+        public TicketController(ITicketService ticketService, IMapper mapper)
+        {           
             this.ticketService = ticketService;
             this.mapper = mapper;
         }
@@ -69,31 +58,24 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(TicketResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Add(CreateTicketRequest model, CancellationToken cancellationToken)
+        public async Task<IActionResult> Add(CreateTicketRequest request, CancellationToken cancellationToken)
         {
-            var result = await ticketService.AddAsync(model.HallId, model.FilmId, model.CinemaId, model.ClientId, 
-                model.StaffId, model.Row, model.Place, model.Price, model.Date, cancellationToken);       
+            var model = mapper.Map<TicketRequestModel>(request);        
+            var result = await ticketService.AddAsync(model, cancellationToken);  
+            
             return Ok(mapper.Map<TicketResponse>(result));
         }
 
         /// <summary>
         /// Изменить билет по Id
         /// </summary>
-        [HttpPut("{id:guid}")]
+        [HttpPut]
         [ProducesResponseType(typeof(TicketResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> Edit(Guid id, CreateTicketRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(TicketRequest request, CancellationToken cancellationToken)
         {
-            var model = mapper.Map<TicketModel>(request);
-
-            model.Id = id;
-            model.Hall = await hallService.GetByIdAsync(request.HallId, cancellationToken);
-            model.Cinema = await cinemaService.GetByIdAsync(request.CinemaId, cancellationToken);
-            model.Film = await filmService.GetByIdAsync(request.FilmId, cancellationToken);
-            model.Client = await clientService.GetByIdAsync(request.ClientId, cancellationToken);
-            model.Staff = request.StaffId.HasValue ? await staffService.GetByIdAsync(request.StaffId.Value, cancellationToken)
-                : null;
-
+            var model = mapper.Map<TicketRequestModel>(request);
             var result = await ticketService.EditAsync(model, cancellationToken);
+
             return Ok(mapper.Map<TicketResponse>(result));
         }
 

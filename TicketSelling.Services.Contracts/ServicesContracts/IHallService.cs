@@ -17,7 +17,7 @@ namespace TicketSelling.Services.Contracts.ReadServices
         /// <summary>
         /// Добавляет новый зал
         /// </summary>
-        Task<HallModel> AddAsync(short number, short numberOfSeats, CancellationToken cancellationToken);
+        Task<HallModel> AddAsync(HallModel model, CancellationToken cancellationToken);
 
         /// <summary>
         /// Редактирует существующий зал
