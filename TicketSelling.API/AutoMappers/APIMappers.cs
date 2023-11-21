@@ -14,7 +14,7 @@ namespace TicketSelling.API.AutoMappers
         public APIMappers()
         {
             CreateMap<PostModel, PostResponse>().ConvertUsingEnumMapping(opt => opt.MapByName()).ReverseMap();
-            CreateMap<CinemaModel, CinemaResponse>(MemberList.Destination);
+
             CreateMap<CreateCinemaRequest, CinemaModel>(MemberList.Destination)
                 .ForMember(x => x.Id, opt => Guid.NewGuid());
 
@@ -30,7 +30,6 @@ namespace TicketSelling.API.AutoMappers
             CreateMap<CreateStaffRequest, StaffModel>(MemberList.Destination)
                 .ForMember(x => x.Id, opt => Guid.NewGuid());
 
-
             CreateMap<CinemaRequest, CinemaModel>(MemberList.Destination);
             CreateMap<FilmRequest, FilmModel>(MemberList.Destination);
             CreateMap<HallRequest, HallModel>(MemberList.Destination);
@@ -44,19 +43,18 @@ namespace TicketSelling.API.AutoMappers
                 .ForMember(x => x.Staff, opt => opt.Ignore());
 
             CreateMap<TicketRequest, TicketRequestModel>(MemberList.Destination);
-
             CreateMap<CreateTicketRequest, TicketRequestModel>(MemberList.Destination)
                 .ForMember(x => x.Id, opt => Guid.NewGuid());
 
-            CreateMap<ClientModel, ClientResponse>(MemberList.Destination)
-                .ForMember(x => x.Name, opt => opt.MapFrom(src => $"{src.LastName} {src.FirstName} {src.Patronymic}"));
-
             CreateMap<FilmModel, FilmResponse>(MemberList.Destination);
             CreateMap<HallModel, HallResponse>(MemberList.Destination);
+            CreateMap<CinemaModel, CinemaResponse>(MemberList.Destination);
+            CreateMap<TicketModel, TicketResponse>(MemberList.Destination);
             CreateMap<StaffModel, StaffResponse>(MemberList.Destination)
                 .ForMember(x => x.Name, opt => opt.MapFrom(src => $"{src.LastName} {src.FirstName} {src.Patronymic}"));
 
-            CreateMap<TicketModel, TicketResponse>(MemberList.Destination);    
+            CreateMap<ClientModel, ClientResponse>(MemberList.Destination)
+                .ForMember(x => x.Name, opt => opt.MapFrom(src => $"{src.LastName} {src.FirstName} {src.Patronymic}"));
         }
     }
 }

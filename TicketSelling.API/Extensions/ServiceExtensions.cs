@@ -1,9 +1,6 @@
-﻿using FluentValidation;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
 using TicketSelling.API.AutoMappers;
-using TicketSelling.API.Models.CreateRequest;
-using TicketSelling.API.Validation.Validators;
 using TicketSelling.Common.Entity;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context;

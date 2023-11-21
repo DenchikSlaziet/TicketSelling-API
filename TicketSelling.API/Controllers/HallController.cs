@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using TicketSelling.API.Models.CreateRequest;
 using TicketSelling.API.Models.Response;
