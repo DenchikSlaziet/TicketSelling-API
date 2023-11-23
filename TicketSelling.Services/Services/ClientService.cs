@@ -31,6 +31,7 @@ namespace TicketSelling.Services.ReadServices
 
             clientWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<ClientModel>(item);
         }
 
@@ -63,10 +64,11 @@ namespace TicketSelling.Services.ReadServices
             targetClient.LastName = source.LastName;
             targetClient.Patronymic = source.Patronymic;
             targetClient.Age = source.Age;
-            targetClient.Email = source.Email;          
-            clientWriteRepository.Update(targetClient);
+            targetClient.Email = source.Email;
 
+            clientWriteRepository.Update(targetClient);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<ClientModel>(targetClient);
         }
 

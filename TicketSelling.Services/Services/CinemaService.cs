@@ -37,6 +37,7 @@ namespace TicketSelling.Services.ReadServices
             var item = mapper.Map<Cinema>(model); 
             cinemaWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<CinemaModel>(item);
         }
 
@@ -73,8 +74,8 @@ namespace TicketSelling.Services.ReadServices
             targetCinema.Address = source.Address;
 
             cinemaWriteRepository.Update(targetCinema);
-
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<CinemaModel>(targetCinema);
         }
 

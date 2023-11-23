@@ -32,6 +32,7 @@ namespace TicketSelling.Services.ReadServices
 
             staffWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<StaffModel>(item);
         }
 
@@ -69,8 +70,8 @@ namespace TicketSelling.Services.ReadServices
             targetStaff.Age = source.Age;
 
             staffWriteRepository.Update(targetStaff);
-
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<StaffModel>(targetStaff);
         }
 

@@ -31,6 +31,7 @@ namespace TicketSelling.Services.ReadServices
 
             filmWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<FilmModel>(item);
         }
 
@@ -64,9 +65,10 @@ namespace TicketSelling.Services.ReadServices
             targetFilm.Title = source.Title;
             targetFilm.Limitation = source.Limitation;
             targetFilm.Description = source.Description;
-            filmWriteRepository.Update(targetFilm);
 
+            filmWriteRepository.Update(targetFilm);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<FilmModel>(targetFilm);
         }
 
@@ -84,6 +86,7 @@ namespace TicketSelling.Services.ReadServices
             {
                 throw new TimeTableEntityNotFoundException<Film>(id);
             }
+
             return mapper.Map<FilmModel>(item);
         }
     }

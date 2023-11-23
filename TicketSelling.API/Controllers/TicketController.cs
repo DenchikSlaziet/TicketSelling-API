@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using TicketSelling.API.Models.CreateRequest;
 using TicketSelling.API.Models.Response;
 using TicketSelling.Services.Contracts.ModelsRequest;
@@ -41,7 +42,7 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(TicketResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetById([Required] Guid id, CancellationToken cancellationToken)
         {
             var item = await ticketService.GetByIdAsync(id, cancellationToken);
 
@@ -83,7 +84,7 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> Delete([Required] Guid id, CancellationToken cancellationToken)
         {
             await ticketService.DeleteAsync(id, cancellationToken);
             return Ok();

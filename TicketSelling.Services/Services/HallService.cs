@@ -31,6 +31,7 @@ namespace TicketSelling.Services.ReadServices
 
             hallWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<HallModel>(item);
         }
 
@@ -58,9 +59,10 @@ namespace TicketSelling.Services.ReadServices
             
             targetHall.Number = source.Number;
             targetHall.NumberOfSeats = source.NumberOfSeats;
-            hallWriteRepository.Update(targetHall);
 
+            hallWriteRepository.Update(targetHall);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<HallModel>(targetHall);
         }
 
