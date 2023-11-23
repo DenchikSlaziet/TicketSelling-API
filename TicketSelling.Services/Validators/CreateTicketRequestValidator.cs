@@ -1,5 +1,9 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
+using System.Collections.Immutable;
+using TicketSelling.General;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
+using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.ModelsRequest;
 
 namespace TicketSelling.API.Validation.Validators

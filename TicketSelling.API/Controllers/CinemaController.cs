@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using TicketSelling.API.Exceptions;
 using TicketSelling.API.Models.CreateRequest;
 using TicketSelling.API.Models.Response;
 using TicketSelling.Services.Contracts.Models;
@@ -56,6 +57,7 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(CinemaResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status417ExpectationFailed)]
         public async Task<IActionResult> Add(CreateCinemaRequest model, CancellationToken cancellationToken)
         {
             var cinemaModel = mapper.Map<CinemaModel>(model);
@@ -69,6 +71,7 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpPut]
         [ProducesResponseType(typeof(CinemaResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status417ExpectationFailed)]
         public async Task<IActionResult> Edit(CinemaRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<CinemaModel>(request);

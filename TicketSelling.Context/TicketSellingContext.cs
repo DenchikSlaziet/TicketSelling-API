@@ -6,6 +6,16 @@ using TicketSelling.Context.Contracts.Models;
 
 namespace TicketSelling.Context
 {
+    /// <summary>
+    /// Контекст работы с БД
+    /// </summary>
+    /// <remarks>
+    /// 1) dotnet tool install --global dotnet-ef --version 6.0.0
+    /// 2) dotnet tool update --global dotnet-ef
+    /// 3) dotnet ef migrations add [name] --project TicketSelling.Context\TicketSelling.Context.csproj
+    /// 4) dotnet ef database update --project TicketSelling.Context\TicketSelling.Context.csproj
+    /// 5) dotnet ef database update [targetMigrationName] --TicketSelling.Context\TicketSelling.Context.csproj
+    /// </remarks>
     public class TicketSellingContext : DbContext, ITicketSellingContext, IDbRead, IDbWriter, IUnitOfWork
     {
         public DbSet<Cinema> Cinemas { get; set; }

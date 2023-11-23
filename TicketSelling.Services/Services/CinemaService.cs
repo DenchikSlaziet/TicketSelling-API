@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using TicketSelling.API.Validation.Validators;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
@@ -16,6 +18,7 @@ namespace TicketSelling.Services.ReadServices
         private readonly ICinemaWriteRepository cinemaWriteRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly CreateCinemaRequestValidator validations;
 
         public CinemaService(ICinemaReadRepository cinemaReadRepositiry, IMapper mapper, 
             ICinemaWriteRepository cinemaWriteRepository, IUnitOfWork unitOfWork)
@@ -24,10 +27,13 @@ namespace TicketSelling.Services.ReadServices
             this.mapper = mapper;
             this.cinemaWriteRepository = cinemaWriteRepository;
             this.unitOfWork = unitOfWork;
+            validations = new CreateCinemaRequestValidator();
         }
 
         async Task<CinemaModel> ICinemaService.AddAsync(CinemaModel model, CancellationToken cancellationToken)
         {
+            validations.ValidateAndThrow(model);
+
             var item = mapper.Map<Cinema>(model); 
             cinemaWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
@@ -55,6 +61,8 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<CinemaModel> ICinemaService.EditAsync(CinemaModel source, CancellationToken cancellationToken)
         {
+            validations.ValidateAndThrow(source);
+
             var targetCinema = await cinemaReadRepositiry.GetByIdAsync(source.Id, cancellationToken);
             if (targetCinema == null)
             {
