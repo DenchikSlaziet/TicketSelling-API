@@ -58,7 +58,7 @@
     }
     class Film {
         +string Title
-        +string Description
+        +string? Description
         +short Limitation
     }
 
