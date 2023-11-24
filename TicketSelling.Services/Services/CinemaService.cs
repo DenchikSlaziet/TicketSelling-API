@@ -32,7 +32,7 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<CinemaModel> ICinemaService.AddAsync(CinemaModel model, CancellationToken cancellationToken)
         {
-            validations.ValidateAndThrow(model);
+            await validations.ValidateAndThrowAsync(model, cancellationToken);
 
             var item = mapper.Map<Cinema>(model); 
             cinemaWriteRepository.Add(item);
@@ -62,7 +62,7 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<CinemaModel> ICinemaService.EditAsync(CinemaModel source, CancellationToken cancellationToken)
         {
-            validations.ValidateAndThrow(source);
+            await validations.ValidateAndThrowAsync(source, cancellationToken);
 
             var targetCinema = await cinemaReadRepositiry.GetByIdAsync(source.Id, cancellationToken);
             if (targetCinema == null)

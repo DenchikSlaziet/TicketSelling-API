@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using TicketSelling.API.Exceptions;
 using TicketSelling.API.Models.CreateRequest;
 using TicketSelling.API.Models.Response;
 using TicketSelling.Services.Contracts.Models;
@@ -41,6 +42,7 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(HallResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById([Required] Guid id, CancellationToken cancellationToken)
         {
             var item = await hallService.GetByIdAsync(id, cancellationToken);
@@ -57,6 +59,8 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(HallResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Add(CreateHallRequest model, CancellationToken cancellationToken)
         {
             var hallModel = mapper.Map<HallModel>(model);
@@ -69,6 +73,9 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpPut]
         [ProducesResponseType(typeof(HallResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Edit(HallRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<HallModel>(request);
@@ -81,6 +88,8 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status417ExpectationFailed)]
         public async Task<IActionResult> Delete([Required] Guid id, CancellationToken cancellationToken)
         {
             await hallService.DeleteAsync(id, cancellationToken);

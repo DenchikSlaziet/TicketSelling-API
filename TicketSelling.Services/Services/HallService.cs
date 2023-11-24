@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using TicketSelling.API.Validation.Validators;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
@@ -16,6 +18,7 @@ namespace TicketSelling.Services.ReadServices
         private readonly IHallReadRepository hallReadRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly CreateHallRequestValidator validations;
 
         public HallService(IHallWriteRepository hallWriteRepository,IHallReadRepository hallReadRepository, IUnitOfWork unitOfWork ,IMapper mapper)
         {
@@ -23,10 +26,13 @@ namespace TicketSelling.Services.ReadServices
             this.hallReadRepository = hallReadRepository;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
+            validations = new CreateHallRequestValidator();
         }
 
         async Task<HallModel> IHallService.AddAsync(HallModel model, CancellationToken cancellationToken)
         {
+            await validations.ValidateAndThrowAsync(model, cancellationToken);
+
             var item = mapper.Map<Hall>(model);
 
             hallWriteRepository.Add(item);
@@ -50,6 +56,8 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<HallModel> IHallService.EditAsync(HallModel source, CancellationToken cancellationToken)
         {
+            await validations.ValidateAndThrowAsync(source, cancellationToken);
+
             var targetHall = await hallReadRepository.GetByIdAsync(source.Id, cancellationToken);
 
             if (targetHall == null)

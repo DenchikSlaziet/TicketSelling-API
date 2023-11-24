@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using TicketSelling.API.Validation.Validators;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
@@ -7,6 +9,7 @@ using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace TicketSelling.Services.ReadServices
 {
@@ -16,6 +19,7 @@ namespace TicketSelling.Services.ReadServices
         private readonly IClientReadRepository clientReadRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly CreateClientRequestValidator validations;
 
         public ClientService(IClientWriteRepository clientWriteRepository, IClientReadRepository clientReadRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -23,10 +27,13 @@ namespace TicketSelling.Services.ReadServices
             this.clientWriteRepository = clientWriteRepository;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
+            validations = new CreateClientRequestValidator();
         }
 
         async Task<ClientModel> IClientService.AddAsync(ClientModel model, CancellationToken cancellationToken)
         {
+            await validations.ValidateAndThrowAsync(model, cancellationToken);
+
             var item = mapper.Map<Client>(model);
 
             clientWriteRepository.Add(item);
@@ -54,6 +61,8 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<ClientModel> IClientService.EditAsync(ClientModel source, CancellationToken cancellationToken)
         {
+            await validations.ValidateAndThrowAsync(source, cancellationToken);
+
             var targetClient = await clientReadRepository.GetByIdAsync(source.Id, cancellationToken);
             if (targetClient == null)
             {

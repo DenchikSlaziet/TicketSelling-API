@@ -1,7 +1,4 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
-using TicketSelling.General;
-using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
 
 namespace TicketSelling.API.Validation.Validators

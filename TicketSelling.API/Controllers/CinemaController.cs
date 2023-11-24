@@ -42,6 +42,7 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(CinemaResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById([Required] Guid id,CancellationToken cancellationToken)
         {
             var item = await cinemaService.GetByIdAsync(id,cancellationToken);
@@ -58,7 +59,8 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(CinemaResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status417ExpectationFailed)]
+        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Add(CreateCinemaRequest model, CancellationToken cancellationToken)
         {
             var cinemaModel = mapper.Map<CinemaModel>(model);
@@ -72,7 +74,9 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpPut]
         [ProducesResponseType(typeof(CinemaResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status417ExpectationFailed)]
+        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Edit(CinemaRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<CinemaModel>(request);
@@ -85,6 +89,8 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status417ExpectationFailed)]
         public async Task<IActionResult> Delete([Required] Guid id, CancellationToken cancellationToken)
         {
             await cinemaService.DeleteAsync(id, cancellationToken);

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using TicketSelling.API.Exceptions;
 using TicketSelling.API.Models.CreateRequest;
 using TicketSelling.API.Models.Response;
 using TicketSelling.Services.Contracts.Models;
@@ -41,6 +42,8 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(FilmResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status417ExpectationFailed)]
         public async Task<IActionResult> GetById([Required] Guid id, CancellationToken cancellationToken)
         {
             var item = await filmService.GetByIdAsync(id, cancellationToken);
@@ -57,6 +60,8 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(FilmResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Add(CreateFilmRequest model, CancellationToken cancellationToken)
         {
             var filmModel = mapper.Map<FilmModel>(model);
@@ -69,6 +74,9 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpPut]
         [ProducesResponseType(typeof(FilmResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Edit(FilmRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<FilmModel>(request);
@@ -81,6 +89,8 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status417ExpectationFailed)]
         public async Task<IActionResult> Delete([Required] Guid id, CancellationToken cancellationToken)
         {
             await filmService.DeleteAsync(id, cancellationToken);

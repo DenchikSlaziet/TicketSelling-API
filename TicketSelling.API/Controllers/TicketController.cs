@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using TicketSelling.API.Exceptions;
 using TicketSelling.API.Models.CreateRequest;
 using TicketSelling.API.Models.Response;
+using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.ModelsRequest;
 using TicketSelling.Services.Contracts.ReadServices;
 
@@ -42,6 +44,7 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(TicketResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById([Required] Guid id, CancellationToken cancellationToken)
         {
             var item = await ticketService.GetByIdAsync(id, cancellationToken);
@@ -59,6 +62,8 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(TicketResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Add(CreateTicketRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<TicketRequestModel>(request);        
@@ -72,6 +77,8 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpPut]
         [ProducesResponseType(typeof(TicketResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Edit(TicketRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<TicketRequestModel>(request);
@@ -84,6 +91,8 @@ namespace TicketSelling.API.Controllers
         /// </summary>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status417ExpectationFailed)]
         public async Task<IActionResult> Delete([Required] Guid id, CancellationToken cancellationToken)
         {
             await ticketService.DeleteAsync(id, cancellationToken);

@@ -24,13 +24,17 @@ namespace TicketSelling.API.Extensions
 
         public static void RegistrationControllers(this IServiceCollection services)
         {
-            services.AddControllers().AddNewtonsoftJson(o =>
+            services.AddControllers(x =>
             {
-                o.SerializerSettings.Converters.Add(new StringEnumConverter
+                x.Filters.Add<TicketSellingExceptionFilter>();
+            })
+                .AddNewtonsoftJson(o =>
                 {
-                    CamelCaseText = false
+                    o.SerializerSettings.Converters.Add(new StringEnumConverter
+                    {
+                        CamelCaseText = false
+                    });
                 });
-            });
         }
 
         public static void RegistrationSwagger(this IServiceCollection services)

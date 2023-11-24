@@ -45,7 +45,7 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<TicketModel> ITicketService.AddAsync(TicketRequestModel model, CancellationToken cancellationToken)
         {
-            await validations.ValidateAndThrowAsync(model);
+            await validations.ValidateAndThrowAsync(model, cancellationToken);
 
             var ticket = mapper.Map<Ticket>(model);
             ticket.Date = model.Date;
@@ -93,7 +93,7 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<TicketModel> ITicketService.EditAsync(TicketRequestModel model, CancellationToken cancellationToken)
         {
-            await validations.ValidateAndThrowAsync(model);
+            await validations.ValidateAndThrowAsync(model,cancellationToken);
 
             var ticket = await ticketReadRepository.GetByIdAsync(model.Id, cancellationToken);
 

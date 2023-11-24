@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using TicketSelling.API.Validation.Validators;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
@@ -16,6 +18,7 @@ namespace TicketSelling.Services.ReadServices
         private readonly IFilmReadRepository filmReadRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly CreateFilmRequestValidator validations;
 
         public FilmService(IFilmWriteRepository filmWriteRepository, IFilmReadRepository filmReadRepository, IMapper mapper, IUnitOfWork unitOfWork)
         {
@@ -23,10 +26,13 @@ namespace TicketSelling.Services.ReadServices
             this.filmReadRepository = filmReadRepository;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
+            validations = new CreateFilmRequestValidator();
         }
 
         async Task<FilmModel> IFilmService.AddAsync(FilmModel model, CancellationToken cancellationToken)
         {
+            await validations.ValidateAndThrowAsync(model, cancellationToken);
+
             var item = mapper.Map<Film>(model);
 
             filmWriteRepository.Add(item);
@@ -55,6 +61,8 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<FilmModel> IFilmService.EditAsync(FilmModel source, CancellationToken cancellationToken)
         {
+            await validations.ValidateAndThrowAsync(source, cancellationToken);
+
             var targetFilm = await filmReadRepository.GetByIdAsync(source.Id, cancellationToken);
 
             if (targetFilm == null)
