@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using TicketSelling.API.Validation.Validators;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts.Enums;
 using TicketSelling.Context.Contracts.Models;
@@ -17,6 +19,7 @@ namespace TicketSelling.Services.ReadServices
         private readonly IStaffReadRepository staffReadRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly CreateStaffRequestValidator validator;
 
         public StaffService(IStaffWriteRepository staffWriteRepository, IStaffReadRepository staffReadRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -24,10 +27,13 @@ namespace TicketSelling.Services.ReadServices
             this.staffReadRepository = staffReadRepository;
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            validator = new CreateStaffRequestValidator();
         }
 
         async Task<StaffModel> IStaffService.AddAsync(StaffModel model, CancellationToken cancellationToken)
         {
+            await validator.ValidateAndThrowAsync(model, cancellationToken);
+
             var item = mapper.Map<Staff>(model);
 
             staffWriteRepository.Add(item);
@@ -56,6 +62,8 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<StaffModel> IStaffService.EditAsync(StaffModel source, CancellationToken cancellationToken)
         {
+            await validator.ValidateAndThrowAsync(source, cancellationToken);
+
             var targetStaff = await staffReadRepository.GetByIdAsync(source.Id, cancellationToken);
 
             if (targetStaff == null)

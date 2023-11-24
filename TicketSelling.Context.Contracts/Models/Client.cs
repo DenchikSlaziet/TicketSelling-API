@@ -1,6 +1,4 @@
-﻿using TicketSelling.Common.Entity.EntityInterface;
-
-namespace TicketSelling.Context.Contracts.Models
+﻿namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Клиент

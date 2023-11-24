@@ -36,10 +36,11 @@ namespace TicketSelling.Repositories.ReadRepositories
         Task<Dictionary<Guid, Film>> IFilmReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
             => reader.Read<Film>()
                 .ByIds(ids)
+                .NotDeletedAt()
                 .OrderBy(x => x.Title)
                 .ToDictionaryAsync(x => x.Id, cancellationToken);
 
         Task<bool> IFilmReadRepository.IsNotNullAsync(Guid id, CancellationToken cancellationToken)
-            => reader.Read<Film>().AnyAsync(x => x.Id == id, cancellationToken);
+            => reader.Read<Film>().AnyAsync(x => x.Id == id && !x.DeletedAt.HasValue, cancellationToken);
     }
 }

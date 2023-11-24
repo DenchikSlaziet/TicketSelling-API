@@ -31,7 +31,12 @@ namespace TicketSelling.Services.AutoMappers
                 .ForMember(x => x.Cinema, opt => opt.Ignore())
                 .ForMember(x => x.Client, opt => opt.Ignore())
                 .ForMember(x => x.Film, opt => opt.Ignore())
-                .ForMember(x => x.Staff, opt => opt.Ignore()).ReverseMap();
+                .ForMember(x => x.Staff, opt => opt.Ignore())
+                .ForMember(x => x.CreatedAt, opt => opt.Ignore())
+                .ForMember(x => x.DeletedAt, opt => opt.Ignore())
+                .ForMember(x => x.CreatedBy, opt => opt.Ignore())
+                .ForMember(x => x.UpdatedAt, opt => opt.Ignore())
+                .ForMember(x => x.UpdatedBy, opt => opt.Ignore());
 
         }
     }

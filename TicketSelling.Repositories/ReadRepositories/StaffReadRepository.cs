@@ -44,6 +44,6 @@ namespace TicketSelling.Repositories.ReadRepositories
                 .ToDictionaryAsync(x => x.Id, cancellationToken);
 
         Task<bool> IStaffReadRepository.IsNotNullAsync(Guid id, CancellationToken cancellationToken)
-            => reader.Read<Staff>().AnyAsync(x => x.Id == id, cancellationToken);
+            => reader.Read<Staff>().AnyAsync(x => x.Id == id && !x.DeletedAt.HasValue, cancellationToken);
     }
 }
