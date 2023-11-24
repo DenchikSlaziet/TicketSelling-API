@@ -9,10 +9,10 @@ using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace TicketSelling.Services.ReadServices
 {
+    /// <inheritdoc cref="IClientService"/>
     public class ClientService : IClientService, IServiceAnchor
     {
         private readonly IClientWriteRepository clientWriteRepository;

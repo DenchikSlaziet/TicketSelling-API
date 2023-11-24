@@ -6,6 +6,9 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
 {
     public class TicketIEntityTypeConfiguration : IEntityTypeConfiguration<Ticket>
     {
+        /// <summary>
+        /// Конфигурация для <see cref="Ticket"/>
+        /// </summary>
         void IEntityTypeConfiguration<Ticket>.Configure(EntityTypeBuilder<Ticket> builder)
         {
             builder.ToTable("Tickets");

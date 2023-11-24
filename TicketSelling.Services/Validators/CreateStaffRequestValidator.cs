@@ -3,6 +3,9 @@ using TicketSelling.Services.Contracts.Models;
 
 namespace TicketSelling.API.Validation.Validators
 {
+    /// <summary>
+    /// Валидатор <see cref="StaffModel"/>
+    /// </summary>
     public class CreateStaffRequestValidator : AbstractValidator<StaffModel>
     {
         public CreateStaffRequestValidator()

@@ -8,6 +8,9 @@ using TicketSelling.Services.Contracts.ModelsRequest;
 
 namespace TicketSelling.Services.AutoMappers
 {
+    /// <summary>
+    /// Маппер
+    /// </summary>
     public class ServiceMapper : Profile
     {
         public ServiceMapper() 
@@ -37,7 +40,6 @@ namespace TicketSelling.Services.AutoMappers
                 .ForMember(x => x.CreatedBy, opt => opt.Ignore())
                 .ForMember(x => x.UpdatedAt, opt => opt.Ignore())
                 .ForMember(x => x.UpdatedBy, opt => opt.Ignore());
-
         }
     }
 }

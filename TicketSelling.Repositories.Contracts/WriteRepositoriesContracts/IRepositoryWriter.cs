@@ -3,6 +3,10 @@ using TicketSelling.Common.Entity.EntityInterface;
 
 namespace TicketSelling.Repositories.Contracts.WriteRepositoriesContracts
 {
+    /// <summary>
+    /// Интерфейс для работы с БД
+    /// </summary>
+    /// <typeparam name="TEntity"> Сущность из БД</typeparam>
     public interface IRepositoryWriter<in TEntity> where TEntity : class, IEntity
     {
         /// <summary>

@@ -3,6 +3,9 @@ using TicketSelling.Services.Contracts.Models;
 
 namespace TicketSelling.API.Validation.Validators
 {
+    /// <summary>
+    /// Валидатор <see cref="HallModel"/>
+    /// </summary>
     public class CreateHallRequestValidator : AbstractValidator<HallModel>
     {
         public CreateHallRequestValidator()

@@ -4,6 +4,9 @@ using TicketSelling.Services.Contracts.ModelsRequest;
 
 namespace TicketSelling.API.Validation.Validators
 {
+    /// <summary>
+    /// Валидатор <see cref="TicketRequestModel"/>
+    /// </summary>
     public class CreateTicketRequestValidator : AbstractValidator<TicketRequestModel>
     {
         private readonly ICinemaReadRepository cinemaReadRepository;

@@ -12,6 +12,7 @@ using TicketSelling.Services.Contracts.ReadServices;
 
 namespace TicketSelling.Services.ReadServices
 {
+    /// <inheritdoc cref="IHallService"/>
     public class HallService : IHallService, IServiceAnchor
     {
         private readonly IHallWriteRepository hallWriteRepository;

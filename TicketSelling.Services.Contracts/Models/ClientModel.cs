@@ -1,5 +1,8 @@
 ﻿namespace TicketSelling.Services.Contracts.Models
 {
+    /// <summary>
+    /// Модель клиента
+    /// </summary>
     public class ClientModel
     {
         /// <summary>

@@ -10,8 +10,14 @@ using TicketSelling.Services.AutoMappers;
 
 namespace TicketSelling.API.Extensions
 {
+    /// <summary>
+    /// Расширения для <see cref="IServiceCollection"/>
+    /// </summary>
     public static class ServiceExtensions
     {
+        /// <summary>
+        /// Регистрирует все сервисы, репозитории и все что нужно для контекста
+        /// </summary>
         public static void RegistrationSRC(this IServiceCollection services)
         {
             services.AddTransient<IDateTimeProvider, DateTimeProvider>();
@@ -22,6 +28,10 @@ namespace TicketSelling.API.Extensions
             services.AddAutoMapper(typeof(APIMappers), typeof(ServiceMapper));
         }
 
+        /// <summary>
+        /// Включает фильтры и ставит шрифт на перечесления
+        /// </summary>
+        /// <param name="services"></param>
         public static void RegistrationControllers(this IServiceCollection services)
         {
             services.AddControllers(x =>
@@ -37,6 +47,9 @@ namespace TicketSelling.API.Extensions
                 });
         }
 
+        /// <summary>
+        /// Настройки свагера
+        /// </summary>
         public static void RegistrationSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
@@ -53,6 +66,9 @@ namespace TicketSelling.API.Extensions
             });
         }
 
+        /// <summary>
+        /// Настройки свагера
+        /// </summary>
         public static void CustomizeSwaggerUI(this WebApplication web)
         {
             web.UseSwagger();

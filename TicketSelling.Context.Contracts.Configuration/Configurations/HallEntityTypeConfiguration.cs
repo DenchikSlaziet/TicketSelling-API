@@ -4,6 +4,9 @@ using TicketSelling.Context.Contracts.Models;
 
 namespace TicketSelling.Context.Contracts.Configuration.Configurations
 {
+    /// <summary>
+    /// Конфигурация для <see cref="Hall"/>
+    /// </summary>
     public class HallEntityTypeConfiguration : IEntityTypeConfiguration<Hall>
     {
         void IEntityTypeConfiguration<Hall>.Configure(EntityTypeBuilder<Hall> builder)

@@ -3,6 +3,9 @@ using TicketSelling.Services.Contracts.Models;
 
 namespace TicketSelling.API.Validation.Validators
 {
+    /// <summary>
+    /// Валидатор <see cref="ClientModel"/>
+    /// </summary>
     public class CreateClientRequestValidator : AbstractValidator<ClientModel>
     {
         public CreateClientRequestValidator()

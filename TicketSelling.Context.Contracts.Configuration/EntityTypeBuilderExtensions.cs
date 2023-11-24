@@ -1,14 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicketSelling.Common.Entity.EntityInterface;
 using TicketSelling.Context.Contracts.Models;
 
 namespace TicketSelling.Context.Contracts.Configuration
 {
+    /// <summary>
+    /// Методы расширения для <see cref="EntityTypeBuilder"/>
+    /// </summary>
     static internal class EntityTypeBuilderExtensions
     {
         /// <summary>

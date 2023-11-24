@@ -5,8 +5,15 @@ using TicketSelling.Context.Contracts;
 
 namespace TicketSelling.Context
 {
+    /// <summary>
+    /// Методы пасширения для <see cref="IServiceCollection"/>
+    /// </summary>
     public static class RegistrationContexts
     {
+        /// <summary>
+        /// Регистрирует все что связано с контекстом
+        /// </summary>
+        /// <param name="service"></param>
         public static void RegistrationContext(this IServiceCollection service)
         {
             service.TryAddScoped<ITicketSellingContext>(provider => provider.GetRequiredService<TicketSellingContext>());

@@ -2,6 +2,9 @@
 
 namespace TicketSelling.API
 {
+    /// <summary>
+    /// Реализация <see cref="IDateTimeProvider"/>
+    /// </summary>
     public class DateTimeProvider : IDateTimeProvider
     {
         DateTimeOffset IDateTimeProvider.UtcNow => DateTimeOffset.UtcNow;

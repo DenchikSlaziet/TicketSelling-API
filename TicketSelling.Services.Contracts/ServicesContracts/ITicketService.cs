@@ -3,6 +3,9 @@ using TicketSelling.Services.Contracts.ModelsRequest;
 
 namespace TicketSelling.Services.Contracts.ReadServices
 {
+    /// <summary>
+    /// Сервис <see cref="TicketModel"/>
+    /// </summary>
     public interface ITicketService
     {
         /// <summary>

@@ -2,6 +2,9 @@
 
 namespace TicketSelling.Services.Contracts.ReadServices
 {
+    /// <summary>
+    /// Сервис <see cref="HallModel"/>
+    /// </summary>
     public interface IHallService
     {
         /// <summary>

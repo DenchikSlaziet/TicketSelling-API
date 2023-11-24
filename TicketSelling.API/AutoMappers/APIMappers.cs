@@ -9,6 +9,9 @@ using TicketSelling.Services.Contracts.ModelsRequest;
 
 namespace TicketSelling.API.AutoMappers
 {
+    /// <summary>
+    /// Маппер
+    /// </summary>
     public class APIMappers : Profile
     {
         public APIMappers()

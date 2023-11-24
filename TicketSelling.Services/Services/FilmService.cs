@@ -12,6 +12,7 @@ using TicketSelling.Services.Contracts.ReadServices;
 
 namespace TicketSelling.Services.ReadServices
 {
+    /// <inheritdoc cref="IFilmService"/>
     public class FilmService : IFilmService, IServiceAnchor
     {
         private readonly IFilmWriteRepository filmWriteRepository;

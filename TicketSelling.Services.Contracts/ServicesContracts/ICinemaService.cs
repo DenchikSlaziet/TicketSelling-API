@@ -2,6 +2,9 @@
 
 namespace TicketSelling.Services.Contracts.ReadServices
 {
+    /// <summary>
+    /// Сервис <see cref="CinemaModel"/>
+    /// </summary>
     public interface ICinemaService
     {
         /// <summary>

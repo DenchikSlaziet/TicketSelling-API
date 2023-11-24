@@ -13,6 +13,7 @@ using TicketSelling.Services.Contracts.ReadServices;
 
 namespace TicketSelling.Services.ReadServices
 {
+    /// <inheritdoc cref="IStaffService"/>
     public class StaffService : IStaffService, IServiceAnchor
     {
         private readonly IStaffWriteRepository staffWriteRepository;

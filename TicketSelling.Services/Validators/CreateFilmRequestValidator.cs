@@ -3,6 +3,9 @@ using TicketSelling.Services.Contracts.Models;
 
 namespace TicketSelling.API.Validation.Validators
 {
+    /// <summary>
+    /// Валидатор <see cref="FilmModel"/>
+    /// </summary>
     public class CreateFilmRequestValidator : AbstractValidator<FilmModel>
     {
         public CreateFilmRequestValidator()

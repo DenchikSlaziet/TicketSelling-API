@@ -41,6 +41,9 @@ namespace TicketSelling.Context
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(CinemaEntityTypeConfiguration).Assembly);
         }
 
+        /// <summary>
+        /// Сохранение изменений в БД
+        /// </summary>
         async Task<int> IUnitOfWork.SaveChangesAsync(CancellationToken cancellationToken)
         {
             var count = await base.SaveChangesAsync(cancellationToken);
@@ -51,17 +54,29 @@ namespace TicketSelling.Context
             return count;
         }
 
+        /// <summary>
+        /// Чтение сущностей из БД
+        /// </summary>
         IQueryable<TEntity> IDbRead.Read<TEntity>()
             => base.Set<TEntity>()
                 .AsNoTracking()
                 .AsQueryable();
 
+        /// <summary>
+        /// Запись сущности в БД
+        /// </summary>
         void IDbWriter.Add<TEntity>(TEntity entity)
             => base.Entry(entity).State = EntityState.Added;
 
+        /// <summary>
+        /// Обновление сущностей
+        /// </summary>
         void IDbWriter.Update<TEntity>(TEntity entity)
             => base.Entry(entity).State = EntityState.Modified;
 
+        /// <summary>
+        /// Удаление сущности из БД
+        /// </summary>
         void IDbWriter.Delete<TEntity>(TEntity entity)
             => base.Entry(entity).State = EntityState.Deleted;
     }

@@ -3,6 +3,9 @@ using TicketSelling.Common.Entity.InterfaceDB;
 
 namespace TicketSelling.API
 {
+    /// <summary>
+    /// Реализация <see cref="IDbWriterContext"/>
+    /// </summary>
     public class DbWriterContext : IDbWriterContext
     {
         /// <inheritdoc/>
