@@ -74,7 +74,7 @@
         +Guid CinemaId
         +Guid FilmId
         +Guid ClientId
-        +Guid StaffId
+        +Guid? StaffId
         +short Row
         +short Place
         +decimal Price
