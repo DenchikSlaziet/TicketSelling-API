@@ -32,6 +32,7 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<HallModel> IHallService.AddAsync(HallModel model, CancellationToken cancellationToken)
         {
+            model.Id = Guid.NewGuid();
             await validations.ValidateAndThrowAsync(model, cancellationToken);
 
             var item = mapper.Map<Hall>(model);
@@ -51,6 +52,11 @@ namespace TicketSelling.Services.ReadServices
                 throw new TimeTableEntityNotFoundException<Hall>(id);
             }
 
+            if (targetHall.DeletedAt.HasValue)
+            {
+                throw new TimeTableInvalidOperationException($"Зал с идентификатором {id} уже удален");
+            }
+
             hallWriteRepository.Delete(targetHall);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
@@ -65,9 +71,8 @@ namespace TicketSelling.Services.ReadServices
             {
                 throw new TimeTableEntityNotFoundException<Hall>(source.Id);
             }
-            
-            targetHall.Number = source.Number;
-            targetHall.NumberOfSeats = source.NumberOfSeats;
+
+            targetHall = mapper.Map<Hall>(source);
 
             hallWriteRepository.Update(targetHall);
             await unitOfWork.SaveChangesAsync(cancellationToken);

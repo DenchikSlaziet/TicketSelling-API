@@ -32,6 +32,7 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<FilmModel> IFilmService.AddAsync(FilmModel model, CancellationToken cancellationToken)
         {
+            model.Id = Guid.NewGuid();
             await validations.ValidateAndThrowAsync(model, cancellationToken);
 
             var item = mapper.Map<Film>(model);
@@ -71,9 +72,7 @@ namespace TicketSelling.Services.ReadServices
                 throw new TimeTableEntityNotFoundException<Film>(source.Id);
             }
 
-            targetFilm.Title = source.Title;
-            targetFilm.Limitation = source.Limitation;
-            targetFilm.Description = source.Description;
+            targetFilm = mapper.Map<Film>(source);
 
             filmWriteRepository.Update(targetFilm);
             await unitOfWork.SaveChangesAsync(cancellationToken);

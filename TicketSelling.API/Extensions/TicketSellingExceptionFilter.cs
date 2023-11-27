@@ -16,7 +16,7 @@ namespace TicketSelling.API.Extensions
         /// <inheritdoc/>
         public void OnException(ExceptionContext context)
         {
-            var exception = context.Exception; //TODO: убрали AS
+            var exception = context.Exception; //TODO: убрал AS
             if (exception == null)
             {
                 return;

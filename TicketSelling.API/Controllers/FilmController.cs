@@ -47,11 +47,6 @@ namespace TicketSelling.API.Controllers
         public async Task<IActionResult> GetById([Required] Guid id, CancellationToken cancellationToken)
         {
             var item = await filmService.GetByIdAsync(id, cancellationToken);
-
-            if (item == null)
-            {
-                return NotFound("Фильма с таким Id нет!");
-            }
             return Ok(mapper.Map<FilmResponse>(item));
         }
 

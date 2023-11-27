@@ -1,26 +1,90 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TicketSelling.Context.Contracts.Models;
+﻿using TicketSelling.Context.Contracts.Models;
 
 namespace TicketSelling.Services.Tests
 {
-    static internal class TestDataGenerator
+    internal static class TestDataGenerator
     {
-        static internal Cinema Discipline(Action<Cinema>? settings = null)
+        static internal Cinema Cinema(Action<Cinema>? settings = null)
         {
             var result = new Cinema
             {
-                Id = Guid.NewGuid(),
-                Title = "Test",
-                Address = "Test",
-                CreatedAt = DateTimeOffset.UtcNow,
-                CreatedBy = $"CreatedBy{Guid.NewGuid():N}",
-                UpdatedAt = DateTimeOffset.UtcNow,
-                UpdatedBy = $"UpdatedBy{Guid.NewGuid():N}",
+                Title = $"{Guid.NewGuid():N}",
+                Address = $"{Guid.NewGuid():N}"
             };
+            result.BaseAuditSetParamtrs();
+
+            settings?.Invoke(result);
+            return result;
+        }
+
+        static internal Film Film(Action<Film>? settings = null)
+        {
+            var result = new Film
+            {
+                Title = $"{Guid.NewGuid():N}",
+                Description = $"{Guid.NewGuid():N}"
+            };
+            result.BaseAuditSetParamtrs();
+
+            settings?.Invoke(result);
+            return result;
+        }
+
+        static internal Hall Hall(Action<Hall>? settings = null)
+        {
+            var result = new Hall
+            {
+                Number = 1,
+                NumberOfSeats = 20
+            };
+            result.BaseAuditSetParamtrs();
+
+            settings?.Invoke(result);
+            return result;
+        }
+
+        static internal Client Client(Action<Client>? settings = null)
+        {
+            var result = new Client
+            {
+                FirstName = $"{Guid.NewGuid():N}",
+                LastName = $"{Guid.NewGuid():N}",
+                Patronymic = $"{Guid.NewGuid():N}",
+                Age = 18,
+                Email = $"{Guid.NewGuid():N}"
+            };
+            result.BaseAuditSetParamtrs();
+
+            settings?.Invoke(result);
+            return result;
+        }
+
+        static internal Staff Staff(Action<Staff>? settings = null)
+        {
+            var result = new Staff
+            {
+                FirstName = $"{Guid.NewGuid():N}",
+                LastName = $"{Guid.NewGuid():N}",
+                Patronymic = $"{Guid.NewGuid():N}",
+                Age = 18,
+                Post = Context.Contracts.Enums.Post.Manager
+            };
+            result.BaseAuditSetParamtrs();
+
+            settings?.Invoke(result);
+            return result;
+        }
+
+        static internal Ticket Ticket(Action<Ticket>? settings = null)
+        {
+            var result = new Ticket
+            {
+                Date = DateTimeOffset.Now,
+                Place = 1,
+                Row = 1,
+                Price = 100
+            };
+            result.BaseAuditSetParamtrs();
 
             settings?.Invoke(result);
             return result;

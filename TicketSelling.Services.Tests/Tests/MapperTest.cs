@@ -2,7 +2,7 @@
 using TicketSelling.Services.AutoMappers;
 using Xunit;
 
-namespace TicketSelling.Services.Tests
+namespace TicketSelling.Services.Tests.Tests
 {
     public class MapperTest
     {

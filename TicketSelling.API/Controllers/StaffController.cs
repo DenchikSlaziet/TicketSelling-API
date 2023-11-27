@@ -46,11 +46,6 @@ namespace TicketSelling.API.Controllers
         public async Task<IActionResult> GetById([Required] Guid id, CancellationToken cancellationToken)
         {
             var item = await staffService.GetByIdAsync(id, cancellationToken);
-
-            if (item == null)
-            {
-                return NotFound("Персонала с таким Id нет!");
-            }
             return Ok(mapper.Map<StaffResponse>(item));
         }
 

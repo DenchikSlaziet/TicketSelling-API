@@ -46,11 +46,6 @@ namespace TicketSelling.API.Controllers
         public async Task<IActionResult> GetById([Required] Guid id, CancellationToken cancellationToken)
         {
             var item = await hallService.GetByIdAsync(id, cancellationToken);
-
-            if (item == null)
-            {
-                return NotFound("Зала с таким Id нет!");
-            }
             return Ok(mapper.Map<HallResponse>(item));
         }
 

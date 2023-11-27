@@ -28,22 +28,22 @@ namespace TicketSelling.API.Validation.Validators
 
             RuleFor(x => x.HallId)
                 .NotEmpty().WithMessage(MessageForValidation.DefaultMessage)
-                .MustAsync(async (x, cancellationToken) => await this.hallReadRepository.GetByIdAsync(x, cancellationToken) != null)
+                .MustAsync(async (x, cancellationToken) => await this.hallReadRepository.IsNotNullAsync(x, cancellationToken))
                 .WithMessage(MessageForValidation.NotFoundGuidMessage);
 
             RuleFor(x => x.CinemaId)
                 .NotEmpty().WithMessage(MessageForValidation.DefaultMessage)
-                .MustAsync(async (x, cancellationToken) => await this.cinemaReadRepository.GetByIdAsync(x, cancellationToken) != null)
+                .MustAsync(async (x, cancellationToken) => await this.cinemaReadRepository.IsNotNullAsync(x, cancellationToken))
                 .WithMessage(MessageForValidation.NotFoundGuidMessage);
 
             RuleFor(x => x.ClientId)
                 .NotEmpty().WithMessage(MessageForValidation.DefaultMessage)
-                .MustAsync(async (x, cancellationToken) => await this.clientReadRepository.GetByIdAsync(x, cancellationToken) != null)
+                .MustAsync(async (x, cancellationToken) => await this.clientReadRepository.IsNotNullAsync(x, cancellationToken))
                 .WithMessage(MessageForValidation.NotFoundGuidMessage);
 
             RuleFor(x => x.FilmId)
                 .NotEmpty().WithMessage(MessageForValidation.DefaultMessage)
-                .MustAsync(async (x, cancellationToken) => await this.filmReadRepository.GetByIdAsync(x, cancellationToken) != null)
+                .MustAsync(async (x, cancellationToken) => await this.filmReadRepository.IsNotNullAsync(x, cancellationToken))
                 .WithMessage(MessageForValidation.NotFoundGuidMessage);
 
             RuleFor(x => x.Date)

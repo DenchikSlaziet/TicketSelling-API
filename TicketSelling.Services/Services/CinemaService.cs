@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using System.Net.Sockets;
 using TicketSelling.API.Validation.Validators;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts.Models;
@@ -33,6 +34,8 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<CinemaModel> ICinemaService.AddAsync(CinemaModel model, CancellationToken cancellationToken)
         {
+            model.Id = Guid.NewGuid();
+
             await validations.ValidateAndThrowAsync(model, cancellationToken);
 
             var item = mapper.Map<Cinema>(model); 
@@ -51,7 +54,6 @@ namespace TicketSelling.Services.ReadServices
                 throw new TimeTableEntityNotFoundException<Cinema>(id);
             }
 
-
             if (targetCinema.DeletedAt.HasValue)
             {
                 throw new TimeTableInvalidOperationException($"Кинотеатр с идентификатором {id} уже удален");
@@ -66,14 +68,13 @@ namespace TicketSelling.Services.ReadServices
             await validations.ValidateAndThrowAsync(source, cancellationToken);
 
             var targetCinema = await cinemaReadRepositiry.GetByIdAsync(source.Id, cancellationToken);
+
             if (targetCinema == null)
             {
                 throw new TimeTableEntityNotFoundException<Cinema>(source.Id);
             }
 
-            targetCinema.Title = source.Title;
-            targetCinema.Address = source.Address;
-
+            targetCinema = mapper.Map<Cinema>(source);
             cinemaWriteRepository.Update(targetCinema);
             await unitOfWork.SaveChangesAsync(cancellationToken);
 

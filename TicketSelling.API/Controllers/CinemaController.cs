@@ -64,7 +64,6 @@ namespace TicketSelling.API.Controllers
         public async Task<IActionResult> Add(CreateCinemaRequest model, CancellationToken cancellationToken)
         {
             var cinemaModel = mapper.Map<CinemaModel>(model);
-
             var result = await cinemaService.AddAsync(cinemaModel, cancellationToken);
             return Ok(mapper.Map<CinemaResponse>(result));
         }

@@ -19,19 +19,19 @@ namespace TicketSelling.API.AutoMappers
             CreateMap<PostModel, PostResponse>().ConvertUsingEnumMapping(opt => opt.MapByName()).ReverseMap();
 
             CreateMap<CreateCinemaRequest, CinemaModel>(MemberList.Destination)
-                .ForMember(x => x.Id, opt => opt.MapFrom(x => Guid.NewGuid()));
+                .ForMember(x => x.Id, opt => opt.Ignore());
 
             CreateMap<CreateFilmRequest, FilmModel>(MemberList.Destination)
-                .ForMember(x => x.Id, opt => opt.MapFrom(x => Guid.NewGuid()));
+                .ForMember(x => x.Id, opt => opt.Ignore());
 
             CreateMap<CreateHallRequest, HallModel>(MemberList.Destination)
-                .ForMember(x => x.Id, opt => opt.MapFrom(x => Guid.NewGuid()));
+                .ForMember(x => x.Id, opt => opt.Ignore());
 
             CreateMap<CreateClientRequest, ClientModel>(MemberList.Destination)
-                .ForMember(x => x.Id, opt => opt.MapFrom(x => Guid.NewGuid()));
+                .ForMember(x => x.Id, opt => opt.Ignore());
 
             CreateMap<CreateStaffRequest, StaffModel>(MemberList.Destination)
-                .ForMember(x => x.Id, opt => opt.MapFrom(x => Guid.NewGuid()));
+                .ForMember(x => x.Id, opt => opt.Ignore());
 
             CreateMap<CinemaRequest, CinemaModel>(MemberList.Destination);
             CreateMap<FilmRequest, FilmModel>(MemberList.Destination);
@@ -47,7 +47,7 @@ namespace TicketSelling.API.AutoMappers
 
             CreateMap<TicketRequest, TicketRequestModel>(MemberList.Destination);
             CreateMap<CreateTicketRequest, TicketRequestModel>(MemberList.Destination)
-                .ForMember(x => x.Id, opt => opt.MapFrom(x => Guid.NewGuid()));
+                .ForMember(x => x.Id, opt => opt.Ignore());
 
             CreateMap<FilmModel, FilmResponse>(MemberList.Destination);
             CreateMap<HallModel, HallResponse>(MemberList.Destination);

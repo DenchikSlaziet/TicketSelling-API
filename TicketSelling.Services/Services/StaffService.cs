@@ -33,6 +33,7 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<StaffModel> IStaffService.AddAsync(StaffModel model, CancellationToken cancellationToken)
         {
+            model.Id = Guid.NewGuid();
             await validator.ValidateAndThrowAsync(model, cancellationToken);
 
             var item = mapper.Map<Staff>(model);
@@ -72,11 +73,7 @@ namespace TicketSelling.Services.ReadServices
                 throw new TimeTableEntityNotFoundException<Staff>(source.Id);
             }
 
-            targetStaff.FirstName = source.FirstName;
-            targetStaff.LastName = source.LastName;
-            targetStaff.Patronymic = source.Patronymic;
-            targetStaff.Post = (Post)source.Post;
-            targetStaff.Age = source.Age;
+            targetStaff = mapper.Map<Staff>(source);
 
             staffWriteRepository.Update(targetStaff);
             await unitOfWork.SaveChangesAsync(cancellationToken);
@@ -96,7 +93,7 @@ namespace TicketSelling.Services.ReadServices
 
             if (item == null)
             {
-                throw new TimeTableEntityNotFoundException<Ticket>(id);
+                throw new TimeTableEntityNotFoundException<Staff>(id);
             }
 
             return mapper.Map<StaffModel>(item);

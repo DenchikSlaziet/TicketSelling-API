@@ -48,12 +48,6 @@ namespace TicketSelling.API.Controllers
         public async Task<IActionResult> GetById([Required] Guid id, CancellationToken cancellationToken)
         {
             var item = await ticketService.GetByIdAsync(id, cancellationToken);
-
-            if (item == null)
-            {
-                return NotFound("Персонала с таким Id нет!");
-            }
-
             return Ok(mapper.Map<TicketResponse>(item));
         }
 
@@ -67,8 +61,7 @@ namespace TicketSelling.API.Controllers
         public async Task<IActionResult> Add(CreateTicketRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<TicketRequestModel>(request);        
-            var result = await ticketService.AddAsync(model, cancellationToken);  
-            
+            var result = await ticketService.AddAsync(model, cancellationToken);          
             return Ok(mapper.Map<TicketResponse>(result));
         }
 

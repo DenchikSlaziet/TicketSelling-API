@@ -32,6 +32,7 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<ClientModel> IClientService.AddAsync(ClientModel model, CancellationToken cancellationToken)
         {
+            model.Id = Guid.NewGuid();
             await validations.ValidateAndThrowAsync(model, cancellationToken);
 
             var item = mapper.Map<Client>(model);
@@ -69,11 +70,7 @@ namespace TicketSelling.Services.ReadServices
                 throw new TimeTableEntityNotFoundException<Client>(source.Id);
             }
 
-            targetClient.FirstName = source.FirstName;
-            targetClient.LastName = source.LastName;
-            targetClient.Patronymic = source.Patronymic;
-            targetClient.Age = source.Age;
-            targetClient.Email = source.Email;
+            targetClient = mapper.Map<Client>(source);
 
             clientWriteRepository.Update(targetClient);
             await unitOfWork.SaveChangesAsync(cancellationToken);

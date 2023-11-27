@@ -32,8 +32,9 @@ namespace TicketSelling.Context.Tests
         {
             cancellationTokenSource = new CancellationTokenSource();
             CancellationToken = cancellationTokenSource.Token;
-            var optionsBuilder = new DbContextOptionsBuilder<TicketSellingContext>()
+            var optionsBuilder = new DbContextOptionsBuilder<TicketSellingContext>()            
                 .UseInMemoryDatabase($"MoneronTests{Guid.NewGuid()}")
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                 .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning));
             Context = new TicketSellingContext(optionsBuilder.Options);
         }
