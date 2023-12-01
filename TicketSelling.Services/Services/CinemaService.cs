@@ -1,7 +1,4 @@
 ﻿using AutoMapper;
-using FluentValidation;
-using System.Net.Sockets;
-using TicketSelling.API.Validation.Validators;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
@@ -10,6 +7,7 @@ using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
+using TicketSelling.Services.Validator;
 
 namespace TicketSelling.Services.ReadServices
 {
@@ -20,23 +18,23 @@ namespace TicketSelling.Services.ReadServices
         private readonly ICinemaWriteRepository cinemaWriteRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        private readonly CreateCinemaRequestValidator validations;
+        private readonly IServiceValidatorService validatorService;
 
         public CinemaService(ICinemaReadRepository cinemaReadRepositiry, IMapper mapper, 
-            ICinemaWriteRepository cinemaWriteRepository, IUnitOfWork unitOfWork)
+            ICinemaWriteRepository cinemaWriteRepository, IUnitOfWork unitOfWork, IServiceValidatorService validatorService)
         {
             this.cinemaReadRepositiry = cinemaReadRepositiry;
             this.mapper = mapper;
             this.cinemaWriteRepository = cinemaWriteRepository;
             this.unitOfWork = unitOfWork;
-            validations = new CreateCinemaRequestValidator();
+            this.validatorService = validatorService;
         }
 
         async Task<CinemaModel> ICinemaService.AddAsync(CinemaModel model, CancellationToken cancellationToken)
         {
             model.Id = Guid.NewGuid();
 
-            await validations.ValidateAndThrowAsync(model, cancellationToken);
+            await validatorService.ValidateAsync(model, cancellationToken);
 
             var item = mapper.Map<Cinema>(model); 
             cinemaWriteRepository.Add(item);
@@ -65,7 +63,7 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<CinemaModel> ICinemaService.EditAsync(CinemaModel source, CancellationToken cancellationToken)
         {
-            await validations.ValidateAndThrowAsync(source, cancellationToken);
+            await validatorService.ValidateAsync(source, cancellationToken);
 
             var targetCinema = await cinemaReadRepositiry.GetByIdAsync(source.Id, cancellationToken);
 

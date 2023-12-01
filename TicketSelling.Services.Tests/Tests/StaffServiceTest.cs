@@ -2,12 +2,14 @@
 using FluentAssertions;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Context.Tests;
+using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.ReadRepositories;
 using TicketSelling.Repositories.WriteRepositoriеs;
 using TicketSelling.Services.AutoMappers;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.ReadServices;
 using TicketSelling.Services.ReadServices;
+using TicketSelling.Services.Validator;
 using Xunit;
 
 namespace TicketSelling.Services.Tests.Tests
@@ -27,7 +29,8 @@ namespace TicketSelling.Services.Tests.Tests
             });
 
             staffService = new StaffService(new StaffWriteRepository(WriterContext), new StaffReadRepository(Reader),
-                UnitOfWork, config.CreateMapper());
+                UnitOfWork, config.CreateMapper(), new ServicesValidatorService(new CinemaReadRepository(Reader), 
+                new ClientReadRepository(Reader), new FilmReadRepository(Reader), new HallReadRepository(Reader)));
         }
 
         /// <summary>

@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
 using TicketSelling.Services.Contracts.Models;
 
-namespace TicketSelling.API.Validation.Validators
+namespace TicketSelling.Services.Validator.Validators
 {
     /// <summary>
-    /// Валидатор <see cref="StaffModel"/>
+    /// Валидатор <see cref="ClientModel"/>
     /// </summary>
-    public class CreateStaffRequestValidator : AbstractValidator<StaffModel>
+    public class CreateClientRequestValidator : AbstractValidator<ClientModel>
     {
-        public CreateStaffRequestValidator()
+        public CreateClientRequestValidator()
         {
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage(MessageForValidation.DefaultMessage)
@@ -26,9 +26,10 @@ namespace TicketSelling.API.Validation.Validators
                 .Length(2, 50).WithMessage(MessageForValidation.LengthMessage);
 
             RuleFor(x => (int)x.Age)
-              .InclusiveBetween(18, 99).WithMessage(MessageForValidation.InclusiveBetweenMessage);
+                .InclusiveBetween(0, 99).WithMessage(MessageForValidation.InclusiveBetweenMessage);
 
-            RuleFor(x => x.Post).IsInEnum().WithMessage(MessageForValidation.DefaultMessage);
+            RuleFor(x => x.Email)
+                .EmailAddress().WithMessage(MessageForValidation.DefaultMessage).When(x => !string.IsNullOrWhiteSpace(x.Email));
         }
     }
 }

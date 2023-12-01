@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using TicketSelling.API.Validation.Validators;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
@@ -9,6 +8,8 @@ using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
+using TicketSelling.Services.Validator;
+using TicketSelling.Services.Validator.Validators;
 
 namespace TicketSelling.Services.ReadServices
 {
@@ -19,21 +20,22 @@ namespace TicketSelling.Services.ReadServices
         private readonly IHallReadRepository hallReadRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        private readonly CreateHallRequestValidator validations;
+        private readonly IServiceValidatorService validatorService;
 
-        public HallService(IHallWriteRepository hallWriteRepository,IHallReadRepository hallReadRepository, IUnitOfWork unitOfWork ,IMapper mapper)
+        public HallService(IHallWriteRepository hallWriteRepository,IHallReadRepository hallReadRepository, 
+            IUnitOfWork unitOfWork, IMapper mapper, IServiceValidatorService validatorService)
         {
             this.hallWriteRepository = hallWriteRepository;
             this.hallReadRepository = hallReadRepository;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
-            validations = new CreateHallRequestValidator();
+            this.validatorService = validatorService;
         }
 
         async Task<HallModel> IHallService.AddAsync(HallModel model, CancellationToken cancellationToken)
         {
             model.Id = Guid.NewGuid();
-            await validations.ValidateAndThrowAsync(model, cancellationToken);
+            await validatorService.ValidateAsync(model, cancellationToken);
 
             var item = mapper.Map<Hall>(model);
 
@@ -63,7 +65,7 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<HallModel> IHallService.EditAsync(HallModel source, CancellationToken cancellationToken)
         {
-            await validations.ValidateAndThrowAsync(source, cancellationToken);
+            await validatorService.ValidateAsync(source, cancellationToken);
 
             var targetHall = await hallReadRepository.GetByIdAsync(source.Id, cancellationToken);
 

@@ -1,4 +1,4 @@
-﻿namespace TicketSelling.API.Validation
+﻿namespace TicketSelling.Services.Validator.Validators
 {
     /// <summary>
     /// Статический класс для работы с сообщениями в валидаторе

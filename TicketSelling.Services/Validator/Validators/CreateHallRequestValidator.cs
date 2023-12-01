@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using TicketSelling.Services.Contracts.Models;
 
-namespace TicketSelling.API.Validation.Validators
+namespace TicketSelling.Services.Validator.Validators
 {
     /// <summary>
     /// Валидатор <see cref="HallModel"/>

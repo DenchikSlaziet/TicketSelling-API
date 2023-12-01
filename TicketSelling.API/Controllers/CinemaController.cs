@@ -61,7 +61,7 @@ namespace TicketSelling.API.Controllers
         [ProducesResponseType(typeof(CinemaResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Add(CreateCinemaRequest model, CancellationToken cancellationToken)
+        public async Task<IActionResult> Add([FromBody] CreateCinemaRequest model, CancellationToken cancellationToken)
         {
             var cinemaModel = mapper.Map<CinemaModel>(model);
             var result = await cinemaService.AddAsync(cinemaModel, cancellationToken);

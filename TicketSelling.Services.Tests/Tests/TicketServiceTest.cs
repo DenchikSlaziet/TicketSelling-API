@@ -8,6 +8,7 @@ using TicketSelling.Services.AutoMappers;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.ReadServices;
 using TicketSelling.Services.ReadServices;
+using TicketSelling.Services.Validator;
 using Xunit;
 
 namespace TicketSelling.Services.Tests.Tests
@@ -28,7 +29,9 @@ namespace TicketSelling.Services.Tests.Tests
 
             ticketService = new TicketService(new TicketWriteRepository(WriterContext), new TicketReadRepositiry(Reader),
                 new CinemaReadRepository(Reader), new ClientReadRepository(Reader), new FilmReadRepository(Reader),
-                new HallReadRepository(Reader), new StaffReadRepository(Reader), config.CreateMapper(), UnitOfWork);
+                new HallReadRepository(Reader), new StaffReadRepository(Reader), config.CreateMapper(), UnitOfWork,
+                new ServicesValidatorService(new CinemaReadRepository(Reader),
+                new ClientReadRepository(Reader), new FilmReadRepository(Reader), new HallReadRepository(Reader)));
         }
 
         /// <summary>

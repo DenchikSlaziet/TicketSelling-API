@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using TicketSelling.API.Validation.Validators;
 using TicketSelling.Common.Entity.InterfaceDB;
-using TicketSelling.Context.Contracts.Enums;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.Contracts.WriteRepositoriesContracts;
@@ -10,6 +8,7 @@ using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
+using TicketSelling.Services.Validator;
 
 namespace TicketSelling.Services.ReadServices
 {
@@ -20,21 +19,22 @@ namespace TicketSelling.Services.ReadServices
         private readonly IStaffReadRepository staffReadRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        private readonly CreateStaffRequestValidator validator;
+        private readonly IServiceValidatorService validatorService;
 
-        public StaffService(IStaffWriteRepository staffWriteRepository, IStaffReadRepository staffReadRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public StaffService(IStaffWriteRepository staffWriteRepository, IStaffReadRepository staffReadRepository, 
+            IUnitOfWork unitOfWork, IMapper mapper, IServiceValidatorService validatorService)
         {
             this.staffWriteRepository = staffWriteRepository;
             this.staffReadRepository = staffReadRepository;
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            validator = new CreateStaffRequestValidator();
+            this.validatorService = validatorService;
         }
 
         async Task<StaffModel> IStaffService.AddAsync(StaffModel model, CancellationToken cancellationToken)
         {
             model.Id = Guid.NewGuid();
-            await validator.ValidateAndThrowAsync(model, cancellationToken);
+            await validatorService.ValidateAsync(model, cancellationToken);
 
             var item = mapper.Map<Staff>(model);
 
@@ -64,7 +64,7 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<StaffModel> IStaffService.EditAsync(StaffModel source, CancellationToken cancellationToken)
         {
-            await validator.ValidateAndThrowAsync(source, cancellationToken);
+            await validatorService.ValidateAsync(source, cancellationToken);
 
             var targetStaff = await staffReadRepository.GetByIdAsync(source.Id, cancellationToken);
 

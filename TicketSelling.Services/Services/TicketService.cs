@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using TicketSelling.API.Validation.Validators;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
@@ -10,6 +9,8 @@ using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ModelsRequest;
 using TicketSelling.Services.Contracts.ReadServices;
+using TicketSelling.Services.Validator;
+using TicketSelling.Services.Validator.Validators;
 
 namespace TicketSelling.Services.ReadServices
 {
@@ -25,12 +26,12 @@ namespace TicketSelling.Services.ReadServices
         private readonly IStaffReadRepository staffReadRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        private readonly CreateTicketRequestValidator validations;
+        private readonly IServiceValidatorService validatorService;
 
         public TicketService(ITicketWriteRepository ticketWriteRepository, ITicketReadRepository ticketReadRepository, ICinemaReadRepository cinemaReadRepository,
             IClientReadRepository clientReadRepository, IFilmReadRepository filmReadRepository,
             IHallReadRepository hallReadRepository, IStaffReadRepository staffReadRepository,
-            IMapper mapper, IUnitOfWork unitOfWork)
+            IMapper mapper, IUnitOfWork unitOfWork, IServiceValidatorService validatorService)
         {
             this.ticketWriteRepository = ticketWriteRepository;
             this.ticketReadRepository = ticketReadRepository;
@@ -41,13 +42,13 @@ namespace TicketSelling.Services.ReadServices
             this.staffReadRepository = staffReadRepository;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
-            validations = new CreateTicketRequestValidator(cinemaReadRepository, clientReadRepository, filmReadRepository, hallReadRepository);
+            this.validatorService = validatorService;
         }
 
         async Task<TicketModel> ITicketService.AddAsync(TicketRequestModel model, CancellationToken cancellationToken)
         {
             model.Id = Guid.NewGuid();
-            await validations.ValidateAndThrowAsync(model, cancellationToken);
+            await validatorService.ValidateAsync(model, cancellationToken);
 
             var ticket = mapper.Map<Ticket>(model);      
             ticketWriteRepository.Add(ticket);
@@ -76,7 +77,7 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<TicketModel> ITicketService.EditAsync(TicketRequestModel model, CancellationToken cancellationToken)
         {
-            await validations.ValidateAndThrowAsync(model,cancellationToken);
+            await validatorService.ValidateAsync(model, cancellationToken);
 
             var ticket = await ticketReadRepository.GetByIdAsync(model.Id, cancellationToken);
 

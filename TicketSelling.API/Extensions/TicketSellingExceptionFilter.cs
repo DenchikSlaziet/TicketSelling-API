@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
-using TicketSelling.Services.Contracts.Exceptions;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using TicketSelling.API.Exceptions;
-using FluentValidation;
-using TicketSelling.General;
-using Microsoft.EntityFrameworkCore;
+using TicketSelling.Services.Contracts.Exceptions;
 
 namespace TicketSelling.API.Extensions
 {
@@ -16,7 +13,7 @@ namespace TicketSelling.API.Extensions
         /// <inheritdoc/>
         public void OnException(ExceptionContext context)
         {
-            var exception = context.Exception; //TODO: убрал AS
+            var exception = context.Exception as TimeTableException;
             if (exception == null)
             {
                 return;
@@ -33,14 +30,14 @@ namespace TicketSelling.API.Extensions
                         context);
                     break;
 
-                //case TimeTableInvalidOperationException ex:
-                //    SetDataToContext(
-                //        new BadRequestObjectResult(new ApiExceptionDetail { Message = ex.Message, })
-                //        {
-                //            StatusCode = StatusCodes.Status406NotAcceptable,
-                //        },
-                //        context);
-                //    break;
+                case TimeTableInvalidOperationException ex:
+                    SetDataToContext(
+                        new BadRequestObjectResult(new ApiExceptionDetail { Message = ex.Message, })
+                        {
+                            StatusCode = StatusCodes.Status406NotAcceptable,
+                        },
+                        context);
+                    break;
 
                 case TimeTableNotFoundException ex:
                     SetDataToContext(new NotFoundObjectResult(new ApiExceptionDetail
@@ -48,25 +45,11 @@ namespace TicketSelling.API.Extensions
                         Message = ex.Message,
                     }), context);
                     break;
-
-                case ValidationException ex:
-                    SetDataToContext(new ConflictObjectResult(new ApiValidationExceptionDetail
-                    {
-                        Errors = ex.Errors.Select(x => InvalidateItemModel.New(x.PropertyName, x.ErrorMessage))
-                    }), context);
-                    break;
-
-                case DbUpdateException ex:
-                    SetDataToContext(new BadRequestObjectResult(new ApiExceptionDetail
-                    {
-                        Message = $"Ошибка записи в Базу данных (проверьте по индексам). {ex.TargetSite}"
-                    }), context);
-                    break;
-
+           
                 default:
                     SetDataToContext(new BadRequestObjectResult(new ApiExceptionDetail
                     {
-                        Message = $"Ошибка приведения типов. {exception.Message}",
+                        Message = $"Ошибка записи в БД (Проверьте индексы). {exception.Message}",
                     }), context);
                     break;
             }

@@ -2,12 +2,15 @@
 using FluentAssertions;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Context.Tests;
+using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.ReadRepositories;
 using TicketSelling.Repositories.WriteRepositoriеs;
 using TicketSelling.Services.AutoMappers;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.ReadServices;
 using TicketSelling.Services.ReadServices;
+using TicketSelling.Services.Validator;
+using TicketSelling.Services.Validator.Validators;
 using Xunit;
 
 namespace TicketSelling.Services.Tests.Tests
@@ -15,6 +18,7 @@ namespace TicketSelling.Services.Tests.Tests
     public class ClientServiceTest : TicketSellingContextInMemory
     {
         private readonly IClientService clientService;
+        private readonly ClientReadRepository clientReadRepository;
 
         /// <summary>
         /// Инициализирует новый экземпляр <see cref="ClientServiceTest"/>
@@ -25,9 +29,11 @@ namespace TicketSelling.Services.Tests.Tests
             {
                 cfg.AddProfile(new ServiceMapper());
             });
+            clientReadRepository = new ClientReadRepository(Reader);
 
-            clientService = new ClientService(new ClientWriteRepository(WriterContext), new ClientReadRepository(Reader),
-                UnitOfWork, config.CreateMapper());
+            clientService = new ClientService(new ClientWriteRepository(WriterContext), clientReadRepository,
+                UnitOfWork, config.CreateMapper(), new ServicesValidatorService(new CinemaReadRepository(Reader), clientReadRepository, new FilmReadRepository(Reader),
+                new HallReadRepository(Reader)));
         }
 
         /// <summary>

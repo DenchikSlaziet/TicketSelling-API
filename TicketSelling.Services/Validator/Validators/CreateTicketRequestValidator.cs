@@ -2,7 +2,7 @@
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Services.Contracts.ModelsRequest;
 
-namespace TicketSelling.API.Validation.Validators
+namespace TicketSelling.Services.Validator.Validators
 {
     /// <summary>
     /// Валидатор <see cref="TicketRequestModel"/>

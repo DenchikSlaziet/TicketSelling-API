@@ -8,13 +8,15 @@ using TicketSelling.Services.AutoMappers;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.ReadServices;
 using TicketSelling.Services.ReadServices;
+using TicketSelling.Services.Validator;
 using Xunit;
 
 namespace TicketSelling.Services.Tests.Tests
 {
     public class CinemaServiceTest : TicketSellingContextInMemory
     {
-        private readonly ICinemaService cinemaeService;
+        private readonly ICinemaService cinemaService;
+        private readonly CinemaReadRepository cinemaRead;
 
         /// <summary>
         /// Инициализирует новый экземпляр <see cref="CinemaServiceTest"/>
@@ -26,8 +28,12 @@ namespace TicketSelling.Services.Tests.Tests
                 cfg.AddProfile(new ServiceMapper());
             });
 
-            cinemaeService = new CinemaService(new CinemaReadRepository(Reader), config.CreateMapper(), 
-                new CinemaWriteRepository(WriterContext), UnitOfWork);
+            cinemaRead = new CinemaReadRepository(Reader);
+
+            cinemaService = new CinemaService(cinemaRead, config.CreateMapper(), 
+                new CinemaWriteRepository(WriterContext), UnitOfWork, 
+                new ServicesValidatorService(cinemaRead, new ClientReadRepository(Reader), new FilmReadRepository(Reader),
+                new HallReadRepository(Reader)));
         }
 
         /// <summary>
@@ -40,7 +46,7 @@ namespace TicketSelling.Services.Tests.Tests
             var id = Guid.NewGuid();
 
             // Act
-            Func<Task> result = () => cinemaeService.GetByIdAsync(id, CancellationToken);
+            Func<Task> result = () => cinemaService.GetByIdAsync(id, CancellationToken);
 
             // Assert
             await Assert.ThrowsAsync<TimeTableEntityNotFoundException<Cinema>>(result);
@@ -58,7 +64,7 @@ namespace TicketSelling.Services.Tests.Tests
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await cinemaeService.GetByIdAsync(target.Id, CancellationToken);
+            var result = await cinemaService.GetByIdAsync(target.Id, CancellationToken);
 
             // Assert
             result.Should()
@@ -78,7 +84,7 @@ namespace TicketSelling.Services.Tests.Tests
         public async Task GetAllShouldReturnEmpty()
         {
             // Act
-            var result = await cinemaeService.GetAllAsync(CancellationToken);
+            var result = await cinemaService.GetAllAsync(CancellationToken);
 
             // Assert
             result.Should()
@@ -100,7 +106,7 @@ namespace TicketSelling.Services.Tests.Tests
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await cinemaeService.GetAllAsync(CancellationToken);
+            var result = await cinemaService.GetAllAsync(CancellationToken);
 
             // Assert
             result.Should()
@@ -119,7 +125,7 @@ namespace TicketSelling.Services.Tests.Tests
             var id = Guid.NewGuid();
 
             // Act
-            Func<Task> result = () => cinemaeService.DeleteAsync(id, CancellationToken);
+            Func<Task> result = () => cinemaService.DeleteAsync(id, CancellationToken);
 
             // Assert
             await Assert.ThrowsAsync<TimeTableEntityNotFoundException<Cinema>>(result);
@@ -137,7 +143,7 @@ namespace TicketSelling.Services.Tests.Tests
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            Func<Task> result = () => cinemaeService.DeleteAsync(model.Id, CancellationToken);
+            Func<Task> result = () => cinemaService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
             await Assert.ThrowsAsync<TimeTableInvalidOperationException>(result);

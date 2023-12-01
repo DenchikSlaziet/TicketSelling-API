@@ -2,12 +2,14 @@
 using FluentAssertions;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Context.Tests;
+using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.ReadRepositories;
 using TicketSelling.Repositories.WriteRepositoriеs;
 using TicketSelling.Services.AutoMappers;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.ReadServices;
 using TicketSelling.Services.ReadServices;
+using TicketSelling.Services.Validator;
 using Xunit;
 
 namespace TicketSelling.Services.Tests.Tests
@@ -15,6 +17,7 @@ namespace TicketSelling.Services.Tests.Tests
     public class HallServiceTest : TicketSellingContextInMemory
     {
         private readonly IHallService hallService;
+        private readonly HallReadRepository hallReadRepository;
 
         /// <summary>
         /// Инициализирует новый экземпляр <see cref="HallServiceTest"/>
@@ -26,8 +29,10 @@ namespace TicketSelling.Services.Tests.Tests
                 cfg.AddProfile(new ServiceMapper());
             });
 
-            hallService = new HallService(new HallWriteRepository(WriterContext), new HallReadRepository(Reader),
-                UnitOfWork, config.CreateMapper());
+            hallReadRepository = new HallReadRepository(Reader);
+            hallService = new HallService(new HallWriteRepository(WriterContext), hallReadRepository,
+                UnitOfWork, config.CreateMapper(), new ServicesValidatorService(new CinemaReadRepository(Reader), 
+                new ClientReadRepository(Reader), new FilmReadRepository(Reader), hallReadRepository));
         }
 
         /// <summary>
