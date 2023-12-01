@@ -46,11 +46,6 @@ namespace TicketSelling.API.Controllers
         public async Task<IActionResult> GetById([Required] Guid id,CancellationToken cancellationToken)
         {
             var item = await cinemaService.GetByIdAsync(id,cancellationToken);
-
-            if(item == null)
-            {
-                return NotFound("Кинотеатра с таким Id нет!");
-            }
             return Ok(mapper.Map<CinemaResponse>(item));
         }
 
