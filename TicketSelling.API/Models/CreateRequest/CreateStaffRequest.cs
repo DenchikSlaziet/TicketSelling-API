@@ -1,5 +1,10 @@
-﻿namespace TicketSelling.API.Models.CreateRequest
+﻿using TicketSelling.API.Enums;
+
+namespace TicketSelling.API.Models.CreateRequest
 {
+    /// <summary>
+    /// Модель запроса создания сотрудника
+    /// </summary>
     public class CreateStaffRequest
     {
         /// <summary>
@@ -25,6 +30,6 @@
         /// <summary>
         /// Должность
         /// </summary>
-        public int Post { get; set; }
+        public PostResponse Post { get; set; }
     }
 }

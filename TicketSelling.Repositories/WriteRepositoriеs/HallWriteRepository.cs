@@ -5,6 +5,9 @@ using TicketSelling.Repositories.Contracts.WriteRepositoriesContracts;
 
 namespace TicketSelling.Repositories.WriteRepositoriеs
 {
+    /// <summary>
+    /// Реализация <see cref="IHallWriteRepository"/>
+    /// </summary>
     public class HallWriteRepository : BaseWriteRepository<Hall>, IHallWriteRepository, IRepositoryAnchor
     {
         public HallWriteRepository(IDbWriterContext writerContext) 

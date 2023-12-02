@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using TicketSelling.Common.Entity.InterfaceDB;
-using TicketSelling.Context.Contracts.Enums;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.Contracts.WriteRepositoriesContracts;
@@ -8,39 +8,39 @@ using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
+using TicketSelling.Services.Validator;
 
 namespace TicketSelling.Services.ReadServices
 {
+    /// <inheritdoc cref="IStaffService"/>
     public class StaffService : IStaffService, IServiceAnchor
     {
         private readonly IStaffWriteRepository staffWriteRepository;
         private readonly IStaffReadRepository staffReadRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly IServiceValidatorService validatorService;
 
-        public StaffService(IStaffWriteRepository staffWriteRepository, IStaffReadRepository staffReadRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public StaffService(IStaffWriteRepository staffWriteRepository, IStaffReadRepository staffReadRepository, 
+            IUnitOfWork unitOfWork, IMapper mapper, IServiceValidatorService validatorService)
         {
             this.staffWriteRepository = staffWriteRepository;
             this.staffReadRepository = staffReadRepository;
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.validatorService = validatorService;
         }
 
-        async Task<StaffModel> IStaffService.AddAsync(string firstName, string lastName, string patronymic, 
-            short age, int post, CancellationToken cancellationToken)
+        async Task<StaffModel> IStaffService.AddAsync(StaffModel model, CancellationToken cancellationToken)
         {
-            var item = new Staff
-            {
-                Id = Guid.NewGuid(),
-                FirstName = firstName,
-                LastName = lastName,
-                Patronymic = patronymic,
-                Age = age,
-                Post = (Post)post
-            };
+            model.Id = Guid.NewGuid();
+            await validatorService.ValidateAsync(model, cancellationToken);
+
+            var item = mapper.Map<Staff>(model);
 
             staffWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<StaffModel>(item);
         }
 
@@ -64,6 +64,8 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<StaffModel> IStaffService.EditAsync(StaffModel source, CancellationToken cancellationToken)
         {
+            await validatorService.ValidateAsync(source, cancellationToken);
+
             var targetStaff = await staffReadRepository.GetByIdAsync(source.Id, cancellationToken);
 
             if (targetStaff == null)
@@ -71,15 +73,11 @@ namespace TicketSelling.Services.ReadServices
                 throw new TimeTableEntityNotFoundException<Staff>(source.Id);
             }
 
-            targetStaff.FirstName = source.FirstName;
-            targetStaff.LastName = source.LastName;
-            targetStaff.Patronymic = source.Patronymic;
-            targetStaff.Post = (Post)source.Post;
-            targetStaff.Age = source.Age;
+            targetStaff = mapper.Map<Staff>(source);
 
             staffWriteRepository.Update(targetStaff);
-
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<StaffModel>(targetStaff);
         }
 
@@ -93,10 +91,11 @@ namespace TicketSelling.Services.ReadServices
         {
             var item = await staffReadRepository.GetByIdAsync(id, cancellationToken);
 
-            if(item == null)
+            if (item == null)
             {
-                return null;
+                throw new TimeTableEntityNotFoundException<Staff>(id);
             }
+
             return mapper.Map<StaffModel>(item);
         }
     }

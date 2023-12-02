@@ -5,7 +5,7 @@ using TicketSelling.Common.Entity.EntityInterface;
 namespace TicketSelling.Common.Entity.Repositories
 {
     /// <summary>
-    /// Вспомогательные методв расширения
+    /// Вспомогательные методы расширения
     /// </summary>
     public static class CommonSpecs
     {

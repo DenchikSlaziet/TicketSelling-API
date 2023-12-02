@@ -6,7 +6,7 @@ namespace TicketSelling.Context.Contracts.Models
     /// <summary>
     /// Кассир
     /// </summary>
-    public class Staff : BaseAuditEntity, IEntity, IEntityWithId
+    public class Staff : BaseAuditEntity
     {
         /// <summary>
         /// Фамилия
@@ -31,7 +31,7 @@ namespace TicketSelling.Context.Contracts.Models
         /// <summary>
         /// Должность
         /// </summary>
-        public Post Post { get; set; }
+        public Post Post { get; set; } = Post.None;
 
         public ICollection<Ticket>? Tickets { get; set; }
     }

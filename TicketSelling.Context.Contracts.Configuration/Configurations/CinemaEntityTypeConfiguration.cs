@@ -4,12 +4,16 @@ using TicketSelling.Context.Contracts.Models;
 
 namespace TicketSelling.Context.Contracts.Configuration.Configurations
 {
+    /// <summary>
+    /// Конфигурация для <see cref="Cinema"/>
+    /// </summary>
     public class CinemaEntityTypeConfiguration : IEntityTypeConfiguration<Cinema>
     {
         void IEntityTypeConfiguration<Cinema>.Configure(EntityTypeBuilder<Cinema> builder)
         {
             builder.ToTable("Cinemas");
             builder.HasKey(x => x.Id);
+            builder.PropertyAuditConfiguration();
             builder.Property(x => x.Id).IsRequired();
             builder.Property(x => x.Title).HasMaxLength(50).IsRequired();
             builder.HasIndex(x => x.Title).HasDatabaseName($"{nameof(Cinema)}_{nameof(Cinema.Title)}");

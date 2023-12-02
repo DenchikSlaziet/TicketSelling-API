@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using TicketSelling.API.Exceptions;
 using TicketSelling.API.Models.CreateRequest;
-using TicketSelling.API.Models.Request;
 using TicketSelling.API.Models.Response;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
@@ -25,6 +26,9 @@ namespace TicketSelling.API.Controllers
             this.mapper = mapper;
         }
 
+        /// <summary>
+        /// Получить список фильмов
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(ICollection<FilmResponse>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
@@ -33,29 +37,43 @@ namespace TicketSelling.API.Controllers
             return Ok(result.Select(x => mapper.Map<FilmResponse>(x)));
         }
 
+        /// <summary>
+        /// Получить фильм по Id
+        /// </summary>
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(FilmResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status417ExpectationFailed)]
+        public async Task<IActionResult> GetById([Required] Guid id, CancellationToken cancellationToken)
         {
             var item = await filmService.GetByIdAsync(id, cancellationToken);
-
-            if (item == null)
-            {
-                return NotFound("Фильма с таким Id нет!");
-            }
             return Ok(mapper.Map<FilmResponse>(item));
         }
 
+        /// <summary>
+        /// Добавить фильм
+        /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(FilmResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Add(CreateFilmRequest model, CancellationToken cancellationToken)
         {
-            var result = await filmService.AddAsync(model.Title, model.Limitation, model.Description, cancellationToken);
+            var filmModel = mapper.Map<FilmModel>(model);
+            var result = await filmService.AddAsync(filmModel, cancellationToken);
             return Ok(mapper.Map<FilmResponse>(result));
         }
 
+        /// <summary>
+        /// Изменить фильм по Id
+        /// </summary>
         [HttpPut]
         [ProducesResponseType(typeof(FilmResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Edit(FilmRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<FilmModel>(request);
@@ -63,9 +81,14 @@ namespace TicketSelling.API.Controllers
             return Ok(mapper.Map<FilmResponse>(result));
         }
 
+        /// <summary>
+        /// Удалить фильм по Id
+        /// </summary>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status417ExpectationFailed)]
+        public async Task<IActionResult> Delete([Required] Guid id, CancellationToken cancellationToken)
         {
             await filmService.DeleteAsync(id, cancellationToken);
             return Ok();

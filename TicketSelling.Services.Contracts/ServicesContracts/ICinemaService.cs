@@ -2,6 +2,9 @@
 
 namespace TicketSelling.Services.Contracts.ReadServices
 {
+    /// <summary>
+    /// Сервис <see cref="CinemaModel"/>
+    /// </summary>
     public interface ICinemaService
     {
         /// <summary>
@@ -17,7 +20,7 @@ namespace TicketSelling.Services.Contracts.ReadServices
         /// <summary>
         /// Добавляет новый кинотетар
         /// </summary>
-        Task<CinemaModel> AddAsync(string address, string title, CancellationToken cancellationToken);
+        Task<CinemaModel> AddAsync(CinemaModel model, CancellationToken cancellationToken);
 
         /// <summary>
         /// Редактирует существующий кинотеатр

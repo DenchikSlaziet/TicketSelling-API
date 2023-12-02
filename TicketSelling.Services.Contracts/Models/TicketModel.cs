@@ -13,22 +13,22 @@
         /// <summary>
         /// Идентификатор Зала
         /// </summary>
-        public HallModel? Hall { get; set; }
+        public HallModel Hall { get; set; }
 
         /// <summary>
         /// Идентификатор Кинотеатра
         /// </summary>
-        public CinemaModel? Cinema { get; set; }
+        public CinemaModel Cinema { get; set; }
 
         /// <summary>
         /// Идентификатор Фильма
         /// </summary>
-        public FilmModel? Film{ get; set; }
+        public FilmModel Film{ get; set; }
 
         /// <summary>
         /// Идентификатор Клиента
         /// </summary>
-        public ClientModel? Client { get; set; }
+        public ClientModel Client { get; set; }
 
         /// <summary>
         /// Идентификатор завхоза

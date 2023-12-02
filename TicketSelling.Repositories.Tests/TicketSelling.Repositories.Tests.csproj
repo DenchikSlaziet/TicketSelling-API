@@ -7,7 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="xunit" Version="2.6.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TicketSelling.Context.Contracts\TicketSelling.Context.Contracts.csproj" />
+    <ProjectReference Include="..\TicketSelling.Context.Tests\TicketSelling.Context.Tests.csproj" />
+    <ProjectReference Include="..\TicketSelling.Repositories.Contracts\TicketSelling.Repositories.Contracts.csproj" />
+    <ProjectReference Include="..\TicketSelling.Repositories\TicketSelling.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

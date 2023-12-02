@@ -3,7 +3,6 @@
     /// <summary>
     /// Модель запроса создания кинотеатра
     /// </summary>
-
     public class CreateCinemaRequest
     {
         /// <summary>

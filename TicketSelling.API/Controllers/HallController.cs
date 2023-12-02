@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using TicketSelling.API.Exceptions;
 using TicketSelling.API.Models.CreateRequest;
-using TicketSelling.API.Models.Request;
 using TicketSelling.API.Models.Response;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
@@ -25,6 +26,9 @@ namespace TicketSelling.API.Controllers
             this.mapper = mapper;
         }
 
+        /// <summary>
+        /// Получить список залов
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(ICollection<HallResponse>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
@@ -33,29 +37,42 @@ namespace TicketSelling.API.Controllers
             return Ok(result.Select(x => mapper.Map<HallResponse>(x)));
         }
 
+        /// <summary>
+        /// Получить зал по Id
+        /// </summary>
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(HallResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetById([Required] Guid id, CancellationToken cancellationToken)
         {
             var item = await hallService.GetByIdAsync(id, cancellationToken);
-
-            if (item == null)
-            {
-                return NotFound("Зала с таким Id нет!");
-            }
             return Ok(mapper.Map<HallResponse>(item));
         }
 
+        /// <summary>
+        /// Добавить зал
+        /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(HallResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Add(CreateHallRequest model, CancellationToken cancellationToken)
         {
-            var result = await hallService.AddAsync(model.Number, model.NumberOfSeats, cancellationToken);
+            var hallModel = mapper.Map<HallModel>(model);
+            var result = await hallService.AddAsync(hallModel, cancellationToken);
             return Ok(mapper.Map<HallResponse>(result));
         }
 
+        /// <summary>
+        /// Изменить зал по Id
+        /// </summary>
         [HttpPut]
         [ProducesResponseType(typeof(HallResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Edit(HallRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<HallModel>(request);
@@ -63,9 +80,14 @@ namespace TicketSelling.API.Controllers
             return Ok(mapper.Map<HallResponse>(result));
         }
 
+        /// <summary>
+        /// Удалить зал по Id
+        /// </summary>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status417ExpectationFailed)]
+        public async Task<IActionResult> Delete([Required] Guid id, CancellationToken cancellationToken)
         {
             await hallService.DeleteAsync(id, cancellationToken);
             return Ok();

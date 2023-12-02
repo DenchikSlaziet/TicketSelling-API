@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
@@ -7,35 +8,40 @@ using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
+using TicketSelling.Services.Validator;
+using TicketSelling.Services.Validator.Validators;
 
 namespace TicketSelling.Services.ReadServices
 {
+    /// <inheritdoc cref="IHallService"/>
     public class HallService : IHallService, IServiceAnchor
     {
         private readonly IHallWriteRepository hallWriteRepository;
         private readonly IHallReadRepository hallReadRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly IServiceValidatorService validatorService;
 
-        public HallService(IHallWriteRepository hallWriteRepository,IHallReadRepository hallReadRepository, IUnitOfWork unitOfWork ,IMapper mapper)
+        public HallService(IHallWriteRepository hallWriteRepository,IHallReadRepository hallReadRepository, 
+            IUnitOfWork unitOfWork, IMapper mapper, IServiceValidatorService validatorService)
         {
             this.hallWriteRepository = hallWriteRepository;
             this.hallReadRepository = hallReadRepository;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
+            this.validatorService = validatorService;
         }
 
-        async Task<HallModel> IHallService.AddAsync(short number, short numberOfSeats, CancellationToken cancellationToken)
+        async Task<HallModel> IHallService.AddAsync(HallModel model, CancellationToken cancellationToken)
         {
-            var item = new Hall
-            {
-                Id = Guid.NewGuid(),
-                Number = number,
-                NumberOfSeats = numberOfSeats
-            };
+            model.Id = Guid.NewGuid();
+            await validatorService.ValidateAsync(model, cancellationToken);
+
+            var item = mapper.Map<Hall>(model);
 
             hallWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<HallModel>(item);
         }
 
@@ -59,23 +65,20 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<HallModel> IHallService.EditAsync(HallModel source, CancellationToken cancellationToken)
         {
+            await validatorService.ValidateAsync(source, cancellationToken);
+
             var targetHall = await hallReadRepository.GetByIdAsync(source.Id, cancellationToken);
 
             if (targetHall == null)
             {
                 throw new TimeTableEntityNotFoundException<Hall>(source.Id);
             }
-            
-            if(targetHall.Number > targetHall.NumberOfSeats)
-            {
-                throw new Exception("Номер места не может быть большем чем общее кол-во мест!");
-            }
 
-            targetHall.Number = source.Number;
-            targetHall.NumberOfSeats = source.NumberOfSeats;
+            targetHall = mapper.Map<Hall>(source);
+
             hallWriteRepository.Update(targetHall);
-
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<HallModel>(targetHall);
         }
 
@@ -89,10 +92,11 @@ namespace TicketSelling.Services.ReadServices
         {
             var item = await hallReadRepository.GetByIdAsync(id, cancellationToken);
 
-            if(item == null)
+            if (item == null)
             {
                 throw new TimeTableEntityNotFoundException<Hall>(id);
             }
+            
             return mapper.Map<HallModel>(item);
         }
     }

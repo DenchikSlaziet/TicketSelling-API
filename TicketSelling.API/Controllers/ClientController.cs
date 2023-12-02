@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using TicketSelling.API.Exceptions;
 using TicketSelling.API.Models.CreateRequest;
-using TicketSelling.API.Models.Request;
 using TicketSelling.API.Models.Response;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
@@ -25,6 +26,9 @@ namespace TicketSelling.API.Controllers
             this.mapper = mapper;
         }
 
+        /// <summary>
+        /// Получить список клиентов
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(ICollection<ClientResponse>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
@@ -33,29 +37,42 @@ namespace TicketSelling.API.Controllers
             return Ok(result.Select(x => mapper.Map<ClientResponse>(x)));
         }
 
+        /// <summary>
+        /// Получить клиента по Id
+        /// </summary>
         [HttpGet("{id:guid}")]
         [ProducesResponseType(typeof(ClientResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetById([Required] Guid id, CancellationToken cancellationToken)
         {
             var item = await clientService.GetByIdAsync(id, cancellationToken);
-
-            if (item == null)
-            {
-                return NotFound("Клиента с таким Id нет!");
-            }
             return Ok(mapper.Map<ClientResponse>(item));
         }
 
+        /// <summary>
+        /// Добавить клиента
+        /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(ClientResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Add(CreateClientRequest model, CancellationToken cancellationToken)
         {
-            var result = await clientService.AddAsync(model.FirstName, model.LastName, model.Patronymic, model.Age, model.Email, cancellationToken);
+            var clientModel = mapper.Map<ClientModel>(model);
+            var result = await clientService.AddAsync(clientModel, cancellationToken);
             return Ok(mapper.Map<ClientResponse>(result));
         }
 
+        /// <summary>
+        /// Изменить клиента по Id
+        /// </summary>
         [HttpPut]
         [ProducesResponseType(typeof(ClientResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Edit(ClientRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<ClientModel>(request);
@@ -63,9 +80,14 @@ namespace TicketSelling.API.Controllers
             return Ok(mapper.Map<ClientResponse>(result));
         }
 
+        /// <summary>
+        /// Удалить клиента по Id
+        /// </summary>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status417ExpectationFailed)]
+        public async Task<IActionResult> Delete([Required] Guid id, CancellationToken cancellationToken)
         {
             await clientService.DeleteAsync(id, cancellationToken);
             return Ok();

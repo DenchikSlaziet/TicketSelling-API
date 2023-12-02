@@ -28,6 +28,6 @@
         /// <summary>
         /// Адрес электронной почты
         /// </summary>
-        public string? Email { get; set; } = string.Empty;
+        public string? Email { get; set; }
     }
 }

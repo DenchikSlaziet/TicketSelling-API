@@ -7,36 +7,39 @@ using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
+using TicketSelling.Services.Validator;
 
 namespace TicketSelling.Services.ReadServices
 {
+    /// <inheritdoc cref="IFilmService"/>
     public class FilmService : IFilmService, IServiceAnchor
     {
         private readonly IFilmWriteRepository filmWriteRepository;
         private readonly IFilmReadRepository filmReadRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly IServiceValidatorService validatorService;
 
-        public FilmService(IFilmWriteRepository filmWriteRepository, IFilmReadRepository filmReadRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public FilmService(IFilmWriteRepository filmWriteRepository, IFilmReadRepository filmReadRepository, 
+            IMapper mapper, IUnitOfWork unitOfWork, IServiceValidatorService validatorService)
         {
             this.filmWriteRepository = filmWriteRepository;
             this.filmReadRepository = filmReadRepository;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
+            this.validatorService = validatorService;
         }
 
-        async Task<FilmModel> IFilmService.AddAsync(string title, short limitation, string description, CancellationToken cancellationToken)
+        async Task<FilmModel> IFilmService.AddAsync(FilmModel model, CancellationToken cancellationToken)
         {
-            var item = new Film
-            {
-                Id = Guid.NewGuid(),
-                Title = title,
-                Limitation = limitation,
-                Description = description             
-            };
+            model.Id = Guid.NewGuid();
+            await validatorService.ValidateAsync(model, cancellationToken);
+
+            var item = mapper.Map<Film>(model);
 
             filmWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<FilmModel>(item);
         }
 
@@ -60,6 +63,8 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<FilmModel> IFilmService.EditAsync(FilmModel source, CancellationToken cancellationToken)
         {
+            await validatorService.ValidateAsync(source, cancellationToken);
+
             var targetFilm = await filmReadRepository.GetByIdAsync(source.Id, cancellationToken);
 
             if (targetFilm == null)
@@ -67,12 +72,11 @@ namespace TicketSelling.Services.ReadServices
                 throw new TimeTableEntityNotFoundException<Film>(source.Id);
             }
 
-            targetFilm.Title = source.Title;
-            targetFilm.Limitation = source.Limitation;
-            targetFilm.Description = source.Description;
-            filmWriteRepository.Update(targetFilm);
+            targetFilm = mapper.Map<Film>(source);
 
+            filmWriteRepository.Update(targetFilm);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<FilmModel>(targetFilm);
         }
 
@@ -90,6 +94,7 @@ namespace TicketSelling.Services.ReadServices
             {
                 throw new TimeTableEntityNotFoundException<Film>(id);
             }
+
             return mapper.Map<FilmModel>(item);
         }
     }

@@ -1,7 +1,8 @@
-﻿using TicketSelling.API.Models.CreateRequest;
-
-namespace TicketSelling.API.Models.Request
+﻿namespace TicketSelling.API.Models.CreateRequest
 {
+    /// <summary>
+    /// Модель запроса создания клиента
+    /// </summary>
     public class ClientRequest : CreateClientRequest
     {
         /// <summary>

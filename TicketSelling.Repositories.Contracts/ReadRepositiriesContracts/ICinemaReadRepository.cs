@@ -21,5 +21,10 @@ namespace TicketSelling.Repositories.Contracts.ReadInterfaces
         /// Получить <see cref="Cinema"/> по идентификаторам
         /// </summary>
         Task<Dictionary<Guid,Cinema>> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Проверить есть ли <see cref="Cinema"/> в коллеции
+        /// </summary>
+        Task<bool> IsNotNullAsync(Guid id, CancellationToken cancellationToken);
     }
 }

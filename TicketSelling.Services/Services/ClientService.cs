@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
@@ -7,39 +8,40 @@ using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ReadServices;
+using TicketSelling.Services.Validator;
+using TicketSelling.Services.Validator.Validators;
 
 namespace TicketSelling.Services.ReadServices
 {
+    /// <inheritdoc cref="IClientService"/>
     public class ClientService : IClientService, IServiceAnchor
     {
         private readonly IClientWriteRepository clientWriteRepository;
         private readonly IClientReadRepository clientReadRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly IServiceValidatorService validatorService;
 
-        public ClientService(IClientWriteRepository clientWriteRepository, IClientReadRepository clientReadRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public ClientService(IClientWriteRepository clientWriteRepository, IClientReadRepository clientReadRepository, 
+            IUnitOfWork unitOfWork, IMapper mapper, IServiceValidatorService validatorService)
         {
             this.clientReadRepository = clientReadRepository;
             this.clientWriteRepository = clientWriteRepository;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
+            this.validatorService = validatorService;
         }
 
-        async Task<ClientModel> IClientService.AddAsync(string firstName, string lastName, string patronymic, short age, 
-            string email, CancellationToken cancellationToken)
+        async Task<ClientModel> IClientService.AddAsync(ClientModel model, CancellationToken cancellationToken)
         {
-            var item = new Client
-            {
-                Id = Guid.NewGuid(),
-                FirstName = firstName,
-                LastName = lastName,
-                Patronymic = patronymic,
-                Age = age,
-                Email = email
-            };
+            model.Id = Guid.NewGuid();
+            await validatorService.ValidateAsync(model, cancellationToken);
+
+            var item = mapper.Map<Client>(model);
 
             clientWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<ClientModel>(item);
         }
 
@@ -50,7 +52,6 @@ namespace TicketSelling.Services.ReadServices
             {
                 throw new TimeTableEntityNotFoundException<Client>(id);
             }
-
 
             if (targetClient.DeletedAt.HasValue)
             {
@@ -63,20 +64,19 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<ClientModel> IClientService.EditAsync(ClientModel source, CancellationToken cancellationToken)
         {
+            await validatorService.ValidateAsync(source, cancellationToken);
+
             var targetClient = await clientReadRepository.GetByIdAsync(source.Id, cancellationToken);
             if (targetClient == null)
             {
                 throw new TimeTableEntityNotFoundException<Client>(source.Id);
             }
 
-            targetClient.FirstName = source.FirstName;
-            targetClient.LastName = source.LastName;
-            targetClient.Patronymic = source.Patronymic;
-            targetClient.Age = source.Age;
-            targetClient.Email = source.Email;          
-            clientWriteRepository.Update(targetClient);
+            targetClient = mapper.Map<Client>(source);
 
+            clientWriteRepository.Update(targetClient);
             await unitOfWork.SaveChangesAsync(cancellationToken);
+
             return mapper.Map<ClientModel>(targetClient);
         }
 
@@ -94,6 +94,7 @@ namespace TicketSelling.Services.ReadServices
             {
                 throw new TimeTableEntityNotFoundException<Client>(id);
             }
+
             return mapper.Map<ClientModel>(item);
         }
     }

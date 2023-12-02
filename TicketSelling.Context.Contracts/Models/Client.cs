@@ -1,11 +1,9 @@
-﻿using TicketSelling.Common.Entity.EntityInterface;
-
-namespace TicketSelling.Context.Contracts.Models
+﻿namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Клиент
     /// </summary>
-    public class Client : BaseAuditEntity, IEntity, IEntityWithId
+    public class Client : BaseAuditEntity
     {
         /// <summary>
         /// Фамилия
@@ -30,7 +28,7 @@ namespace TicketSelling.Context.Contracts.Models
         /// <summary>
         /// Адрес электронной почты
         /// </summary>
-        public string? Email { get; set; } = string.Empty;
+        public string? Email { get; set; }
 
         public ICollection<Ticket> Tickets { get; set; }
     }

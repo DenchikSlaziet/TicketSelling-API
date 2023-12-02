@@ -18,7 +18,7 @@
         /// <summary>
         /// Описание
         /// </summary>
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; }
 
         /// <summary>
         /// Ограничение по возросту

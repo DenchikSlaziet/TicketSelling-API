@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -20,6 +21,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TicketSelling.Context\TicketSelling.Context.csproj" />
+    <ProjectReference Include="..\TicketSelling.General\TicketSelling.General.csproj" />
+    <ProjectReference Include="..\TicketSelling.Repositories.Contracts\TicketSelling.Repositories.Contracts.csproj" />
     <ProjectReference Include="..\TicketSelling.Repositories\TicketSelling.Repositories.csproj" />
     <ProjectReference Include="..\TicketSelling.Services\TicketSelling.Services.csproj" />
   </ItemGroup>
