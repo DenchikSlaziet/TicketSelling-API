@@ -56,6 +56,7 @@ namespace TicketSelling.API.Controllers
         [ProducesResponseType(typeof(ClientResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Add(CreateClientRequest model, CancellationToken cancellationToken)
         {
             var clientModel = mapper.Map<ClientModel>(model);
@@ -71,6 +72,7 @@ namespace TicketSelling.API.Controllers
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Edit(ClientRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<ClientModel>(request);

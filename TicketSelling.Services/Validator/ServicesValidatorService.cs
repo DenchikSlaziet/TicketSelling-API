@@ -11,19 +11,10 @@ namespace TicketSelling.Services.Validator
     public sealed class ServicesValidatorService : IServiceValidatorService
     {
         private readonly Dictionary<Type, IValidator> validators = new Dictionary<Type, IValidator>();
-        private readonly ICinemaReadRepository cinemaReadRepository;
-        private readonly IClientReadRepository clientReadRepository;
-        private readonly IFilmReadRepository filmReadRepository;
-        private readonly IHallReadRepository hallReadRepository;
 
         public ServicesValidatorService(ICinemaReadRepository cinemaReadRepository, IClientReadRepository clientReadRepository,
             IFilmReadRepository filmReadRepository, IHallReadRepository hallReadRepository)
         {
-            this.cinemaReadRepository = cinemaReadRepository;
-            this.clientReadRepository = clientReadRepository;
-            this.filmReadRepository = filmReadRepository;
-            this.hallReadRepository = hallReadRepository;
-
             validators.Add(typeof(CinemaModel), new CreateCinemaRequestValidator());
             validators.Add(typeof(ClientModel), new CreateClientRequestValidator());
             validators.Add(typeof(FilmModel), new CreateFilmRequestValidator());

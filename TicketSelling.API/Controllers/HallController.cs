@@ -56,6 +56,7 @@ namespace TicketSelling.API.Controllers
         [ProducesResponseType(typeof(HallResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Add(CreateHallRequest model, CancellationToken cancellationToken)
         {
             var hallModel = mapper.Map<HallModel>(model);
@@ -71,6 +72,7 @@ namespace TicketSelling.API.Controllers
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Edit(HallRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<HallModel>(request);

@@ -47,7 +47,8 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => filmService.GetByIdAsync(id, CancellationToken);
 
             // Assert
-            await Assert.ThrowsAsync<TimeTableEntityNotFoundException<Film>>(result);
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Film>>()
+                .WithMessage($"*{id}*");
         }
 
         /// <summary>
@@ -126,7 +127,8 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => filmService.DeleteAsync(id, CancellationToken);
 
             // Assert
-            await Assert.ThrowsAsync<TimeTableEntityNotFoundException<Film>>(result);
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Film>>()
+                .WithMessage($"*{id}*");
         }
 
         /// <summary>
@@ -144,7 +146,126 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => filmService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await Assert.ThrowsAsync<TimeTableInvalidOperationException>(result);
+            await result.Should().ThrowAsync<TimeTableInvalidOperationException>()
+                .WithMessage($"*{model.Id}*");
+        }
+  
+        /// <summary>
+        /// Удаление <see cref="Film"/>
+        /// </summary>
+        [Fact]
+        public async Task DeleteShouldWork()
+        {
+            //Arrange
+            var model = TestDataGenerator.Film();
+            await Context.Films.AddAsync(model);
+            await UnitOfWork.SaveChangesAsync(CancellationToken);
+
+            //Act
+            Func<Task> act = () => filmService.DeleteAsync(model.Id, CancellationToken);
+
+            // Assert
+            await act.Should().NotThrowAsync();
+            var entity = Context.Films.Single(x => x.Id == model.Id);
+            entity.Should().NotBeNull();
+            entity.DeletedAt.Should().NotBeNull();
+        }
+
+        /// <summary>
+        /// Добавление <see cref="Film"/>
+        /// </summary>
+        [Fact]
+        public async Task AddShouldWork()
+        {
+            //Arrange
+            var model = TestDataGenerator.FilmModel();
+
+            //Act
+            Func<Task> act = () => filmService.AddAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().NotThrowAsync();
+            var entity = Context.Films.Single(x => x.Id == model.Id);
+            entity.Should().NotBeNull();
+            entity.DeletedAt.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Добавление не валидируемого <see cref="Film"/>
+        /// </summary>
+        [Fact]
+        public async Task AddShouldValidationException()
+        {
+            //Arrange
+            var model = TestDataGenerator.FilmModel(x => x.Limitation = 55);
+
+            //Act
+            Func<Task> act = () => filmService.AddAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeTableValidationException>();
+        }
+
+        /// <summary>
+        /// Изменение несуществующего <see cref="Film"/>
+        /// </summary>
+        [Fact]
+        public async Task EditShouldNotFoundException()
+        {
+            //Arrange
+            var model = TestDataGenerator.FilmModel();
+
+            //Act
+            Func<Task> act = () => filmService.EditAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeTableEntityNotFoundException<Film>>()
+                .WithMessage($"*{model.Id}*");
+        }
+
+        /// <summary>
+        /// Изменение невалидируемого <see cref="Film"/>
+        /// </summary>
+        [Fact]
+        public async Task EditShouldValidationException()
+        {
+            //Arrange
+            var model = TestDataGenerator.FilmModel(x => x.Limitation = 55);
+
+            //Act
+            Func<Task> act = () => filmService.EditAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeTableValidationException>();
+        }
+
+        /// <summary>
+        /// Изменение <see cref="Film"/>
+        /// </summary>
+        [Fact]
+        public async Task EditShouldWork()
+        {
+            //Arrange
+            var model = TestDataGenerator.FilmModel();
+            var film = TestDataGenerator.Film(x => x.Id = model.Id);
+            await Context.Films.AddAsync(film);
+            await UnitOfWork.SaveChangesAsync(CancellationToken);
+
+            //Act
+            Func<Task> act = () => filmService.EditAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().NotThrowAsync();
+            var entity = Context.Films.Single(x => x.Id == film.Id);
+            entity.Should().NotBeNull()
+                .And
+                .BeEquivalentTo(new
+                {
+                    model.Id,
+                    model.Title,
+                    model.Description,
+                    model.Limitation
+                });
         }
     }
 }

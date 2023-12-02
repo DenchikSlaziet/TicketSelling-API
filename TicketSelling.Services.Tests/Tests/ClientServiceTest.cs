@@ -2,7 +2,6 @@
 using FluentAssertions;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Context.Tests;
-using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.ReadRepositories;
 using TicketSelling.Repositories.WriteRepositoriеs;
 using TicketSelling.Services.AutoMappers;
@@ -10,7 +9,6 @@ using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.ReadServices;
 using TicketSelling.Services.ReadServices;
 using TicketSelling.Services.Validator;
-using TicketSelling.Services.Validator.Validators;
 using Xunit;
 
 namespace TicketSelling.Services.Tests.Tests
@@ -29,11 +27,12 @@ namespace TicketSelling.Services.Tests.Tests
             {
                 cfg.AddProfile(new ServiceMapper());
             });
+
             clientReadRepository = new ClientReadRepository(Reader);
 
             clientService = new ClientService(new ClientWriteRepository(WriterContext), clientReadRepository,
-                UnitOfWork, config.CreateMapper(), new ServicesValidatorService(new CinemaReadRepository(Reader), clientReadRepository, new FilmReadRepository(Reader),
-                new HallReadRepository(Reader)));
+                UnitOfWork, config.CreateMapper(), new ServicesValidatorService(new CinemaReadRepository(Reader), 
+                clientReadRepository, new FilmReadRepository(Reader), new HallReadRepository(Reader)));
         }
 
         /// <summary>
@@ -49,7 +48,8 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => clientService.GetByIdAsync(id, CancellationToken);
 
             // Assert
-            await Assert.ThrowsAsync<TimeTableEntityNotFoundException<Client>>(result);
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Client>>()
+               .WithMessage($"*{id}*");
         }
 
         /// <summary>
@@ -131,7 +131,8 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => clientService.DeleteAsync(id, CancellationToken);
 
             // Assert
-            await Assert.ThrowsAsync<TimeTableEntityNotFoundException<Client>>(result);
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Client>>()
+               .WithMessage($"*{id}*");
         }
 
         /// <summary>
@@ -149,7 +150,127 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => clientService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await Assert.ThrowsAsync<TimeTableInvalidOperationException>(result);
+            await result.Should().ThrowAsync<TimeTableInvalidOperationException>()
+                .WithMessage($"*{model.Id}*");
+        }      
+
+        /// <summary>
+        /// Удаление <see cref="Client"/>
+        /// </summary>
+        [Fact]
+        public async Task DeleteShouldWork()
+        {
+            //Arrange
+            var model = TestDataGenerator.Client();
+            await Context.Clients.AddAsync(model);
+            await UnitOfWork.SaveChangesAsync(CancellationToken);
+
+            //Act
+            Func<Task> act = () => clientService.DeleteAsync(model.Id, CancellationToken);
+
+            // Assert
+            await act.Should().NotThrowAsync();
+            var entity = Context.Clients.Single(x => x.Id == model.Id);
+            entity.Should().NotBeNull();
+            entity.DeletedAt.Should().NotBeNull();
+        }
+
+        /// <summary>
+        /// Добавление <see cref="Client"/>
+        /// </summary>
+        [Fact]
+        public async Task AddShouldWork()
+        {
+            //Arrange
+            var model = TestDataGenerator.ClientModel();
+
+            //Act
+            Func<Task> act = () => clientService.AddAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().NotThrowAsync();
+            var entity = Context.Clients.Single(x => x.Id == model.Id);
+            entity.Should().NotBeNull();
+            entity.DeletedAt.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Добавление невалидируемого <see cref="Client"/>
+        /// </summary>
+        [Fact]
+        public async Task AddShouldValidationException()
+        {
+            //Arrange
+            var model = TestDataGenerator.ClientModel(x => x.FirstName = "T");
+
+            //Act
+            Func<Task> act = () => clientService.AddAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeTableValidationException>();
+        }
+
+        /// <summary>
+        /// Изменение несуществующего <see cref="Client"/>
+        /// </summary>
+        [Fact]
+        public async Task EditShouldNotFoundException()
+        {
+            //Arrange
+            var model = TestDataGenerator.ClientModel();
+
+            //Act
+            Func<Task> act = () => clientService.EditAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeTableEntityNotFoundException<Client>>()
+                .WithMessage($"*{model.Id}*");
+        }
+
+        /// <summary>
+        /// Изменение невалидируемого <see cref="Client"/>
+        /// </summary>
+        [Fact]
+        public async Task EditShouldValidationException()
+        {
+            //Arrange
+            var model = TestDataGenerator.ClientModel(x => x.FirstName = "T");
+
+            //Act
+            Func<Task> act = () => clientService.EditAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeTableValidationException>();
+        }
+
+        /// <summary>
+        /// Изменение <see cref="Client"/>
+        /// </summary>
+        [Fact]
+        public async Task EditShouldWork()
+        {
+            //Arrange
+            var model = TestDataGenerator.ClientModel();
+            var client = TestDataGenerator.Client(x => x.Id = model.Id);
+            await Context.Clients.AddAsync(client);
+            await UnitOfWork.SaveChangesAsync(CancellationToken);
+
+            //Act
+            Func<Task> act = () => clientService.EditAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().NotThrowAsync();
+            var entity = Context.Clients.Single(x => x.Id == client.Id);
+            entity.Should().NotBeNull()
+                .And
+                .BeEquivalentTo(new
+                {
+                    model.Id,
+                    model.FirstName,
+                    model.LastName,
+                    model.Patronymic,
+                    model.Email
+                });
         }
     }
 }

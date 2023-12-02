@@ -47,7 +47,8 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => ticketService.GetByIdAsync(id, CancellationToken);
 
             // Assert
-            await Assert.ThrowsAsync<TimeTableEntityNotFoundException<Ticket>>(result);
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Ticket>>()
+                .WithMessage($"*{id}*");
         }
 
         /// <summary>
@@ -126,7 +127,8 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => ticketService.DeleteAsync(id, CancellationToken);
 
             // Assert
-            await Assert.ThrowsAsync<TimeTableEntityNotFoundException<Ticket>>(result);
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Ticket>>()
+                .WithMessage($"*{id}*");
         }
 
         /// <summary>
@@ -144,7 +146,179 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => ticketService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await Assert.ThrowsAsync<TimeTableInvalidOperationException>(result);
+            await result.Should().ThrowAsync<TimeTableInvalidOperationException>()
+                .WithMessage($"*{model.Id}*");
+        }
+        
+        /// <summary>
+        /// Удаление <see cref="Ticket"/>
+        /// </summary>
+        [Fact]
+        public async Task DeleteShouldWork()
+        {
+            //Arrange
+            var model = TestDataGenerator.Ticket();
+            await Context.Tickets.AddAsync(model);
+            await UnitOfWork.SaveChangesAsync(CancellationToken);
+
+            //Act
+            Func<Task> act = () => ticketService.DeleteAsync(model.Id, CancellationToken);
+
+            // Assert
+            await act.Should().NotThrowAsync();
+            var entity = Context.Tickets.Single(x => x.Id == model.Id);
+            entity.Should().NotBeNull();
+            entity.DeletedAt.Should().NotBeNull();
+        }
+
+        /// <summary>
+        /// Добавление <see cref="Ticket"/>
+        /// </summary>
+        [Fact]
+        public async Task AddShouldWork()
+        {
+            //Arrange
+            var cinema = TestDataGenerator.Cinema();
+            var film = TestDataGenerator.Film();
+            var hall = TestDataGenerator.Hall();
+            var client = TestDataGenerator.Client();
+
+            await Context.Cinemas.AddAsync(cinema);
+            await Context.Films.AddAsync(film);
+            await Context.Halls.AddAsync(hall);
+            await Context.Clients.AddAsync(client);
+            await UnitOfWork.SaveChangesAsync(CancellationToken);
+
+            var model = TestDataGenerator.TicketRequestModel();
+            model.ClientId = client.Id;
+            model.FilmId = film.Id;
+            model.HallId = hall.Id;
+            model.CinemaId = cinema.Id;
+
+            //Act
+            Func<Task> act = () => ticketService.AddAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().NotThrowAsync();
+            var entity = Context.Tickets.Single(x => x.Id == model.Id);
+            entity.Should().NotBeNull();
+            entity.DeletedAt.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Добавление не валидируемого <see cref="Ticket"/>
+        /// </summary>
+        [Fact]
+        public async Task AddShouldValidationException()
+        {
+            //Arrange
+            var model = TestDataGenerator.TicketRequestModel();
+
+            //Act
+            Func<Task> act = () => ticketService.AddAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeTableValidationException>();
+        }
+
+        /// <summary>
+        /// Изменение несуществующего <see cref="Ticket"/>
+        /// </summary>
+        [Fact]
+        public async Task EditShouldNotFoundException()
+        {
+            //Arrange
+            var cinema = TestDataGenerator.Cinema();
+            var film = TestDataGenerator.Film();
+            var hall = TestDataGenerator.Hall();
+            var client = TestDataGenerator.Client();
+
+            await Context.Cinemas.AddAsync(cinema);
+            await Context.Films.AddAsync(film);
+            await Context.Halls.AddAsync(hall);
+            await Context.Clients.AddAsync(client);
+            await UnitOfWork.SaveChangesAsync(CancellationToken);
+
+            var model = TestDataGenerator.TicketRequestModel();
+            model.ClientId = client.Id;
+            model.FilmId = film.Id;
+            model.HallId = hall.Id;
+            model.CinemaId = cinema.Id;
+
+            //Act
+            Func<Task> act = () => ticketService.EditAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeTableEntityNotFoundException<Ticket>>()
+                .WithMessage($"*{model.Id}*");
+        }
+
+        /// <summary>
+        /// Изменение невалидируемого <see cref="Ticket"/>
+        /// </summary>
+        [Fact]
+        public async Task EditShouldValidationException()
+        {
+            //Arrange
+            var model = TestDataGenerator.TicketRequestModel();
+
+            //Act
+            Func<Task> act = () => ticketService.EditAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeTableValidationException>();
+        }
+
+        /// <summary>
+        /// Изменение <see cref="Ticket"/>
+        /// </summary>
+        [Fact]
+        public async Task EditShouldWork()
+        {
+            //Arrange
+            var cinema = TestDataGenerator.Cinema();
+            var film = TestDataGenerator.Film();
+            var hall = TestDataGenerator.Hall();
+            var client = TestDataGenerator.Client();
+
+            await Context.Cinemas.AddAsync(cinema);
+            await Context.Films.AddAsync(film);
+            await Context.Halls.AddAsync(hall);
+            await Context.Clients.AddAsync(client);
+            await UnitOfWork.SaveChangesAsync(CancellationToken);
+
+            var ticket = TestDataGenerator.Ticket();
+            ticket.ClientId = client.Id;
+            ticket.FilmId = film.Id;
+            ticket.HallId = hall.Id;
+            ticket.CinemaId = cinema.Id;
+
+            var model = TestDataGenerator.TicketRequestModel();
+            model.Id = ticket.Id;
+            model.ClientId = client.Id;
+            model.FilmId = film.Id;
+            model.HallId = hall.Id;
+            model.CinemaId = cinema.Id;
+
+            await Context.Tickets.AddAsync(ticket);
+            await UnitOfWork.SaveChangesAsync(CancellationToken);
+
+            //Act
+            Func<Task> act = () => ticketService.EditAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().NotThrowAsync();
+            var entity = Context.Tickets.Single(x => x.Id == ticket.Id);
+            entity.Should().NotBeNull()
+                .And
+                .BeEquivalentTo(new
+                {
+                    model.Id,
+                    model.Place,
+                    model.Price,
+                    model.Row,
+                    model.Date
+                });
         }
     }
 }

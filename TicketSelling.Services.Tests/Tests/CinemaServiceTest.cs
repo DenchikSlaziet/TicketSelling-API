@@ -49,7 +49,8 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => cinemaService.GetByIdAsync(id, CancellationToken);
 
             // Assert
-            await Assert.ThrowsAsync<TimeTableEntityNotFoundException<Cinema>>(result);
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Cinema>>()
+               .WithMessage($"*{id}*");
         }
 
         /// <summary>
@@ -116,10 +117,10 @@ namespace TicketSelling.Services.Tests.Tests
         }
 
         /// <summary>
-        /// Удаление не существуюущего <see cref="Cinema"/>
+        /// Удаление несуществуюущего <see cref="Cinema"/>
         /// </summary>
         [Fact]
-        public async Task DeletingNonExistentCinemaReturnExсeption()
+        public async Task DeleteShouldNotFoundException()
         {
             //Arrange
             var id = Guid.NewGuid();
@@ -128,14 +129,15 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => cinemaService.DeleteAsync(id, CancellationToken);
 
             // Assert
-            await Assert.ThrowsAsync<TimeTableEntityNotFoundException<Cinema>>(result);
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Cinema>>()
+                .WithMessage($"*{id}*");
         }
 
         /// <summary>
         /// Удаление удаленного <see cref="Cinema"/>
         /// </summary>
         [Fact]
-        public async Task DeletingDeletedCinemaReturnExсeption()
+        public async Task DeleteShouldInvalidException()
         {
             //Arrange
             var model = TestDataGenerator.Cinema(x => x.DeletedAt = DateTime.UtcNow);
@@ -146,26 +148,125 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => cinemaService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await Assert.ThrowsAsync<TimeTableInvalidOperationException>(result);
+            await result.Should().ThrowAsync<TimeTableInvalidOperationException>()
+                .WithMessage($"*{model.Id}*");
         }
 
-        ///// <summary>
-        ///// Удаление кинотеатра
-        ///// </summary>
-        //[Fact]
-        //public async Task DeletingCinemaReturnTrue()
-        //{
-        //    //Arrange
-        //    var model = TestDataGenerator.Cinema();
-        //    await Context.Cinemas.AddAsync(model);
-        //    await Context.SaveChangesAsync(CancellationToken);
+        /// <summary>
+        /// Удаление <see cref="Cinema"/>
+        /// </summary>
+        [Fact]
+        public async Task DeleteShouldWork()
+        {
+            //Arrange
+            var model = TestDataGenerator.Cinema();
+            await Context.Cinemas.AddAsync(model);
+            await UnitOfWork.SaveChangesAsync(CancellationToken);
 
-        //    //Act
-        //    var result = await Context.Cinemas.FirstAsync();
-        //    await cinemaeService.DeleteAsync(result.Id, CancellationToken);
+            //Act
+            Func<Task> act = () => cinemaService.DeleteAsync(model.Id, CancellationToken);
 
-        //    // Assert
-        //    result.DeletedAt.HasValue.Should().BeTrue();
-        //}
+            // Assert
+            await act.Should().NotThrowAsync();
+            var entity = Context.Cinemas.Single(x => x.Id == model.Id);
+            entity.Should().NotBeNull();
+            entity.DeletedAt.Should().NotBeNull();
+        }
+
+        /// <summary>
+        /// Добавление <see cref="Cinema"/>
+        /// </summary>
+        [Fact]
+        public async Task AddShouldWork()
+        {
+            //Arrange
+            var model = TestDataGenerator.CinemaModel();
+
+            //Act
+            Func<Task> act = () => cinemaService.AddAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().NotThrowAsync();
+            var entity = Context.Cinemas.Single(x => x.Id == model.Id);
+            entity.Should().NotBeNull();
+            entity.DeletedAt.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Добавление не валидируемого <see cref="Cinema"/>
+        /// </summary>
+        [Fact]
+        public async Task AddShouldValidationException()
+        {
+            //Arrange
+            var model = TestDataGenerator.CinemaModel(x => x.Address = "T");
+
+            //Act
+            Func<Task> act = () => cinemaService.AddAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeTableValidationException>();
+        }
+
+        /// <summary>
+        /// Изменение несуществующего <see cref="Cinema"/>
+        /// </summary>
+        [Fact]
+        public async Task EditShouldNotFoundException()
+        {
+            //Arrange
+            var model = TestDataGenerator.CinemaModel();
+
+            //Act
+            Func<Task> act = () => cinemaService.EditAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeTableEntityNotFoundException<Cinema>>()
+                .WithMessage($"*{model.Id}*");
+        }
+
+        /// <summary>
+        /// Изменение невалидируемого <see cref="Cinema"/>
+        /// </summary>
+        [Fact]
+        public async Task EditShouldValidationException()
+        {
+            //Arrange
+            var model = TestDataGenerator.CinemaModel(x => x.Address = "T");
+
+            //Act
+            Func<Task> act = () => cinemaService.EditAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeTableValidationException>();
+        }
+
+        /// <summary>
+        /// Изменение <see cref="Cinema"/>
+        /// </summary>
+        [Fact]
+        public async Task EditShouldWork()
+        {
+            //Arrange
+            var model = TestDataGenerator.CinemaModel();
+            var cinema = TestDataGenerator.Cinema(x => x.Id = model.Id);
+            await Context.Cinemas.AddAsync(cinema);
+            await UnitOfWork.SaveChangesAsync(CancellationToken);
+
+            //Act
+            Func<Task> act = () => cinemaService.EditAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().NotThrowAsync();
+            var entity = Context.Cinemas.Single(x => x.Id == cinema.Id);
+            entity.Should().NotBeNull()
+                .And
+                .BeEquivalentTo(new
+                {
+                    model.Id,
+                    model.Address,
+                    model.Title
+                });
+        }
     }
 }

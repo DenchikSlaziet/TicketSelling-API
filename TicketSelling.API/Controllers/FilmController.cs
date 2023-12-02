@@ -57,6 +57,7 @@ namespace TicketSelling.API.Controllers
         [ProducesResponseType(typeof(FilmResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Add(CreateFilmRequest model, CancellationToken cancellationToken)
         {
             var filmModel = mapper.Map<FilmModel>(model);
@@ -72,6 +73,7 @@ namespace TicketSelling.API.Controllers
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Edit(FilmRequest request, CancellationToken cancellationToken)
         {
             var model = mapper.Map<FilmModel>(request);

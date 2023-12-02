@@ -48,7 +48,8 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => hallService.GetByIdAsync(id, CancellationToken);
 
             // Assert
-            await Assert.ThrowsAsync<TimeTableEntityNotFoundException<Hall>>(result);
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Hall>>()
+                .WithMessage($"*{id}*");
         }
 
         /// <summary>
@@ -127,7 +128,8 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => hallService.DeleteAsync(id, CancellationToken);
 
             // Assert
-            await Assert.ThrowsAsync<TimeTableEntityNotFoundException<Hall>>(result);
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Hall>>()
+                .WithMessage($"*{id}*");
         }
 
         /// <summary>
@@ -145,7 +147,125 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => hallService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await Assert.ThrowsAsync<TimeTableInvalidOperationException>(result);
+            await result.Should().ThrowAsync<TimeTableInvalidOperationException>()
+                .WithMessage($"*{model.Id}*");
+        }        
+
+        /// <summary>
+        /// Удаление <see cref="Hall"/>
+        /// </summary>
+        [Fact]
+        public async Task DeleteShouldWork()
+        {
+            //Arrange
+            var model = TestDataGenerator.Hall();
+            await Context.Halls.AddAsync(model);
+            await UnitOfWork.SaveChangesAsync(CancellationToken);
+
+            //Act
+            Func<Task> act = () => hallService.DeleteAsync(model.Id, CancellationToken);
+
+            // Assert
+            await act.Should().NotThrowAsync();
+            var entity = Context.Halls.Single(x => x.Id == model.Id);
+            entity.Should().NotBeNull();
+            entity.DeletedAt.Should().NotBeNull();
+        }
+
+        /// <summary>
+        /// Добавление <see cref="Hall"/>
+        /// </summary>
+        [Fact]
+        public async Task AddShouldWork()
+        {
+            //Arrange
+            var model = TestDataGenerator.HallModel();
+
+            //Act
+            Func<Task> act = () => hallService.AddAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().NotThrowAsync();
+            var entity = Context.Halls.Single(x => x.Id == model.Id);
+            entity.Should().NotBeNull();
+            entity.DeletedAt.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Добавление не валидируемого <see cref="Hall"/>
+        /// </summary>
+        [Fact]
+        public async Task AddShouldValidationException()
+        {
+            //Arrange
+            var model = TestDataGenerator.HallModel(x => x.NumberOfSeats = -1);
+
+            //Act
+            Func<Task> act = () => hallService.AddAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeTableValidationException>();
+        }
+
+        /// <summary>
+        /// Изменение несуществующего <see cref="Hall"/>
+        /// </summary>
+        [Fact]
+        public async Task EditShouldNotFoundException()
+        {
+            //Arrange
+            var model = TestDataGenerator.HallModel();
+
+            //Act
+            Func<Task> act = () => hallService.EditAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeTableEntityNotFoundException<Hall>>()
+                .WithMessage($"*{model.Id}*");
+        }
+
+        /// <summary>
+        /// Изменение невалидируемого <see cref="Hall"/>
+        /// </summary>
+        [Fact]
+        public async Task EditShouldValidationException()
+        {
+            //Arrange
+            var model = TestDataGenerator.HallModel(x => x.NumberOfSeats = -1);
+
+            //Act
+            Func<Task> act = () => hallService.EditAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().ThrowAsync<TimeTableValidationException>();
+        }
+
+        /// <summary>
+        /// Изменение <see cref="Hall"/>
+        /// </summary>
+        [Fact]
+        public async Task EditShouldWork()
+        {
+            //Arrange
+            var model = TestDataGenerator.HallModel();
+            var hall = TestDataGenerator.Hall(x => x.Id = model.Id);
+            await Context.Halls.AddAsync(hall);
+            await UnitOfWork.SaveChangesAsync(CancellationToken);
+
+            //Act
+            Func<Task> act = () => hallService.EditAsync(model, CancellationToken);
+
+            // Assert
+            await act.Should().NotThrowAsync();
+            var entity = Context.Halls.Single(x => x.Id == hall.Id);
+            entity.Should().NotBeNull()
+                .And
+                .BeEquivalentTo(new
+                {
+                    model.Id,
+                    model.Number,
+                    model.NumberOfSeats
+                });
         }
     }
 }
