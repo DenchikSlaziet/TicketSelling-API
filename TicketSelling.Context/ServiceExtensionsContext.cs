@@ -8,7 +8,7 @@ namespace TicketSelling.Context
     /// <summary>
     /// Методы пасширения для <see cref="IServiceCollection"/>
     /// </summary>
-    public static class RegistrationContexts
+    public static class ServiceExtensionsContext
     {
         /// <summary>
         /// Регистрирует все что связано с контекстом
