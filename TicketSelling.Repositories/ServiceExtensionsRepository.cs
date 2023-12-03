@@ -7,7 +7,7 @@ namespace TicketSelling.Repositories
     /// <summary>
     /// Расширения для <see cref="IServiceCollection"/>
     /// </summary>
-    public static class RegistrationRepositories
+    public static class ServiceExtensionsRepository
     {
         /// <summary>
         /// Регистрация репозиториев

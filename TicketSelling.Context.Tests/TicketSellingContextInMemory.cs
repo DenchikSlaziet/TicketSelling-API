@@ -1,16 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TicketSelling.Common.Entity.InterfaceDB;
 
 namespace TicketSelling.Context.Tests
 {
-    public abstract class TicketSellingContextInMemory : IDisposable
+    public abstract class TicketSellingContextInMemory : IAsyncDisposable
     {
         protected readonly CancellationToken CancellationToken;
         private readonly CancellationTokenSource cancellationTokenSource;
@@ -34,7 +29,6 @@ namespace TicketSelling.Context.Tests
             CancellationToken = cancellationTokenSource.Token;
             var optionsBuilder = new DbContextOptionsBuilder<TicketSellingContext>()            
                 .UseInMemoryDatabase($"MoneronTests{Guid.NewGuid()}")
-                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                 .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning));
             Context = new TicketSellingContext(optionsBuilder.Options);
         }
@@ -48,6 +42,21 @@ namespace TicketSelling.Context.Tests
             {
                 Context.Database.EnsureDeletedAsync().Wait();
                 Context.Dispose();
+            }
+            catch (ObjectDisposedException ex)
+            {
+                Trace.TraceError(ex.Message);
+            }
+        }
+
+        async public ValueTask DisposeAsync()
+        {
+            cancellationTokenSource.Cancel();
+            cancellationTokenSource.Dispose();
+            try
+            {
+                await Context.Database.EnsureDeletedAsync();
+                await Context.DisposeAsync();
             }
             catch (ObjectDisposedException ex)
             {

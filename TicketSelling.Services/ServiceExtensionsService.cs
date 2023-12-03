@@ -8,7 +8,7 @@ namespace TicketSelling.Services
     /// <summary>
     /// Расширения для <see cref="IServiceCollection"/>
     /// </summary>
-    public static class RegistrationServices
+    public static class ServiceExtensionsService
     {
         /// <summary>
         /// Регистрация всех сервисов и валидатора
