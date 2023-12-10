@@ -6,9 +6,9 @@ namespace TicketSelling.Services.Validator.Validators
     /// <summary>
     /// Валидатор <see cref="CinemaModel"/>
     /// </summary>
-    public class CreateCinemaRequestValidator : AbstractValidator<CinemaModel>
+    public class CinemaModelValidator : AbstractValidator<CinemaModel>
     {
-        public CreateCinemaRequestValidator()
+        public CinemaModelValidator()
         {
 
             RuleFor(x => x.Title)

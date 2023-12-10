@@ -6,9 +6,9 @@ namespace TicketSelling.Services.Validator.Validators
     /// <summary>
     /// Валидатор <see cref="FilmModel"/>
     /// </summary>
-    public class CreateFilmRequestValidator : AbstractValidator<FilmModel>
+    public class FilmModelValidator : AbstractValidator<FilmModel>
     {
-        public CreateFilmRequestValidator()
+        public FilmModelValidator()
         {
             RuleFor(x => x.Title)
                .NotEmpty().WithMessage(MessageForValidation.DefaultMessage)

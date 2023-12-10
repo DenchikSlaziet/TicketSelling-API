@@ -7,14 +7,14 @@ namespace TicketSelling.Services.Validator.Validators
     /// <summary>
     /// Валидатор <see cref="TicketRequestModel"/>
     /// </summary>
-    public class CreateTicketRequestValidator : AbstractValidator<TicketRequestModel>
+    public class TicketRequestValidator : AbstractValidator<TicketRequestModel>
     {
         private readonly ICinemaReadRepository cinemaReadRepository;
         private readonly IClientReadRepository clientReadRepository;
         private readonly IFilmReadRepository filmReadRepository;
         private readonly IHallReadRepository hallReadRepository;
 
-        public CreateTicketRequestValidator(ICinemaReadRepository cinemaReadRepository, IClientReadRepository clientReadRepository,
+        public TicketRequestValidator(ICinemaReadRepository cinemaReadRepository, IClientReadRepository clientReadRepository,
             IFilmReadRepository filmReadRepository, IHallReadRepository hallReadRepository)
         {
             this.cinemaReadRepository = cinemaReadRepository;
@@ -47,7 +47,8 @@ namespace TicketSelling.Services.Validator.Validators
                 .WithMessage(MessageForValidation.NotFoundGuidMessage);
 
             RuleFor(x => x.Date)
-                .NotEmpty().WithMessage(MessageForValidation.DefaultMessage);
+                .NotEmpty().WithMessage(MessageForValidation.DefaultMessage)
+                .GreaterThan(DateTimeOffset.Now.AddMinutes(1)).WithMessage(MessageForValidation.InclusiveBetweenMessage);
 
             RuleFor(x => (int)x.Place)
                 .InclusiveBetween(1, 200).WithMessage(MessageForValidation.InclusiveBetweenMessage);

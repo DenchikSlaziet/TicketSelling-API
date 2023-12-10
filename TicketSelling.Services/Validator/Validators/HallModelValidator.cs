@@ -6,9 +6,9 @@ namespace TicketSelling.Services.Validator.Validators
     /// <summary>
     /// Валидатор <see cref="HallModel"/>
     /// </summary>
-    public class CreateHallRequestValidator : AbstractValidator<HallModel>
+    public class HallModelValidator : AbstractValidator<HallModel>
     {
-        public CreateHallRequestValidator()
+        public HallModelValidator()
         {
             RuleFor(x => (int)x.Number)
               .InclusiveBetween(1, 99).WithMessage(MessageForValidation.InclusiveBetweenMessage);
