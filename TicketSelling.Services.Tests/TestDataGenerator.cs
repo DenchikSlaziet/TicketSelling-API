@@ -169,7 +169,7 @@ namespace TicketSelling.Services.Tests
             var result = new TicketRequestModel
             {
                 Id = Guid.NewGuid(),
-                Date = DateTimeOffset.Now,
+                Date = DateTimeOffset.Now.AddDays(1),
                 Place = 1,
                 Row = 1,
                 Price = 100

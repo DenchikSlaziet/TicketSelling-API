@@ -15,12 +15,12 @@ namespace TicketSelling.Services.Validator
         public ServicesValidatorService(ICinemaReadRepository cinemaReadRepository, IClientReadRepository clientReadRepository,
             IFilmReadRepository filmReadRepository, IHallReadRepository hallReadRepository)
         {
-            validators.Add(typeof(CinemaModel), new CreateCinemaRequestValidator());
-            validators.Add(typeof(ClientModel), new CreateClientRequestValidator());
-            validators.Add(typeof(FilmModel), new CreateFilmRequestValidator());
-            validators.Add(typeof(HallModel), new CreateHallRequestValidator());
-            validators.Add(typeof(StaffModel), new CreateStaffRequestValidator());
-            validators.Add(typeof(TicketRequestModel), new CreateTicketRequestValidator(cinemaReadRepository, 
+            validators.Add(typeof(CinemaModel), new CinemaModelValidator());
+            validators.Add(typeof(ClientModel), new ClientModelValidator());
+            validators.Add(typeof(FilmModel), new FilmModelValidator());
+            validators.Add(typeof(HallModel), new HallModelValidator());
+            validators.Add(typeof(StaffModel), new StaffModelValidator());
+            validators.Add(typeof(TicketRequestModel), new TicketRequestValidator(cinemaReadRepository, 
                 clientReadRepository, filmReadRepository, hallReadRepository));
         }
 
