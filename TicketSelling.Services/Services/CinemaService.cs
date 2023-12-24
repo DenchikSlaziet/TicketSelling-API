@@ -51,12 +51,7 @@ namespace TicketSelling.Services.ReadServices
             {
                 throw new TimeTableEntityNotFoundException<Cinema>(id);
             }
-
-            if (targetCinema.DeletedAt.HasValue)
-            {
-                throw new TimeTableInvalidOperationException($"Кинотеатр с идентификатором {id} уже удален");
-            }
-
+         
             cinemaWriteRepository.Delete(targetCinema);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }

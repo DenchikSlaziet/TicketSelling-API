@@ -66,11 +66,6 @@ namespace TicketSelling.Services.ReadServices
                 throw new TimeTableEntityNotFoundException<Ticket>(id);
             }
 
-            if (targetTicket.DeletedAt.HasValue)
-            {
-                throw new TimeTableInvalidOperationException($"Билет с идентификатором {id} уже удален");
-            }
-
             ticketWriteRepository.Delete(targetTicket);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
