@@ -31,6 +31,7 @@ namespace TicketSelling.Repositories.ReadRepositories
         Task<Hall?> IHallReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
             => reader.Read<Hall>()
                 .ById(id)
+                .NotDeletedAt()
                 .FirstOrDefaultAsync(cancellationToken);
 
         Task<Dictionary<Guid, Hall>> IHallReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)

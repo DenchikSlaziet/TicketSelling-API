@@ -33,6 +33,7 @@ namespace TicketSelling.Repositories.ReadRepositories
         Task<Client?> IClientReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
             => reader.Read<Client>()
                 .ById(id)
+                .NotDeletedAt()
                 .FirstOrDefaultAsync(cancellationToken);
 
         Task<Dictionary<Guid, Client>> IClientReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 

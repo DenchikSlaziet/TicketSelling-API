@@ -32,6 +32,7 @@ namespace TicketSelling.Repositories.ReadRepositories
         Task<Staff?> IStaffReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
             => reader.Read<Staff>()
                 .ById(id)
+                .NotDeletedAt()
                 .FirstOrDefaultAsync(cancellationToken);
 
         Task<Dictionary<Guid, Staff>> IStaffReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 

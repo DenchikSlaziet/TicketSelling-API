@@ -146,7 +146,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => filmService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableInvalidOperationException>()
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Film>>()
                 .WithMessage($"*{model.Id}*");
         }
   

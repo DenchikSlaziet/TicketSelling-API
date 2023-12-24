@@ -31,6 +31,7 @@ namespace TicketSelling.Repositories.ReadRepositories
         Task<Cinema?> ICinemaReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
             => reader.Read<Cinema>()
                 .ById(id)
+                .NotDeletedAt()
                 .FirstOrDefaultAsync(cancellationToken);
 
         Task<Dictionary<Guid, Cinema>> ICinemaReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)

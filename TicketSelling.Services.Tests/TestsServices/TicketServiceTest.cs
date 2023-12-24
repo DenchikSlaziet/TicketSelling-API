@@ -146,7 +146,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => ticketService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableInvalidOperationException>()
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Ticket>>()
                 .WithMessage($"*{model.Id}*");
         }
         

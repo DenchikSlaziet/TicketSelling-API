@@ -53,11 +53,6 @@ namespace TicketSelling.Services.ReadServices
                 throw new TimeTableEntityNotFoundException<Staff>(id);
             }
 
-            if (targetStaff.DeletedAt.HasValue)
-            {
-                throw new TimeTableInvalidOperationException($"Работник с идентификатором {id} уже удален");
-            }
-
             staffWriteRepository.Delete(targetStaff);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }

@@ -150,7 +150,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => clientService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableInvalidOperationException>()
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Client>>()
                 .WithMessage($"*{model.Id}*");
         }      
 
