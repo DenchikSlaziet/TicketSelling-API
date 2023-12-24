@@ -8,6 +8,9 @@ using Xunit;
 
 namespace TicketSelling.API.Tests
 {
+    /// <summary>
+    /// Базовый класс для тестов
+    /// </summary>
     [Collection(nameof(TicketSellingApiTestCollection))]
     public class BaseIntegrationTest
     {
