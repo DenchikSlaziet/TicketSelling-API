@@ -1,6 +1,7 @@
 ﻿using FluentValidation.TestHelper;
 using TicketSelling.Services.Contracts.Enums;
 using TicketSelling.Services.Validator.Validators;
+using TicketSelling.Test.Extensions;
 using Xunit;
 
 namespace TicketSelling.Services.Tests.TestsValidators

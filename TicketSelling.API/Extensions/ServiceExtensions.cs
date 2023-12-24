@@ -44,7 +44,8 @@ namespace TicketSelling.API.Extensions
                     {
                         CamelCaseText = false
                     });
-                });
+                })
+                .AddControllersAsServices();
         }
 
         /// <summary>

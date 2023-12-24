@@ -1,8 +1,8 @@
 ﻿using TicketSelling.Context.Contracts.Models;
 
-namespace TicketSelling.Services.Tests
+namespace TicketSelling.Test.Extensions
 {
-    internal static class TestDataExtensions
+    public static class TestDataExtensions
     {
         public static void BaseAuditSetParamtrs<TEntity>(this TEntity entity) where TEntity : BaseAuditEntity
         {

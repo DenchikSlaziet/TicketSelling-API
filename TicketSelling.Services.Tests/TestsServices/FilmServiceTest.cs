@@ -10,6 +10,7 @@ using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.ReadServices;
 using TicketSelling.Services.ReadServices;
 using TicketSelling.Services.Validator;
+using TicketSelling.Test.Extensions;
 using Xunit;
 
 namespace TicketSelling.Services.Tests.Tests
