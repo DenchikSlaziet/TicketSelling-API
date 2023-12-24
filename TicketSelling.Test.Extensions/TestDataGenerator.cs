@@ -1,12 +1,13 @@
 ﻿using TicketSelling.Context.Contracts.Models;
+using TicketSelling.Services.Contracts.Enums;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ModelsRequest;
 
-namespace TicketSelling.Services.Tests
+namespace TicketSelling.Test.Extensions
 {
-    internal static class TestDataGenerator
+    public static class TestDataGenerator
     {
-        static internal Cinema Cinema(Action<Cinema>? settings = null)
+        static public Cinema Cinema(Action<Cinema>? settings = null)
         {
             var result = new Cinema
             {
@@ -19,7 +20,7 @@ namespace TicketSelling.Services.Tests
             return result;
         }
 
-        static internal Film Film(Action<Film>? settings = null)
+        static public Film Film(Action<Film>? settings = null)
         {
             var result = new Film
             {
@@ -32,7 +33,7 @@ namespace TicketSelling.Services.Tests
             return result;
         }
 
-        static internal Hall Hall(Action<Hall>? settings = null)
+        static public Hall Hall(Action<Hall>? settings = null)
         {
             var result = new Hall
             {
@@ -45,7 +46,7 @@ namespace TicketSelling.Services.Tests
             return result;
         }
 
-        static internal Client Client(Action<Client>? settings = null)
+        static public Client Client(Action<Client>? settings = null)
         {
             var result = new Client
             {
@@ -61,7 +62,7 @@ namespace TicketSelling.Services.Tests
             return result;
         }
 
-        static internal Staff Staff(Action<Staff>? settings = null)
+        static public Staff Staff(Action<Staff>? settings = null)
         {
             var result = new Staff
             {
@@ -77,7 +78,7 @@ namespace TicketSelling.Services.Tests
             return result;
         }
 
-        static internal Ticket Ticket(Action<Ticket>? settings = null)
+        static public Ticket Ticket(Action<Ticket>? settings = null)
         {
             var result = new Ticket
             {
@@ -92,7 +93,7 @@ namespace TicketSelling.Services.Tests
             return result;
         }
 
-        static internal CinemaModel CinemaModel(Action<CinemaModel>? settings = null)
+        static public CinemaModel CinemaModel(Action<CinemaModel>? settings = null)
         {
             var result = new CinemaModel
             {
@@ -105,7 +106,7 @@ namespace TicketSelling.Services.Tests
             return result;
         }
 
-        static internal FilmModel FilmModel(Action<FilmModel>? settings = null)
+        static public FilmModel FilmModel(Action<FilmModel>? settings = null)
         {
             var result = new FilmModel
             {
@@ -119,7 +120,7 @@ namespace TicketSelling.Services.Tests
             return result;
         }
 
-        static internal HallModel HallModel(Action<HallModel>? settings = null)
+        static public HallModel HallModel(Action<HallModel>? settings = null)
         {
             var result = new HallModel
             {
@@ -132,7 +133,7 @@ namespace TicketSelling.Services.Tests
             return result;
         }
 
-        static internal ClientModel ClientModel(Action<ClientModel>? settings = null)
+        static public ClientModel ClientModel(Action<ClientModel>? settings = null)
         {
             var result = new ClientModel
             {
@@ -148,7 +149,7 @@ namespace TicketSelling.Services.Tests
             return result;
         }
 
-        static internal StaffModel StaffModel(Action<StaffModel>? settings = null)
+        static public StaffModel StaffModel(Action<StaffModel>? settings = null)
         {
             var result = new StaffModel
             {
@@ -157,14 +158,14 @@ namespace TicketSelling.Services.Tests
                 LastName = $"{Guid.NewGuid():N}",
                 Patronymic = $"{Guid.NewGuid():N}",
                 Age = 18,
-                Post = Contracts.Enums.PostModel.None
+                Post = PostModel.None
             };
 
             settings?.Invoke(result);
             return result;
         }
 
-        static internal TicketRequestModel TicketRequestModel(Action<TicketRequestModel>? settings = null)
+        static public TicketRequestModel TicketRequestModel(Action<TicketRequestModel>? settings = null)
         {
             var result = new TicketRequestModel
             {

@@ -2,6 +2,7 @@
 using TicketSelling.Context.Tests;
 using TicketSelling.Repositories.ReadRepositories;
 using TicketSelling.Services.Validator.Validators;
+using TicketSelling.Test.Extensions;
 using Xunit;
 
 namespace TicketSelling.Services.Tests.TestsValidators

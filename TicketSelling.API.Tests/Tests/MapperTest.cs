@@ -4,7 +4,7 @@ using FluentAssertions.Extensions;
 using TicketSelling.API.AutoMappers;
 using Xunit;
 
-namespace TicketSelling.API.Tests
+namespace TicketSelling.API.Tests.Tests
 {
     public class MapperTest
     {
