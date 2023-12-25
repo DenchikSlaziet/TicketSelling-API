@@ -26,20 +26,10 @@ namespace TicketSelling.API.Tests.Tests
             // Act
             string data = JsonConvert.SerializeObject(cinema);
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("/Cinema", contextdata);
+            await client.PostAsync("/Cinema", contextdata);
 
-            // Assert
-            response.EnsureSuccessStatusCode();
-            var resultString = await response.Content.ReadAsStringAsync();
-
-            var result = JsonConvert.DeserializeObject<CinemaResponse>(resultString);
-            result.Should().NotBeNull()
-                .And
-                .BeEquivalentTo(new
-                {
-                    cinema.Title,
-                    cinema.Address
-                });          
+            // Assert          
+            context.Cinemas.Should().ContainSingle(x => x.Address == cinema.Address && x.Title == cinema.Title);         
         }
 
         [Fact]
@@ -56,25 +46,11 @@ namespace TicketSelling.API.Tests.Tests
             // Act
             string data = JsonConvert.SerializeObject(cinemaRequest);
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync("/Cinema", contextdata);
+            await client.PutAsync("/Cinema", contextdata);
 
             // Assert
-            response.EnsureSuccessStatusCode();
-            var resultString = await response.Content.ReadAsStringAsync();
-
-            var result = JsonConvert.DeserializeObject<CinemaResponse>(resultString);
-            result.Should().NotBeNull()
-                .And
-                .BeEquivalentTo(new
-                {
-                    cinema.Id
-                })
-                .And
-                .NotBeEquivalentTo(new
-                {
-                    cinema.Title,
-                    cinema.Address
-                });
+            context.Cinemas.Should().HaveCount(1);
+            context.Cinemas.First().Should().BeEquivalentTo(cinemaRequest);
         }
 
         [Fact]
