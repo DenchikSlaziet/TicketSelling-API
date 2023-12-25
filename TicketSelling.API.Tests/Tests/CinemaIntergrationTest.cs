@@ -28,8 +28,10 @@ namespace TicketSelling.API.Tests.Tests
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
             await client.PostAsync("/Cinema", contextdata);
 
+            var cinemaFirst = await context.Cinemas.FirstAsync();
+
             // Assert          
-            context.Cinemas.Should().ContainSingle(x => x.Address == cinema.Address && x.Title == cinema.Title);         
+            cinemaFirst.Should().BeEquivalentTo(cinema);     
         }
 
         [Fact]
@@ -48,9 +50,11 @@ namespace TicketSelling.API.Tests.Tests
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
             await client.PutAsync("/Cinema", contextdata);
 
-            // Assert
-            context.Cinemas.Should().HaveCount(1);
-            context.Cinemas.First().Should().BeEquivalentTo(cinemaRequest);
+            var cinemaFirst = await context.Cinemas.FirstAsync();
+
+            // Assert           
+            cinemaFirst.Should()
+                .BeEquivalentTo(cinemaRequest);
         }
 
         [Fact]
@@ -65,8 +69,11 @@ namespace TicketSelling.API.Tests.Tests
             // Act
             await client.DeleteAsync($"/Cinema/{cinema.Id}");
 
+            var cinemaFirst = await context.Cinemas.FirstAsync();
+
             // Assert
-            context.Cinemas.Should().ContainSingle(x => x.Id == cinema.Id && x.DeletedAt != null);
+            cinemaFirst.Id.Should().Be(cinema.Id);
+            cinemaFirst.DeletedAt.Should().NotBeNull();
         }
 
         [Fact]
@@ -86,10 +93,10 @@ namespace TicketSelling.API.Tests.Tests
             // Assert
             response.EnsureSuccessStatusCode();
             var resultString = await response.Content.ReadAsStringAsync();
-
             var result = JsonConvert.DeserializeObject<CinemaResponse>(resultString);
 
-            result.Should().NotBeNull()
+            result.Should()
+                .NotBeNull()
                 .And
                 .BeEquivalentTo(new 
                 {
@@ -115,8 +122,8 @@ namespace TicketSelling.API.Tests.Tests
             // Assert
             response.EnsureSuccessStatusCode();
             var resultString = await response.Content.ReadAsStringAsync();
-
             var result = JsonConvert.DeserializeObject<IEnumerable<CinemaResponse>>(resultString);
+
             result.Should()
                 .NotBeNull()
                 .And
