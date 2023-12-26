@@ -95,9 +95,8 @@ namespace TicketSelling.API.Tests.Tests
             // Arrange
             var client = factory.CreateClient();
             var hall1 = TestDataGenerator.Hall();
-            var hall2 = TestDataGenerator.Hall();
 
-            await context.Halls.AddRangeAsync(hall1, hall2);
+            await context.Halls.AddRangeAsync(hall1);
             await unitOfWork.SaveChangesAsync();
 
             // Act

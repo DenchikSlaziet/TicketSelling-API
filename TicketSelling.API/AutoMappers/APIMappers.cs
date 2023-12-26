@@ -45,7 +45,7 @@ namespace TicketSelling.API.AutoMappers
                 .ForMember(x => x.Film, opt => opt.Ignore())
                 .ForMember(x => x.Staff, opt => opt.Ignore()).ReverseMap();
 
-            CreateMap<TicketRequest, TicketRequestModel>(MemberList.Destination);
+            CreateMap<TicketRequest, TicketRequestModel>(MemberList.Destination).ReverseMap();
             CreateMap<CreateTicketRequest, TicketRequestModel>(MemberList.Destination)
                 .ForMember(x => x.Id, opt => opt.Ignore()).ReverseMap();
 
