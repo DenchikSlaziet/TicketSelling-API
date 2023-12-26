@@ -29,9 +29,11 @@ namespace TicketSelling.API.Tests.Tests
             // Act
             string data = JsonConvert.SerializeObject(client);
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
-            await clientFactory.PostAsync("/Client", contextdata);
+            var response = await clientFactory.PostAsync("/Client", contextdata);
+            var resultString = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ClientResponse>(resultString);
 
-            var clientFirst = await context.Clients.FirstAsync();
+            var clientFirst = await context.Clients.FirstAsync(x => x.Id == result!.Id);
 
             // Assert          
             clientFirst.Should()
@@ -47,14 +49,14 @@ namespace TicketSelling.API.Tests.Tests
             await context.Clients.AddAsync(client);
             await unitOfWork.SaveChangesAsync();
 
-            var clientRequest = mapper.Map<ClientRequest>(TestDataGenerator.ClientModel(x => x.Id = client.Id));
+            var clientRequest = mapper.Map<ClientRequest>(TestDataGenerator.ClientModel(x =>  x.Id = client.Id));
 
             // Act
             string data = JsonConvert.SerializeObject(clientRequest);
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
             await clientFactory.PutAsync("/Client", contextdata);
 
-            var clientFirst = await context.Clients.FirstAsync();
+            var clientFirst = await context.Clients.FirstAsync(x => x.Id == clientRequest.Id);
 
             // Assert           
             clientFirst.Should()
@@ -73,14 +75,18 @@ namespace TicketSelling.API.Tests.Tests
             // Act
             await clientFactory.DeleteAsync($"/Client/{client.Id}");
 
-            var clientFirst = await context.Clients.FirstAsync();
+            var clientFirst = await context.Clients.FirstAsync(x => x.Id == client.Id);
 
             // Assert
-            clientFirst.Id.Should()
-                .Be(client.Id);
-
             clientFirst.DeletedAt.Should()
                 .NotBeNull();
+
+            clientFirst.Should()
+            .BeEquivalentTo(new
+                {
+                    client.Age,
+                    client.Id
+                });
         }
 
         [Fact]
@@ -132,7 +138,12 @@ namespace TicketSelling.API.Tests.Tests
             result.Should()
                 .NotBeNull()
                 .And
-                .ContainSingle(x => x.Id == client1.Id);
+                .Contain(x => x.Id == client1.Id);
+
+            result.Should()
+                .NotBeNull()
+                .And
+                .NotContain(x => x.Id == client2.Id);
         }
     }
 }

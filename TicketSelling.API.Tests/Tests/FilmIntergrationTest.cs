@@ -29,9 +29,11 @@ namespace TicketSelling.API.Tests.Tests
             // Act
             string data = JsonConvert.SerializeObject(film);
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
-            await client.PostAsync("/Film", contextdata);
+            var response = await client.PostAsync("/Film", contextdata);
+            var resultString = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<FilmResponse>(resultString);
 
-            var filmFirst = await context.Films.FirstAsync();
+            var filmFirst = await context.Films.FirstAsync(x => x.Id == result!.Id);
 
             // Assert          
             filmFirst.Should()
@@ -54,7 +56,7 @@ namespace TicketSelling.API.Tests.Tests
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
             await client.PutAsync("/Film", contextdata);
 
-            var filmFirst = await context.Films.FirstAsync();
+            var filmFirst = await context.Films.FirstAsync(x => x.Id == filmRequest.Id);
 
             // Assert           
             filmFirst.Should()
@@ -73,14 +75,18 @@ namespace TicketSelling.API.Tests.Tests
             // Act
             await client.DeleteAsync($"/Film/{film.Id}");
 
-            var filmFirst = await context.Films.FirstAsync();
+            var filmFirst = await context.Films.FirstAsync(x => x.Id == film.Id);
 
             // Assert
-            filmFirst.Id.Should()
-                .Be(film.Id);
-
             filmFirst.DeletedAt.Should()
                 .NotBeNull();
+
+            filmFirst.Should()
+            .BeEquivalentTo(new
+            {
+                film.Title,
+                film.Description
+            });
         }
 
         [Fact]
@@ -134,7 +140,12 @@ namespace TicketSelling.API.Tests.Tests
             result.Should()
                 .NotBeNull()
                 .And
-                .ContainSingle(x => x.Id == film1.Id);
+                .Contain(x => x.Id == film1.Id);
+
+            result.Should()
+                .NotBeNull()
+                .And
+                .NotContain(x => x.Id == film2.Id);
         }
     }
 }

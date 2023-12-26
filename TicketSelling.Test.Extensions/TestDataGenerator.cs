@@ -54,7 +54,7 @@ namespace TicketSelling.Test.Extensions
                 LastName = $"{Guid.NewGuid():N}",
                 Patronymic = $"{Guid.NewGuid():N}",
                 Age = 20,
-                Email = $"{Guid.NewGuid():N}"
+                Email = $"{Guid.NewGuid():N}@gmail.com"
             };
             result.BaseAuditSetParamtrs();
 
@@ -125,7 +125,7 @@ namespace TicketSelling.Test.Extensions
             var result = new HallModel
             {
                 Id = Guid.NewGuid(),
-                Number = 1,
+                Number = (short)new Random().Next(100),
                 NumberOfSeats = 20
             };
 
@@ -142,7 +142,7 @@ namespace TicketSelling.Test.Extensions
                 LastName = $"{Guid.NewGuid():N}",
                 Patronymic = $"{Guid.NewGuid():N}",
                 Age = 18,
-                Email = "kochetkov@gmail.com"
+                Email = $"{Guid.NewGuid():N}@gmail.com"
             };
 
             settings?.Invoke(result);

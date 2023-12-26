@@ -29,9 +29,11 @@ namespace TicketSelling.API.Tests.Tests
             // Act
             string data = JsonConvert.SerializeObject(hall);
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
-            await client.PostAsync("/Hall", contextdata);
+            var response = await client.PostAsync("/Hall", contextdata);
+            var resultString = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<HallResponse>(resultString);
 
-            var hallFirst = await context.Halls.FirstAsync();
+            var hallFirst = await context.Halls.FirstAsync(x => x.Id == result!.Id);
 
             // Assert          
             hallFirst.Should()
@@ -54,7 +56,7 @@ namespace TicketSelling.API.Tests.Tests
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
             await client.PutAsync("/Hall", contextdata);
 
-            var hallFirst = await context.Halls.FirstAsync();
+            var hallFirst = await context.Halls.FirstAsync(x => x.Id == hallRequest.Id);
 
             // Assert           
             hallFirst.Should()
@@ -73,14 +75,18 @@ namespace TicketSelling.API.Tests.Tests
             // Act
             await client.DeleteAsync($"/Hall/{hall.Id}");
 
-            var hallFirst = await context.Halls.FirstAsync();
+            var hallFirst = await context.Halls.FirstAsync(x => x.Id == hall.Id);
 
             // Assert
-            hallFirst.Id.Should()
-                .Be(hall.Id);
-
             hallFirst.DeletedAt.Should()
                 .NotBeNull();
+
+            hallFirst.Should()
+            .BeEquivalentTo(new
+            {
+                hall.Number,
+                hall.NumberOfSeats
+            });
         }
 
         [Fact]
@@ -135,7 +141,12 @@ namespace TicketSelling.API.Tests.Tests
             result.Should()
                 .NotBeNull()
                 .And
-                .ContainSingle(x => x.Id == hall1.Id);
+                .Contain(x => x.Id == hall1.Id);
+
+            result.Should()
+                .NotBeNull()
+                .And
+                .NotContain(x => x.Id == hall2.Id);
         }
     }
 }
