@@ -37,7 +37,7 @@ namespace TicketSelling.Test.Extensions
         {
             var result = new Hall
             {
-                Number = 1,
+                Number = (short)new Random().Next(100),
                 NumberOfSeats = 20
             };
             result.BaseAuditSetParamtrs();
