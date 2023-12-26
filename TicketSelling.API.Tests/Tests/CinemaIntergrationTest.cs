@@ -1,5 +1,4 @@
-﻿using Azure;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Text;
@@ -54,7 +53,7 @@ namespace TicketSelling.API.Tests.Tests
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
             await client.PutAsync("/Cinema", contextdata);
 
-            var cinemaFirst = await context.Cinemas.FirstAsync(x => x.Id == cinema.Id);
+            var cinemaFirst = await context.Cinemas.FirstAsync(x => x.Id == cinemaRequest.Id);
 
             // Assert           
             cinemaFirst.Should()
