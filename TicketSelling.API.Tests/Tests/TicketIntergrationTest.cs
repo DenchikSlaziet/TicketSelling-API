@@ -20,7 +20,6 @@ namespace TicketSelling.API.Tests.Tests
 
         public TicketIntergrationTest(TicketSellingApiFixture fixture) : base(fixture)
         {
-            var clientFactory = factory.CreateClient();
             hall = TestDataGenerator.Hall();
             client = TestDataGenerator.Client();
             cinema = TestDataGenerator.Cinema();
