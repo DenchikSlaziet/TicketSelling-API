@@ -4,7 +4,7 @@ using Xunit;
 
 namespace TicketSelling.Services.Tests.Tests
 {
-    public class MapperTest
+    public class MapperTests
     {
         [Fact]
         public void TestMapper()

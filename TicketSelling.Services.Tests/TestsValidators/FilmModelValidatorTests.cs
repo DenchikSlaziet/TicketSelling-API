@@ -5,13 +5,13 @@ using Xunit;
 
 namespace TicketSelling.Services.Tests.TestsValidators
 {
-    public class HallModelValidatorTest
+    public class FilmModelValidatorTests
     {
-        private readonly HallModelValidator validator;
+        private readonly FilmModelValidator validator;
 
-        public HallModelValidatorTest()
+        public FilmModelValidatorTests()
         {
-            validator = new HallModelValidator();
+            validator = new FilmModelValidator();
         }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace TicketSelling.Services.Tests.TestsValidators
         public void ValidatorShouldError()
         {
             //Arrange
-            var model = TestDataGenerator.HallModel(x => { x.Number = -1; x.NumberOfSeats = -1; });
+            var model = TestDataGenerator.FilmModel(x => { x.Title = "1"; x.Limitation = 22; x.Description = "1"; });
 
             // Act
             var result = validator.TestValidate(model);
@@ -37,7 +37,7 @@ namespace TicketSelling.Services.Tests.TestsValidators
         public void ValidatorShouldSuccess()
         {
             //Arrange
-            var model = TestDataGenerator.HallModel();
+            var model = TestDataGenerator.FilmModel();
 
             // Act
             var result = validator.TestValidate(model);

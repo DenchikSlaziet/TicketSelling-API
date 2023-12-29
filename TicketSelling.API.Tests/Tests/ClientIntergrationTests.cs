@@ -13,9 +13,9 @@ namespace TicketSelling.API.Tests.Tests
     /// <summary>
     /// Переделаю
     /// </summary>
-    public class ClientIntergrationTest : BaseIntegrationTest
+    public class ClientIntergrationTests : BaseIntegrationTest
     {
-        public ClientIntergrationTest(TicketSellingApiFixture fixture) : base(fixture)
+        public ClientIntergrationTests(TicketSellingApiFixture fixture) : base(fixture)
         {
         }
 

@@ -11,14 +11,14 @@ using Xunit;
 
 namespace TicketSelling.API.Tests.Tests
 {
-    public class TicketIntergrationTest : BaseIntegrationTest
+    public class TicketIntergrationTests : BaseIntegrationTest
     {
         private readonly Hall hall;
         private readonly Client client;
         private readonly Cinema cinema;
         private readonly Film film;
 
-        public TicketIntergrationTest(TicketSellingApiFixture fixture) : base(fixture)
+        public TicketIntergrationTests(TicketSellingApiFixture fixture) : base(fixture)
         {
             hall = TestDataGenerator.Hall();
             client = TestDataGenerator.Client();

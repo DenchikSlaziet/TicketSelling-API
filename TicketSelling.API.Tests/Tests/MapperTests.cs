@@ -6,7 +6,7 @@ using Xunit;
 
 namespace TicketSelling.API.Tests.Tests
 {
-    public class MapperTest
+    public class MapperTests
     {
         [Fact]
         public void TestMapper()

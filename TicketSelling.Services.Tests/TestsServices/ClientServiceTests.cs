@@ -2,7 +2,6 @@
 using FluentAssertions;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Context.Tests;
-using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.ReadRepositories;
 using TicketSelling.Repositories.WriteRepositoriеs;
 using TicketSelling.Services.AutoMappers;
@@ -15,29 +14,30 @@ using Xunit;
 
 namespace TicketSelling.Services.Tests.Tests
 {
-    public class HallServiceTest : TicketSellingContextInMemory
+    public class ClientServiceTests : TicketSellingContextInMemory
     {
-        private readonly IHallService hallService;
-        private readonly HallReadRepository hallReadRepository;
+        private readonly IClientService clientService;
+        private readonly ClientReadRepository clientReadRepository;
 
         /// <summary>
-        /// Инициализирует новый экземпляр <see cref="HallServiceTest"/>
+        /// Инициализирует новый экземпляр <see cref="ClientServiceTests"/>
         /// </summary>
-        public HallServiceTest()
+        public ClientServiceTests()
         {
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new ServiceMapper());
             });
 
-            hallReadRepository = new HallReadRepository(Reader);
-            hallService = new HallService(new HallWriteRepository(WriterContext), hallReadRepository,
+            clientReadRepository = new ClientReadRepository(Reader);
+
+            clientService = new ClientService(new ClientWriteRepository(WriterContext), clientReadRepository,
                 UnitOfWork, config.CreateMapper(), new ServicesValidatorService(new CinemaReadRepository(Reader), 
-                new ClientReadRepository(Reader), new FilmReadRepository(Reader), hallReadRepository));
+                clientReadRepository, new FilmReadRepository(Reader), new HallReadRepository(Reader)));
         }
 
         /// <summary>
-        /// Получение <see cref="Hall"/> по идентификатору возвращает null
+        /// Получение <see cref="Client"/> по идентификатору возвращает null
         /// </summary>
         [Fact]
         public async Task GetByIdShouldReturnNull()
@@ -46,26 +46,26 @@ namespace TicketSelling.Services.Tests.Tests
             var id = Guid.NewGuid();
 
             // Act
-            Func<Task> result = () => hallService.GetByIdAsync(id, CancellationToken);
+            Func<Task> result = () => clientService.GetByIdAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Hall>>()
-                .WithMessage($"*{id}*");
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Client>>()
+               .WithMessage($"*{id}*");
         }
 
         /// <summary>
-        /// Получение <see cref="Hall"/> по идентификатору возвращает данные
+        /// Получение <see cref="Client"/> по идентификатору возвращает данные
         /// </summary>
         [Fact]
         public async Task GetByIdShouldReturnValue()
         {
             //Arrange
-            var target = TestDataGenerator.Hall();
-            await Context.Halls.AddAsync(target);
+            var target = TestDataGenerator.Client();
+            await Context.Clients.AddAsync(target);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await hallService.GetByIdAsync(target.Id, CancellationToken);
+            var result = await clientService.GetByIdAsync(target.Id, CancellationToken);
 
             // Assert
             result.Should()
@@ -73,19 +73,22 @@ namespace TicketSelling.Services.Tests.Tests
                 .And.BeEquivalentTo(new
                 {
                     target.Id,
-                    target.NumberOfSeats,
-                    target.Number
+                    target.Age,
+                    target.FirstName,
+                    target.LastName,
+                    target.Email,
+                    target.Patronymic
                 });
         }
 
         /// <summary>
-        /// Получение <see cref="IEnumerable{Hall}"/> по идентификаторам возвращает пустую коллекцию
+        /// Получение <see cref="IEnumerable{Client}"/> по идентификаторам возвращает пустую коллекцию
         /// </summary>
         [Fact]
         public async Task GetAllShouldReturnEmpty()
         {
             // Act
-            var result = await hallService.GetAllAsync(CancellationToken);
+            var result = await clientService.GetAllAsync(CancellationToken);
 
             // Assert
             result.Should()
@@ -94,20 +97,20 @@ namespace TicketSelling.Services.Tests.Tests
         }
 
         /// <summary>
-        /// Получение <see cref="IEnumerable{Hall}"/> по идентификаторам возвращает данные
+        /// Получение <see cref="IEnumerable{Client}"/> по идентификаторам возвращает данные
         /// </summary>
         [Fact]
         public async Task GetAllShouldReturnValues()
         {
             //Arrange
-            var target = TestDataGenerator.Hall();
+            var target = TestDataGenerator.Client();
 
-            await Context.Halls.AddRangeAsync(target,
-                TestDataGenerator.Hall(x => x.DeletedAt = DateTimeOffset.UtcNow));
+            await Context.Clients.AddRangeAsync(target,
+                TestDataGenerator.Client(x => x.DeletedAt = DateTimeOffset.UtcNow));
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await hallService.GetAllAsync(CancellationToken);
+            var result = await clientService.GetAllAsync(CancellationToken);
 
             // Assert
             result.Should()
@@ -117,7 +120,7 @@ namespace TicketSelling.Services.Tests.Tests
         }
 
         /// <summary>
-        /// Удаление несуществуюущего <see cref="Hall"/>
+        /// Удаление несуществуюущего <see cref="Client"/>
         /// </summary>
         [Fact]
         public async Task DeletingNonExistentCinemaReturnExсeption()
@@ -126,146 +129,148 @@ namespace TicketSelling.Services.Tests.Tests
             var id = Guid.NewGuid();
 
             // Act
-            Func<Task> result = () => hallService.DeleteAsync(id, CancellationToken);
+            Func<Task> result = () => clientService.DeleteAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Hall>>()
-                .WithMessage($"*{id}*");
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Client>>()
+               .WithMessage($"*{id}*");
         }
 
         /// <summary>
-        /// Удаление удаленного <see cref="Hall"/>
+        /// Удаление удаленного <see cref="Client"/>
         /// </summary>
         [Fact]
         public async Task DeletingDeletedCinemaReturnExсeption()
         {
             //Arrange
-            var model = TestDataGenerator.Hall(x => x.DeletedAt = DateTime.UtcNow);
-            await Context.Halls.AddAsync(model);
+            var model = TestDataGenerator.Client(x => x.DeletedAt = DateTime.UtcNow);
+            await Context.Clients.AddAsync(model);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            Func<Task> result = () => hallService.DeleteAsync(model.Id, CancellationToken);
+            Func<Task> result = () => clientService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Hall>>()
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Client>>()
                 .WithMessage($"*{model.Id}*");
-        }        
+        }      
 
         /// <summary>
-        /// Удаление <see cref="Hall"/>
+        /// Удаление <see cref="Client"/>
         /// </summary>
         [Fact]
         public async Task DeleteShouldWork()
         {
             //Arrange
-            var model = TestDataGenerator.Hall();
-            await Context.Halls.AddAsync(model);
+            var model = TestDataGenerator.Client();
+            await Context.Clients.AddAsync(model);
             await UnitOfWork.SaveChangesAsync(CancellationToken);
 
             //Act
-            Func<Task> act = () => hallService.DeleteAsync(model.Id, CancellationToken);
+            Func<Task> act = () => clientService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
             await act.Should().NotThrowAsync();
-            var entity = Context.Halls.Single(x => x.Id == model.Id);
+            var entity = Context.Clients.Single(x => x.Id == model.Id);
             entity.Should().NotBeNull();
             entity.DeletedAt.Should().NotBeNull();
         }
 
         /// <summary>
-        /// Добавление <see cref="Hall"/>
+        /// Добавление <see cref="Client"/>
         /// </summary>
         [Fact]
         public async Task AddShouldWork()
         {
             //Arrange
-            var model = TestDataGenerator.HallModel();
+            var model = TestDataGenerator.ClientModel();
 
             //Act
-            Func<Task> act = () => hallService.AddAsync(model, CancellationToken);
+            Func<Task> act = () => clientService.AddAsync(model, CancellationToken);
 
             // Assert
             await act.Should().NotThrowAsync();
-            var entity = Context.Halls.Single(x => x.Id == model.Id);
+            var entity = Context.Clients.Single(x => x.Id == model.Id);
             entity.Should().NotBeNull();
             entity.DeletedAt.Should().BeNull();
         }
 
         /// <summary>
-        /// Добавление не валидируемого <see cref="Hall"/>
+        /// Добавление невалидируемого <see cref="Client"/>
         /// </summary>
         [Fact]
         public async Task AddShouldValidationException()
         {
             //Arrange
-            var model = TestDataGenerator.HallModel(x => x.NumberOfSeats = -1);
+            var model = TestDataGenerator.ClientModel(x => x.FirstName = "T");
 
             //Act
-            Func<Task> act = () => hallService.AddAsync(model, CancellationToken);
+            Func<Task> act = () => clientService.AddAsync(model, CancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<TimeTableValidationException>();
         }
 
         /// <summary>
-        /// Изменение несуществующего <see cref="Hall"/>
+        /// Изменение несуществующего <see cref="Client"/>
         /// </summary>
         [Fact]
         public async Task EditShouldNotFoundException()
         {
             //Arrange
-            var model = TestDataGenerator.HallModel();
+            var model = TestDataGenerator.ClientModel();
 
             //Act
-            Func<Task> act = () => hallService.EditAsync(model, CancellationToken);
+            Func<Task> act = () => clientService.EditAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableEntityNotFoundException<Hall>>()
+            await act.Should().ThrowAsync<TimeTableEntityNotFoundException<Client>>()
                 .WithMessage($"*{model.Id}*");
         }
 
         /// <summary>
-        /// Изменение невалидируемого <see cref="Hall"/>
+        /// Изменение невалидируемого <see cref="Client"/>
         /// </summary>
         [Fact]
         public async Task EditShouldValidationException()
         {
             //Arrange
-            var model = TestDataGenerator.HallModel(x => x.NumberOfSeats = -1);
+            var model = TestDataGenerator.ClientModel(x => x.FirstName = "T");
 
             //Act
-            Func<Task> act = () => hallService.EditAsync(model, CancellationToken);
+            Func<Task> act = () => clientService.EditAsync(model, CancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<TimeTableValidationException>();
         }
 
         /// <summary>
-        /// Изменение <see cref="Hall"/>
+        /// Изменение <see cref="Client"/>
         /// </summary>
         [Fact]
         public async Task EditShouldWork()
         {
             //Arrange
-            var model = TestDataGenerator.HallModel();
-            var hall = TestDataGenerator.Hall(x => x.Id = model.Id);
-            await Context.Halls.AddAsync(hall);
+            var model = TestDataGenerator.ClientModel();
+            var client = TestDataGenerator.Client(x => x.Id = model.Id);
+            await Context.Clients.AddAsync(client);
             await UnitOfWork.SaveChangesAsync(CancellationToken);
 
             //Act
-            Func<Task> act = () => hallService.EditAsync(model, CancellationToken);
+            Func<Task> act = () => clientService.EditAsync(model, CancellationToken);
 
             // Assert
             await act.Should().NotThrowAsync();
-            var entity = Context.Halls.Single(x => x.Id == hall.Id);
+            var entity = Context.Clients.Single(x => x.Id == client.Id);
             entity.Should().NotBeNull()
                 .And
                 .BeEquivalentTo(new
                 {
                     model.Id,
-                    model.Number,
-                    model.NumberOfSeats
+                    model.FirstName,
+                    model.LastName,
+                    model.Patronymic,
+                    model.Email
                 });
         }
     }

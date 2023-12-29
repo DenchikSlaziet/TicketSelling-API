@@ -2,27 +2,28 @@
 using TicketSelling.Context.Tests;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.ReadRepositories;
+using TicketSelling.Test.Extensions;
 using Xunit;
 
 namespace TicketSelling.Repositories.Tests.Tests
 {
-    public class CinemaReadTest : TicketSellingContextInMemory
+    public class FilmReadTests : TicketSellingContextInMemory
     {
-        private readonly ICinemaReadRepository cinemaReadRepository;
+        private readonly IFilmReadRepository filmReadRepository;
 
-        public CinemaReadTest()
+        public FilmReadTests()
         {
-            cinemaReadRepository = new CinemaReadRepository(Reader);
+            filmReadRepository = new FilmReadRepository(Reader);
         }
 
         /// <summary>
-        /// Возвращает пустой список кинотеатров
+        /// Возвращает пустой список фильмов
         /// </summary>
         [Fact]
         public async Task GetAllShouldReturnEmpty()
         {
             // Act
-            var result = await cinemaReadRepository.GetAllAsync(CancellationToken);
+            var result = await filmReadRepository.GetAllAsync(CancellationToken);
 
             // Assert
             result.Should()
@@ -31,20 +32,20 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Возвращает список кинотетаров
+        /// Возвращает список фильмов
         /// </summary>
         [Fact]
         public async Task GetAllShouldReturnValues()
         {
             //Arrange
-            var target = TestDataGenerator.Cinema();
+            var target = TestDataGenerator.Film();
 
-            await Context.Cinemas.AddRangeAsync(target,
-                TestDataGenerator.Cinema(x => x.DeletedAt = DateTimeOffset.UtcNow));
+            await Context.Films.AddRangeAsync(target,
+                TestDataGenerator.Film(x => x.DeletedAt = DateTimeOffset.UtcNow));
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await cinemaReadRepository.GetAllAsync(CancellationToken);
+            var result = await filmReadRepository.GetAllAsync(CancellationToken);
 
             // Assert
             result.Should()
@@ -54,7 +55,7 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Получение кинотетара по идентификатору возвращает null
+        /// Получение фильмов по идентификатору возвращает null
         /// </summary>
         [Fact]
         public async Task GetByIdShouldReturnNull()
@@ -63,25 +64,25 @@ namespace TicketSelling.Repositories.Tests.Tests
             var id = Guid.NewGuid();
 
             // Act
-            var result = await cinemaReadRepository.GetByIdAsync(id, CancellationToken);
+            var result = await filmReadRepository.GetByIdAsync(id, CancellationToken);
 
             // Assert
             result.Should().BeNull();
         }
 
         /// <summary>
-        /// Получение кинотеатра по идентификатору возвращает данные
+        /// Получение фильмов по идентификатору возвращает данные
         /// </summary>
         [Fact]
         public async Task GetByIdShouldReturnValue()
         {
             //Arrange
-            var target = TestDataGenerator.Cinema();
-            await Context.Cinemas.AddAsync(target);
+            var target = TestDataGenerator.Film();
+            await Context.Films.AddAsync(target);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await cinemaReadRepository.GetByIdAsync(target.Id, CancellationToken);
+            var result = await filmReadRepository.GetByIdAsync(target.Id, CancellationToken);
 
             // Assert
             result.Should()
@@ -90,7 +91,7 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Получение списка кинотеатров по идентификаторам возвращает пустую коллекцию
+        /// Получение списка фильмов по идентификаторам возвращает пустую коллекцию
         /// </summary>
         [Fact]
         public async Task GetByIdsShouldReturnEmpty()
@@ -101,7 +102,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             var id3 = Guid.NewGuid();
 
             // Act
-            var result = await cinemaReadRepository.GetByIdsAsync(new[] { id1, id2, id3 }, CancellationToken);
+            var result = await filmReadRepository.GetByIdsAsync(new[] { id1, id2, id3 }, CancellationToken);
 
             // Assert
             result.Should()
@@ -110,21 +111,21 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Получение списка кинотеатров по идентификаторам возвращает данные
+        /// Получение списка фильмов по идентификаторам возвращает данные
         /// </summary>
         [Fact]
         public async Task GetByIdsShouldReturnValue()
         {
             //Arrange
-            var target1 = TestDataGenerator.Cinema();
-            var target2 = TestDataGenerator.Cinema(x => x.DeletedAt = DateTimeOffset.UtcNow);
-            var target3 = TestDataGenerator.Cinema();
-            var target4 = TestDataGenerator.Cinema();
-            await Context.Cinemas.AddRangeAsync(target1, target2, target3, target4);
+            var target1 = TestDataGenerator.Film();
+            var target2 = TestDataGenerator.Film(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            var target3 = TestDataGenerator.Film();
+            var target4 = TestDataGenerator.Film();
+            await Context.Films.AddRangeAsync(target1, target2, target3, target4);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await cinemaReadRepository.GetByIdsAsync(new[] { target1.Id, target2.Id, target4.Id }, CancellationToken);
+            var result = await filmReadRepository.GetByIdsAsync(new[] { target1.Id, target2.Id, target4.Id }, CancellationToken);
 
             // Assert
             result.Should()
@@ -135,25 +136,25 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Поиск кинотетра в коллекции по идентификатору (true)
+        /// Поиск фильма в коллекции по идентификатору (true)
         /// </summary>
         [Fact]
         public async Task IsNotNullEntityReturnTrue()
         {
             //Arrange
-            var target1 = TestDataGenerator.Cinema();           
-            await Context.Cinemas.AddAsync(target1);
+            var target1 = TestDataGenerator.Film();
+            await Context.Films.AddAsync(target1);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await cinemaReadRepository.IsNotNullAsync(target1.Id, CancellationToken);
+            var result = await filmReadRepository.IsNotNullAsync(target1.Id, CancellationToken);
 
             // Assert
             result.Should().BeTrue();
         }
 
         /// <summary>
-        /// Поиск кинотетра в коллекции по идентификатору (false)
+        /// Поиск фильма в коллекции по идентификатору (false)
         /// </summary>
         [Fact]
         public async Task IsNotNullEntityReturnFalse()
@@ -162,25 +163,25 @@ namespace TicketSelling.Repositories.Tests.Tests
             var target1 = Guid.NewGuid();
 
             // Act
-            var result = await cinemaReadRepository.IsNotNullAsync(target1, CancellationToken);
+            var result = await filmReadRepository.IsNotNullAsync(target1, CancellationToken);
 
             // Assert
             result.Should().BeFalse();
         }
 
         /// <summary>
-        /// Поиск удаленного кинотетра в коллекции по идентификатору
+        /// Поиск удаленного фильма в коллекции по идентификатору
         /// </summary>
         [Fact]
         public async Task IsNotNullDeletedEntityReturnFalse()
         {
             //Arrange
-            var target1 = TestDataGenerator.Cinema(x => x.DeletedAt = DateTimeOffset.UtcNow);
-            await Context.Cinemas.AddAsync(target1);
-            await Context.SaveChangesAsync(CancellationToken);           
+            var target1 = TestDataGenerator.Film(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            await Context.Films.AddAsync(target1);
+            await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await cinemaReadRepository.IsNotNullAsync(target1.Id, CancellationToken);
+            var result = await filmReadRepository.IsNotNullAsync(target1.Id, CancellationToken);
 
             // Assert
             result.Should().BeFalse();

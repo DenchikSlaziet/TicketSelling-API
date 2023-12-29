@@ -13,9 +13,9 @@ namespace TicketSelling.API.Tests.Tests
     /// <summary>
     /// Переделаю
     /// </summary>
-    public class HallIntergrationTest : BaseIntegrationTest
+    public class FilmIntergrationTests : BaseIntegrationTest
     {
-        public HallIntergrationTest(TicketSellingApiFixture fixture) : base(fixture)
+        public FilmIntergrationTests(TicketSellingApiFixture fixture) : base(fixture)
         {
         }
 
@@ -24,20 +24,20 @@ namespace TicketSelling.API.Tests.Tests
         {
             // Arrange
             var client = factory.CreateClient();
-            var hall = mapper.Map<CreateHallRequest>(TestDataGenerator.HallModel());
+            var film = mapper.Map<CreateFilmRequest>(TestDataGenerator.FilmModel());
 
             // Act
-            string data = JsonConvert.SerializeObject(hall);
+            string data = JsonConvert.SerializeObject(film);
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("/Hall", contextdata);
+            var response = await client.PostAsync("/Film", contextdata);
             var resultString = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<HallResponse>(resultString);
+            var result = JsonConvert.DeserializeObject<FilmResponse>(resultString);
 
-            var hallFirst = await context.Halls.FirstAsync(x => x.Id == result!.Id);
+            var filmFirst = await context.Films.FirstAsync(x => x.Id == result!.Id);
 
             // Assert          
-            hallFirst.Should()
-                .BeEquivalentTo(hall);
+            filmFirst.Should()
+                .BeEquivalentTo(film);
         }
 
         [Fact]
@@ -45,22 +45,22 @@ namespace TicketSelling.API.Tests.Tests
         {
             // Arrange
             var client = factory.CreateClient();
-            var hall = TestDataGenerator.Hall();
-            await context.Halls.AddAsync(hall);
+            var film = TestDataGenerator.Film();
+            await context.Films.AddAsync(film);
             await unitOfWork.SaveChangesAsync();
 
-            var hallRequest = mapper.Map<HallRequest>(TestDataGenerator.HallModel(x => x.Id = hall.Id));
+            var filmRequest = mapper.Map<FilmRequest>(TestDataGenerator.FilmModel(x => x.Id = film.Id));
 
             // Act
-            string data = JsonConvert.SerializeObject(hallRequest);
+            string data = JsonConvert.SerializeObject(filmRequest);
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
-            await client.PutAsync("/Hall", contextdata);
+            await client.PutAsync("/Film", contextdata);
 
-            var hallFirst = await context.Halls.FirstAsync(x => x.Id == hallRequest.Id);
+            var filmFirst = await context.Films.FirstAsync(x => x.Id == filmRequest.Id);
 
             // Assert           
-            hallFirst.Should()
-                .BeEquivalentTo(hallRequest);
+            filmFirst.Should()
+                .BeEquivalentTo(filmRequest);
         }
 
         [Fact]
@@ -68,24 +68,24 @@ namespace TicketSelling.API.Tests.Tests
         {
             // Arrange
             var client = factory.CreateClient();
-            var hall = TestDataGenerator.Hall();
-            await context.Halls.AddAsync(hall);
+            var film = TestDataGenerator.Film();
+            await context.Films.AddAsync(film);
             await unitOfWork.SaveChangesAsync();
 
             // Act
-            await client.DeleteAsync($"/Hall/{hall.Id}");
+            await client.DeleteAsync($"/Film/{film.Id}");
 
-            var hallFirst = await context.Halls.FirstAsync(x => x.Id == hall.Id);
+            var filmFirst = await context.Films.FirstAsync(x => x.Id == film.Id);
 
             // Assert
-            hallFirst.DeletedAt.Should()
+            filmFirst.DeletedAt.Should()
                 .NotBeNull();
 
-            hallFirst.Should()
+            filmFirst.Should()
             .BeEquivalentTo(new
             {
-                hall.Number,
-                hall.NumberOfSeats
+                film.Title,
+                film.Description
             });
         }
 
@@ -94,27 +94,27 @@ namespace TicketSelling.API.Tests.Tests
         {
             // Arrange
             var client = factory.CreateClient();
-            var hall1 = TestDataGenerator.Hall();
+            var film1 = TestDataGenerator.Film();
+            var film2 = TestDataGenerator.Film();
 
-            await context.Halls.AddRangeAsync(hall1);
+            await context.Films.AddRangeAsync(film1, film2);
             await unitOfWork.SaveChangesAsync();
 
             // Act
-            var response = await client.GetAsync($"/Hall/{hall1.Id}");
+            var response = await client.GetAsync($"/Film/{film1.Id}");
 
             // Assert
             response.EnsureSuccessStatusCode();
             var resultString = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<HallResponse>(resultString);
+            var result = JsonConvert.DeserializeObject<FilmResponse>(resultString);
 
             result.Should()
                 .NotBeNull()
                 .And
                 .BeEquivalentTo(new
                 {
-                    hall1.Id,
-                    hall1.NumberOfSeats,
-                    hall1.Number
+                    film1.Id,
+                    film1.Title
                 });
         }
 
@@ -123,29 +123,29 @@ namespace TicketSelling.API.Tests.Tests
         {
             // Arrange
             var client = factory.CreateClient();
-            var hall1 = TestDataGenerator.Hall();
-            var hall2 = TestDataGenerator.Hall(x => x.DeletedAt = DateTimeOffset.Now);
+            var film1 = TestDataGenerator.Film();
+            var film2 = TestDataGenerator.Film(x => x.DeletedAt = DateTimeOffset.Now);
 
-            await context.Halls.AddRangeAsync(hall1, hall2);
+            await context.Films.AddRangeAsync(film1, film2);
             await unitOfWork.SaveChangesAsync();
 
             // Act
-            var response = await client.GetAsync("/Hall");
+            var response = await client.GetAsync("/Film");
 
             // Assert
             response.EnsureSuccessStatusCode();
             var resultString = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<IEnumerable<HallResponse>>(resultString);
+            var result = JsonConvert.DeserializeObject<IEnumerable<FilmResponse>>(resultString);
 
             result.Should()
                 .NotBeNull()
                 .And
-                .Contain(x => x.Id == hall1.Id);
+                .Contain(x => x.Id == film1.Id);
 
             result.Should()
                 .NotBeNull()
                 .And
-                .NotContain(x => x.Id == hall2.Id);
+                .NotContain(x => x.Id == film2.Id);
         }
     }
 }

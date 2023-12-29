@@ -21,6 +21,7 @@
     <ProjectReference Include="..\TicketSelling.Context.Tests\TicketSelling.Context.Tests.csproj" />
     <ProjectReference Include="..\TicketSelling.Repositories.Contracts\TicketSelling.Repositories.Contracts.csproj" />
     <ProjectReference Include="..\TicketSelling.Repositories\TicketSelling.Repositories.csproj" />
+    <ProjectReference Include="..\TicketSelling.Test.Extensions\TicketSelling.Test.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

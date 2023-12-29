@@ -8,15 +8,16 @@ using System.Threading.Tasks;
 using TicketSelling.Context.Tests;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.ReadRepositories;
+using TicketSelling.Test.Extensions;
 using Xunit;
 
 namespace TicketSelling.Repositories.Tests.Tests
 {
-    public class ClientReadTest : TicketSellingContextInMemory
+    public class ClientReadTests : TicketSellingContextInMemory
     {
         private readonly IClientReadRepository clientReadRepository;
 
-        public ClientReadTest()
+        public ClientReadTests()
         {
             clientReadRepository = new ClientReadRepository(Reader);
         }

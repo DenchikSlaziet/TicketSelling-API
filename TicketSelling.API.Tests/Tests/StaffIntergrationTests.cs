@@ -11,9 +11,9 @@ using Xunit;
 
 namespace TicketSelling.API.Tests.Tests
 {
-    public class StaffIntergrationTest : BaseIntegrationTest
+    public class StaffIntergrationTests : BaseIntegrationTest
     {
-        public StaffIntergrationTest(TicketSellingApiFixture fixture) : base(fixture)
+        public StaffIntergrationTests(TicketSellingApiFixture fixture) : base(fixture)
         {
         }
 

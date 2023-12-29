@@ -10,9 +10,9 @@ using Xunit;
 
 namespace TicketSelling.API.Tests.Tests
 {
-    public class CinemaIntergrationTest : BaseIntegrationTest
+    public class CinemaIntergrationTests : BaseIntegrationTest
     {
-        public CinemaIntergrationTest(TicketSellingApiFixture fixture) : base(fixture)
+        public CinemaIntergrationTests(TicketSellingApiFixture fixture) : base(fixture)
         {
         }
 

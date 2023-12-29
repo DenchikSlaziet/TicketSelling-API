@@ -7,11 +7,11 @@ using Xunit;
 
 namespace TicketSelling.Services.Tests.TestsValidators
 {
-    public class TicketRequestValidatorTest : TicketSellingContextInMemory
+    public class TicketRequestValidatorTests : TicketSellingContextInMemory
     {
         private readonly TicketRequestValidator validator;
 
-        public TicketRequestValidatorTest()
+        public TicketRequestValidatorTests()
         {
             validator = new TicketRequestValidator(new CinemaReadRepository(Reader), new ClientReadRepository(Reader), 
                 new FilmReadRepository(Reader), new HallReadRepository(Reader));
