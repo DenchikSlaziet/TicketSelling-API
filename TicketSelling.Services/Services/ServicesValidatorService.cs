@@ -4,9 +4,10 @@ using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ModelsRequest;
+using TicketSelling.Services.Contracts.ServicesContracts;
 using TicketSelling.Services.Validator.Validators;
 
-namespace TicketSelling.Services.Validator
+namespace TicketSelling.Services.Services
 {
     public sealed class ServicesValidatorService : IServiceValidatorService
     {
@@ -20,7 +21,7 @@ namespace TicketSelling.Services.Validator
             validators.Add(typeof(FilmModel), new FilmModelValidator());
             validators.Add(typeof(HallModel), new HallModelValidator());
             validators.Add(typeof(StaffModel), new StaffModelValidator());
-            validators.Add(typeof(TicketRequestModel), new TicketRequestValidator(cinemaReadRepository, 
+            validators.Add(typeof(TicketRequestModel), new TicketRequestValidator(cinemaReadRepository,
                 clientReadRepository, filmReadRepository, hallReadRepository));
         }
 

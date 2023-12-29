@@ -2,14 +2,13 @@
 using FluentAssertions;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Context.Tests;
-using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.ReadRepositories;
 using TicketSelling.Repositories.WriteRepositoriеs;
 using TicketSelling.Services.AutoMappers;
 using TicketSelling.Services.Contracts.Exceptions;
-using TicketSelling.Services.Contracts.ReadServices;
+using TicketSelling.Services.Contracts.ServicesContracts;
 using TicketSelling.Services.ReadServices;
-using TicketSelling.Services.Validator;
+using TicketSelling.Services.Services;
 using TicketSelling.Test.Extensions;
 using Xunit;
 

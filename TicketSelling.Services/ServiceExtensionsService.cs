@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TicketSelling.General;
 using TicketSelling.Services.Anchors;
-using TicketSelling.Services.Validator;
+using TicketSelling.Services.Contracts.ServicesContracts;
+using TicketSelling.Services.Services;
 
 namespace TicketSelling.Services
 {

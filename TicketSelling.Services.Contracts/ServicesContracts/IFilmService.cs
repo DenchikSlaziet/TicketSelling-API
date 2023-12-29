@@ -1,6 +1,6 @@
 ﻿using TicketSelling.Services.Contracts.Models;
 
-namespace TicketSelling.Services.Contracts.ReadServices
+namespace TicketSelling.Services.Contracts.ServicesContracts
 {
     /// <summary>
     /// Сервис <see cref="FilmModel"/>
