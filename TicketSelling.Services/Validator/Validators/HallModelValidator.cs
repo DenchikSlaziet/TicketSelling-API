@@ -11,7 +11,7 @@ namespace TicketSelling.Services.Validator.Validators
         public HallModelValidator()
         {
             RuleFor(x => (int)x.Number)
-              .InclusiveBetween(1, 99).WithMessage(MessageForValidation.InclusiveBetweenMessage);
+              .InclusiveBetween(1, 999).WithMessage(MessageForValidation.InclusiveBetweenMessage);
 
             RuleFor(x => (int)x.NumberOfSeats)
               .InclusiveBetween(15, 200).WithMessage(MessageForValidation.InclusiveBetweenMessage);

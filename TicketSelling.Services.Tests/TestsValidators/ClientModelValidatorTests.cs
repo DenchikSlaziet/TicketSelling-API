@@ -1,18 +1,17 @@
 ﻿using FluentValidation.TestHelper;
-using TicketSelling.Services.Contracts.Enums;
 using TicketSelling.Services.Validator.Validators;
 using TicketSelling.Test.Extensions;
 using Xunit;
 
 namespace TicketSelling.Services.Tests.TestsValidators
 {
-    public class StaffModelValidatorTest
+    public class ClientModelValidatorTests
     {
-        private readonly StaffModelValidator validator;
+        private readonly ClientModelValidator validator;
 
-        public StaffModelValidatorTest()
+        public ClientModelValidatorTests()
         {
-            validator = new StaffModelValidator();
+            validator = new ClientModelValidator();
         }
 
         /// <summary>
@@ -22,13 +21,13 @@ namespace TicketSelling.Services.Tests.TestsValidators
         public void ValidatorShouldError()
         {
             //Arrange
-            var model = TestDataGenerator.StaffModel(x => { x.FirstName = "1"; x.LastName = "1"; x.Patronymic = "1"; x.Age = -1; x.Post = (PostModel)33; });
+            var model = TestDataGenerator.ClientModel(x => { x.FirstName = "1"; x.LastName = "1"; x.Patronymic = "1"; x.Age = -1; x.Email = "1";});
 
             // Act
             var result = validator.TestValidate(model);
 
             // Assert
-            result.ShouldHaveAnyValidationError();
+            result.ShouldHaveAnyValidationError();       
         }
 
         /// <summary>
@@ -38,7 +37,7 @@ namespace TicketSelling.Services.Tests.TestsValidators
         public void ValidatorShouldSuccess()
         {
             //Arrange
-            var model = TestDataGenerator.StaffModel();
+            var model = TestDataGenerator.ClientModel();
 
             // Act
             var result = validator.TestValidate(model);

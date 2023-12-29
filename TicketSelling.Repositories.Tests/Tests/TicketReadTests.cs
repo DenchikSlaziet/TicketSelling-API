@@ -2,15 +2,16 @@
 using TicketSelling.Context.Tests;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.ReadRepositories;
+using TicketSelling.Test.Extensions;
 using Xunit;
 
 namespace TicketSelling.Repositories.Tests.Tests
 {
-    public class TicketReadTest : TicketSellingContextInMemory
+    public class TicketReadTests : TicketSellingContextInMemory
     {
         private readonly ITicketReadRepository ticketReadRepository;
 
-        public TicketReadTest()
+        public TicketReadTests()
         {
             ticketReadRepository = new TicketReadRepositiry(Reader);
         }

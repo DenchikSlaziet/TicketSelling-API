@@ -15,14 +15,14 @@ using Xunit;
 
 namespace TicketSelling.Services.Tests.Tests
 {
-    public class StaffServiceTest : TicketSellingContextInMemory
+    public class StaffServiceTests : TicketSellingContextInMemory
     {
         private readonly IStaffService staffService;
 
         /// <summary>
-        /// Инициализирует новый экземпляр <see cref="StaffServiceTest"/>
+        /// Инициализирует новый экземпляр <see cref="StaffServiceTests"/>
         /// </summary>
-        public StaffServiceTest()
+        public StaffServiceTests()
         {
             var config = new MapperConfiguration(cfg =>
             {

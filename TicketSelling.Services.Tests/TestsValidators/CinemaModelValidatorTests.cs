@@ -5,11 +5,11 @@ using Xunit;
 
 namespace TicketSelling.Services.Tests.TestsValidators
 {
-    public class CinemaModelValidatorTest
+    public class CinemaModelValidatorTests
     {
         private readonly CinemaModelValidator validator;
 
-        public CinemaModelValidatorTest()
+        public CinemaModelValidatorTests()
         {
             validator = new CinemaModelValidator();
         }

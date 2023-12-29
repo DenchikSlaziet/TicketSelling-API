@@ -2,27 +2,28 @@
 using TicketSelling.Context.Tests;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.ReadRepositories;
+using TicketSelling.Test.Extensions;
 using Xunit;
 
 namespace TicketSelling.Repositories.Tests.Tests
 {
-    public class FilmReadTest : TicketSellingContextInMemory
+    public class HallReadTests : TicketSellingContextInMemory
     {
-        private readonly IFilmReadRepository filmReadRepository;
+        private readonly IHallReadRepository hallReadRepository;
 
-        public FilmReadTest()
+        public HallReadTests()
         {
-            filmReadRepository = new FilmReadRepository(Reader);
+            hallReadRepository = new HallReadRepository(Reader);
         }
 
         /// <summary>
-        /// Возвращает пустой список фильмов
+        /// Возвращает пустой список залов
         /// </summary>
         [Fact]
         public async Task GetAllShouldReturnEmpty()
         {
             // Act
-            var result = await filmReadRepository.GetAllAsync(CancellationToken);
+            var result = await hallReadRepository.GetAllAsync(CancellationToken);
 
             // Assert
             result.Should()
@@ -31,20 +32,20 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Возвращает список фильмов
+        /// Возвращает список залов
         /// </summary>
         [Fact]
         public async Task GetAllShouldReturnValues()
         {
             //Arrange
-            var target = TestDataGenerator.Film();
+            var target = TestDataGenerator.Hall();
 
-            await Context.Films.AddRangeAsync(target,
-                TestDataGenerator.Film(x => x.DeletedAt = DateTimeOffset.UtcNow));
+            await Context.Halls.AddRangeAsync(target,
+                TestDataGenerator.Hall(x => x.DeletedAt = DateTimeOffset.UtcNow));
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await filmReadRepository.GetAllAsync(CancellationToken);
+            var result = await hallReadRepository.GetAllAsync(CancellationToken);
 
             // Assert
             result.Should()
@@ -54,7 +55,7 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Получение фильмов по идентификатору возвращает null
+        /// Получение зала по идентификатору возвращает null
         /// </summary>
         [Fact]
         public async Task GetByIdShouldReturnNull()
@@ -63,25 +64,25 @@ namespace TicketSelling.Repositories.Tests.Tests
             var id = Guid.NewGuid();
 
             // Act
-            var result = await filmReadRepository.GetByIdAsync(id, CancellationToken);
+            var result = await hallReadRepository.GetByIdAsync(id, CancellationToken);
 
             // Assert
             result.Should().BeNull();
         }
 
         /// <summary>
-        /// Получение фильмов по идентификатору возвращает данные
+        /// Получение зала по идентификатору возвращает данные
         /// </summary>
         [Fact]
         public async Task GetByIdShouldReturnValue()
         {
             //Arrange
-            var target = TestDataGenerator.Film();
-            await Context.Films.AddAsync(target);
+            var target = TestDataGenerator.Hall();
+            await Context.Halls.AddAsync(target);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await filmReadRepository.GetByIdAsync(target.Id, CancellationToken);
+            var result = await hallReadRepository.GetByIdAsync(target.Id, CancellationToken);
 
             // Assert
             result.Should()
@@ -90,7 +91,7 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Получение списка фильмов по идентификаторам возвращает пустую коллекцию
+        /// Получение списка залов по идентификаторам возвращает пустую коллекцию
         /// </summary>
         [Fact]
         public async Task GetByIdsShouldReturnEmpty()
@@ -101,7 +102,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             var id3 = Guid.NewGuid();
 
             // Act
-            var result = await filmReadRepository.GetByIdsAsync(new[] { id1, id2, id3 }, CancellationToken);
+            var result = await hallReadRepository.GetByIdsAsync(new[] { id1, id2, id3 }, CancellationToken);
 
             // Assert
             result.Should()
@@ -110,21 +111,21 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Получение списка фильмов по идентификаторам возвращает данные
+        /// Получение списка залов по идентификаторам возвращает данные
         /// </summary>
         [Fact]
         public async Task GetByIdsShouldReturnValue()
         {
             //Arrange
-            var target1 = TestDataGenerator.Film();
-            var target2 = TestDataGenerator.Film(x => x.DeletedAt = DateTimeOffset.UtcNow);
-            var target3 = TestDataGenerator.Film();
-            var target4 = TestDataGenerator.Film();
-            await Context.Films.AddRangeAsync(target1, target2, target3, target4);
+            var target1 = TestDataGenerator.Hall();
+            var target2 = TestDataGenerator.Hall(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            var target3 = TestDataGenerator.Hall();
+            var target4 = TestDataGenerator.Hall();
+            await Context.Halls.AddRangeAsync(target1, target2, target3, target4);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await filmReadRepository.GetByIdsAsync(new[] { target1.Id, target2.Id, target4.Id }, CancellationToken);
+            var result = await hallReadRepository.GetByIdsAsync(new[] { target1.Id, target2.Id, target4.Id }, CancellationToken);
 
             // Assert
             result.Should()
@@ -135,25 +136,25 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Поиск фильма в коллекции по идентификатору (true)
+        /// Поиск зала в коллекции по идентификатору (true)
         /// </summary>
         [Fact]
         public async Task IsNotNullEntityReturnTrue()
         {
             //Arrange
-            var target1 = TestDataGenerator.Film();
-            await Context.Films.AddAsync(target1);
+            var target1 = TestDataGenerator.Hall();
+            await Context.Halls.AddAsync(target1);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await filmReadRepository.IsNotNullAsync(target1.Id, CancellationToken);
+            var result = await hallReadRepository.IsNotNullAsync(target1.Id, CancellationToken);
 
             // Assert
             result.Should().BeTrue();
         }
 
         /// <summary>
-        /// Поиск фильма в коллекции по идентификатору (false)
+        /// Поиск зала в коллекции по идентификатору (false)
         /// </summary>
         [Fact]
         public async Task IsNotNullEntityReturnFalse()
@@ -162,25 +163,25 @@ namespace TicketSelling.Repositories.Tests.Tests
             var target1 = Guid.NewGuid();
 
             // Act
-            var result = await filmReadRepository.IsNotNullAsync(target1, CancellationToken);
+            var result = await hallReadRepository.IsNotNullAsync(target1, CancellationToken);
 
             // Assert
             result.Should().BeFalse();
         }
 
         /// <summary>
-        /// Поиск удаленного фильма в коллекции по идентификатору
+        /// Поиск зала кинотетра в коллекции по идентификатору
         /// </summary>
         [Fact]
         public async Task IsNotNullDeletedEntityReturnFalse()
         {
             //Arrange
-            var target1 = TestDataGenerator.Film(x => x.DeletedAt = DateTimeOffset.UtcNow);
-            await Context.Films.AddAsync(target1);
+            var target1 = TestDataGenerator.Hall(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            await Context.Halls.AddAsync(target1);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await filmReadRepository.IsNotNullAsync(target1.Id, CancellationToken);
+            var result = await hallReadRepository.IsNotNullAsync(target1.Id, CancellationToken);
 
             // Assert
             result.Should().BeFalse();

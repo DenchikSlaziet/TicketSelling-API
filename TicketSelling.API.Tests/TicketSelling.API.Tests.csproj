@@ -25,4 +25,10 @@
     <ProjectReference Include="..\TicketSelling.Test.Extensions\TicketSelling.Test.Extensions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings.integration.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

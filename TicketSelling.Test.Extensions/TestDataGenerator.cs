@@ -7,6 +7,9 @@ namespace TicketSelling.Test.Extensions
 {
     public static class TestDataGenerator
     {
+
+        private static Random random = new Random();
+
         static public Cinema Cinema(Action<Cinema>? settings = null)
         {
             var result = new Cinema
@@ -37,8 +40,8 @@ namespace TicketSelling.Test.Extensions
         {
             var result = new Hall
             {
-                Number = 1,
-                NumberOfSeats = 20
+                Number = (short)random.Next(1,900),
+                NumberOfSeats = (short)random.Next(15,190)
             };
             result.BaseAuditSetParamtrs();
 
@@ -53,8 +56,8 @@ namespace TicketSelling.Test.Extensions
                 FirstName = $"{Guid.NewGuid():N}",
                 LastName = $"{Guid.NewGuid():N}",
                 Patronymic = $"{Guid.NewGuid():N}",
-                Age = 20,
-                Email = $"{Guid.NewGuid():N}"
+                Age = (short)random.Next(1, 90),
+                Email = $"{Guid.NewGuid():N}@gmail.com"
             };
             result.BaseAuditSetParamtrs();
 
@@ -69,7 +72,7 @@ namespace TicketSelling.Test.Extensions
                 FirstName = $"{Guid.NewGuid():N}",
                 LastName = $"{Guid.NewGuid():N}",
                 Patronymic = $"{Guid.NewGuid():N}",
-                Age = 20,
+                Age = (short)random.Next(19, 90),
                 Post = Context.Contracts.Enums.Post.Manager
             };
             result.BaseAuditSetParamtrs();
@@ -82,10 +85,10 @@ namespace TicketSelling.Test.Extensions
         {
             var result = new Ticket
             {
-                Date = DateTimeOffset.Now,
-                Place = 1,
-                Row = 1,
-                Price = 100
+                Date = DateTimeOffset.UtcNow.AddDays(1),
+                Place = (short)random.Next(1, 199),
+                Row = (short)random.Next(1, 45),
+                Price = (short)random.Next(100, 4500),
             };
             result.BaseAuditSetParamtrs();
 
@@ -125,8 +128,8 @@ namespace TicketSelling.Test.Extensions
             var result = new HallModel
             {
                 Id = Guid.NewGuid(),
-                Number = 1,
-                NumberOfSeats = 20
+                Number = (short)random.Next(1,900),
+                NumberOfSeats = (short)random.Next(15, 190)
             };
 
             settings?.Invoke(result);
@@ -141,8 +144,8 @@ namespace TicketSelling.Test.Extensions
                 FirstName = $"{Guid.NewGuid():N}",
                 LastName = $"{Guid.NewGuid():N}",
                 Patronymic = $"{Guid.NewGuid():N}",
-                Age = 18,
-                Email = "kochetkov@gmail.com"
+                Age = (short)random.Next(1, 90),
+                Email = $"{Guid.NewGuid():N}@gmail.com"
             };
 
             settings?.Invoke(result);
@@ -157,7 +160,7 @@ namespace TicketSelling.Test.Extensions
                 FirstName = $"{Guid.NewGuid():N}",
                 LastName = $"{Guid.NewGuid():N}",
                 Patronymic = $"{Guid.NewGuid():N}",
-                Age = 18,
+                Age = (short)random.Next(19, 90),
                 Post = PostModel.None
             };
 
@@ -170,10 +173,10 @@ namespace TicketSelling.Test.Extensions
             var result = new TicketRequestModel
             {
                 Id = Guid.NewGuid(),
-                Date = DateTimeOffset.Now.AddDays(1),
-                Place = 1,
-                Row = 1,
-                Price = 100
+                Date = DateTimeOffset.UtcNow.AddDays(1),
+                Place = (short)random.Next(1, 199),
+                Row = (short)random.Next(1, 45),
+                Price = (short)random.Next(100, 4500),
             };
 
             settings?.Invoke(result);

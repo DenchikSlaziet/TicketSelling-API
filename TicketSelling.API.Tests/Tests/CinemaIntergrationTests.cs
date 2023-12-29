@@ -10,9 +10,9 @@ using Xunit;
 
 namespace TicketSelling.API.Tests.Tests
 {
-    public class CinemaIntergrationTest : BaseIntegrationTest
+    public class CinemaIntergrationTests : BaseIntegrationTest
     {
-        public CinemaIntergrationTest(TicketSellingApiFixture fixture) : base(fixture)
+        public CinemaIntergrationTests(TicketSellingApiFixture fixture) : base(fixture)
         {
         }
 
@@ -27,19 +27,14 @@ namespace TicketSelling.API.Tests.Tests
             string data = JsonConvert.SerializeObject(cinema);
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
             var response = await client.PostAsync("/Cinema", contextdata);
-
-            // Assert
-            response.EnsureSuccessStatusCode();
             var resultString = await response.Content.ReadAsStringAsync();
-
             var result = JsonConvert.DeserializeObject<CinemaResponse>(resultString);
-            result.Should().NotBeNull()
-                .And
-                .BeEquivalentTo(new
-                {
-                    cinema.Title,
-                    cinema.Address
-                });          
+
+            var cinemaFirst = await context.Cinemas.FirstAsync(x => x.Id == result!.Id);
+
+            // Assert          
+            cinemaFirst.Should()
+                .BeEquivalentTo(cinema);
         }
 
         [Fact]
@@ -56,43 +51,15 @@ namespace TicketSelling.API.Tests.Tests
             // Act
             string data = JsonConvert.SerializeObject(cinemaRequest);
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync("/Cinema", contextdata);
+            await client.PutAsync("/Cinema", contextdata);
 
-            // Assert
-            response.EnsureSuccessStatusCode();
-            var resultString = await response.Content.ReadAsStringAsync();
+            var cinemaFirst = await context.Cinemas.FirstAsync(x => x.Id == cinemaRequest.Id);
 
-            var result = JsonConvert.DeserializeObject<CinemaResponse>(resultString);
-            result.Should().NotBeNull()
-                .And
-                .BeEquivalentTo(new
-                {
-                    cinema.Id
-                })
-                .And
-                .NotBeEquivalentTo(new
-                {
-                    cinema.Title,
-                    cinema.Address
-                });
+            // Assert           
+            cinemaFirst.Should()
+                .BeEquivalentTo(cinemaRequest);
         }
-
-        [Fact]
-        public async Task DeleteShouldWork()
-        {
-            // Arrange
-            var client = factory.CreateClient();
-            var cinema = TestDataGenerator.Cinema();
-            await context.Cinemas.AddAsync(cinema);
-            await unitOfWork.SaveChangesAsync();
-           
-            // Act
-            await client.DeleteAsync($"/Cinema/{cinema.Id}");
-
-            // Assert
-            context.Cinemas.Should().ContainSingle(x => x.Id == cinema.Id && x.DeletedAt != null);
-        }
-
+       
         [Fact]
         public async Task GetShouldWork()
         {
@@ -101,7 +68,7 @@ namespace TicketSelling.API.Tests.Tests
             var cinema1 = TestDataGenerator.Cinema();
             var cinema2 = TestDataGenerator.Cinema();
 
-            await context.Cinemas.AddRangeAsync(cinema1,cinema2);
+            await context.Cinemas.AddRangeAsync(cinema1, cinema2);
             await unitOfWork.SaveChangesAsync();
 
             // Act
@@ -110,13 +77,14 @@ namespace TicketSelling.API.Tests.Tests
             // Assert
             response.EnsureSuccessStatusCode();
             var resultString = await response.Content.ReadAsStringAsync();
-
             var result = JsonConvert.DeserializeObject<CinemaResponse>(resultString);
 
-            result.Should().NotBeNull()
+            result.Should()
+                .NotBeNull()
                 .And
                 .BeEquivalentTo(new 
                 {
+                    cinema1.Id,
                     cinema1.Title,
                     cinema1.Address
                 });
@@ -139,12 +107,40 @@ namespace TicketSelling.API.Tests.Tests
             // Assert
             response.EnsureSuccessStatusCode();
             var resultString = await response.Content.ReadAsStringAsync();
-
             var result = JsonConvert.DeserializeObject<IEnumerable<CinemaResponse>>(resultString);
+
             result.Should()
                 .NotBeNull()
                 .And
-                .ContainSingle(x => x.Id == cinema1.Id);
+                .Contain(x => x.Id == cinema1.Id)
+                .And
+                .NotContain(x => x.Id == cinema2.Id);
+        }
+
+        [Fact]
+        public async Task DeleteShouldWork()
+        {
+            // Arrange
+            var client = factory.CreateClient();
+            var cinema = TestDataGenerator.Cinema();
+            await context.Cinemas.AddAsync(cinema);
+            await unitOfWork.SaveChangesAsync();
+
+            // Act
+            await client.DeleteAsync($"/Cinema/{cinema.Id}");
+
+            var cinemaFirst = await context.Cinemas.FirstAsync(x => x.Id == cinema.Id);
+
+            // Assert
+            cinemaFirst.DeletedAt.Should()
+                .NotBeNull();
+
+            cinemaFirst.Should()
+                .BeEquivalentTo(new
+                {
+                    cinema.Title,
+                    cinema.Address
+                });
         }
     }
 }

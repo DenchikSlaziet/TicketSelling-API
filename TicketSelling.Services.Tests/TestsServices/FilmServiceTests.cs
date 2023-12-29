@@ -15,15 +15,15 @@ using Xunit;
 
 namespace TicketSelling.Services.Tests.Tests
 {
-    public class FilmServiceTest : TicketSellingContextInMemory
+    public class FilmServiceTests : TicketSellingContextInMemory
     {
         private readonly IFilmService filmService;
         private readonly FilmReadRepository filmReadRepository;
 
         /// <summary>
-        /// Инициализирует новый экземпляр <see cref="FilmServiceTest"/>
+        /// Инициализирует новый экземпляр <see cref="FilmServiceTests"/>
         /// </summary>
-        public FilmServiceTest()
+        public FilmServiceTests()
         {
             var config = new MapperConfiguration(cfg =>
             {
