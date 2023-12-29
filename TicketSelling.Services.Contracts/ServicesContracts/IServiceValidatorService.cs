@@ -1,4 +1,4 @@
-﻿namespace TicketSelling.Services.Validator
+﻿namespace TicketSelling.Services.Contracts.ServicesContracts
 {
     /// <summary>
     /// Сервис валидации

@@ -1,7 +1,7 @@
 ﻿using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ModelsRequest;
 
-namespace TicketSelling.Services.Contracts.ReadServices
+namespace TicketSelling.Services.Contracts.ServicesContracts
 {
     /// <summary>
     /// Сервис <see cref="TicketModel"/>

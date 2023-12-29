@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
@@ -7,9 +6,7 @@ using TicketSelling.Repositories.Contracts.WriteRepositoriesContracts;
 using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
-using TicketSelling.Services.Contracts.ReadServices;
-using TicketSelling.Services.Validator;
-using TicketSelling.Services.Validator.Validators;
+using TicketSelling.Services.Contracts.ServicesContracts;
 
 namespace TicketSelling.Services.ReadServices
 {

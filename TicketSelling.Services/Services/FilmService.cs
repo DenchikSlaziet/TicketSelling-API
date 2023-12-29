@@ -6,8 +6,7 @@ using TicketSelling.Repositories.Contracts.WriteRepositoriesContracts;
 using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
-using TicketSelling.Services.Contracts.ReadServices;
-using TicketSelling.Services.Validator;
+using TicketSelling.Services.Contracts.ServicesContracts;
 
 namespace TicketSelling.Services.ReadServices
 {

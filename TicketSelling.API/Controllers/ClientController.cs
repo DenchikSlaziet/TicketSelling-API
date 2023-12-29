@@ -5,7 +5,7 @@ using TicketSelling.API.Exceptions;
 using TicketSelling.API.Models.CreateRequest;
 using TicketSelling.API.Models.Response;
 using TicketSelling.Services.Contracts.Models;
-using TicketSelling.Services.Contracts.ReadServices;
+using TicketSelling.Services.Contracts.ServicesContracts;
 
 namespace TicketSelling.API.Controllers
 {

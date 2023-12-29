@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using TicketSelling.API.Exceptions;
 using TicketSelling.API.Models.CreateRequest;
 using TicketSelling.API.Models.Response;
-using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.ModelsRequest;
-using TicketSelling.Services.Contracts.ReadServices;
+using TicketSelling.Services.Contracts.ServicesContracts;
 
 namespace TicketSelling.API.Controllers
 {
