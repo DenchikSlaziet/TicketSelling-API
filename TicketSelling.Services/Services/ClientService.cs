@@ -34,7 +34,7 @@ namespace TicketSelling.Services.ReadServices
             model.Id = Guid.NewGuid();
             await validatorService.ValidateAsync(model, cancellationToken);
 
-            var item = mapper.Map<Client>(model);
+            var item = mapper.Map<User>(model);
 
             clientWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
@@ -47,7 +47,7 @@ namespace TicketSelling.Services.ReadServices
             var targetClient = await clientReadRepository.GetByIdAsync(id, cancellationToken);
             if (targetClient == null)
             {
-                throw new TimeTableEntityNotFoundException<Client>(id);
+                throw new TimeTableEntityNotFoundException<User>(id);
             }
 
             clientWriteRepository.Delete(targetClient);
@@ -61,10 +61,10 @@ namespace TicketSelling.Services.ReadServices
             var targetClient = await clientReadRepository.GetByIdAsync(source.Id, cancellationToken);
             if (targetClient == null)
             {
-                throw new TimeTableEntityNotFoundException<Client>(source.Id);
+                throw new TimeTableEntityNotFoundException<User>(source.Id);
             }
 
-            targetClient = mapper.Map<Client>(source);
+            targetClient = mapper.Map<User>(source);
 
             clientWriteRepository.Update(targetClient);
             await unitOfWork.SaveChangesAsync(cancellationToken);
@@ -84,7 +84,7 @@ namespace TicketSelling.Services.ReadServices
 
             if(item == null) 
             {
-                throw new TimeTableEntityNotFoundException<Client>(id);
+                throw new TimeTableEntityNotFoundException<User>(id);
             }
 
             return mapper.Map<ClientModel>(item);

@@ -21,7 +21,8 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
                 .HasDatabaseName($"{nameof(Film)}_{nameof(Film.Title)}")
                 .HasFilter($"{nameof(Film.DeletedAt)} is null");
             builder.Property(x => x.Limitation).IsRequired();
-            builder.HasMany(x => x.Tickets).WithOne(x => x.Film).HasForeignKey(x => x.FilmId);
+            builder.Property(x => x.Genre).IsRequired();
+            builder.HasMany(x => x.Sessions).WithOne(x => x.Film).HasForeignKey(x => x.FilmId);
         }
     }
 }

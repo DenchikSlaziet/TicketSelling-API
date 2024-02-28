@@ -5,11 +5,11 @@ namespace TicketSelling.Context.Contracts
 {
     public interface ITicketSellingContext
     {
-        /// <summary>Список <inheritdoc cref="Cinema"/></summary>
-        DbSet<Cinema> Cinemas { get; }
+        /// <summary>Список <inheritdoc cref="Session"/></summary>
+        DbSet<Session> Sessions { get; }
 
-        /// <summary>Список <inheritdoc cref="Client"/></summary>
-        DbSet<Client> Clients { get; }
+        /// <summary>Список <inheritdoc cref="User"/></summary>
+        DbSet<User> Users { get; }
 
         /// <summary>Список <inheritdoc cref="Film"/></summary>
         DbSet<Film> Films { get; }

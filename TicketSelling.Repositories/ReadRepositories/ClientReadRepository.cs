@@ -22,22 +22,22 @@ namespace TicketSelling.Repositories.ReadRepositories
             this.reader = reader;
         }
 
-        Task<IReadOnlyCollection<Client>> IClientReadRepository.GetAllAsync(CancellationToken cancellationToken) 
-            => reader.Read<Client>()
+        Task<IReadOnlyCollection<User>> IClientReadRepository.GetAllAsync(CancellationToken cancellationToken) 
+            => reader.Read<User>()
                 .NotDeletedAt()
                 .OrderBy(x => x.FirstName)
                 .ThenBy(x => x.LastName)
                 .ThenBy(x => x.Patronymic)
                 .ToReadOnlyCollectionAsync(cancellationToken);
 
-        Task<Client?> IClientReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
-            => reader.Read<Client>()
+        Task<User?> IClientReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
+            => reader.Read<User>()
                 .ById(id)
                 .NotDeletedAt()
                 .FirstOrDefaultAsync(cancellationToken);
 
-        Task<Dictionary<Guid, Client>> IClientReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
-            => reader.Read<Client>()
+        Task<Dictionary<Guid, User>> IClientReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
+            => reader.Read<User>()
                 .NotDeletedAt()
                 .ByIds(ids)
                 .OrderBy(x => x.FirstName)
@@ -46,6 +46,6 @@ namespace TicketSelling.Repositories.ReadRepositories
                 .ToDictionaryAsync(x => x.Id, cancellationToken);
 
         Task<bool> IClientReadRepository.IsNotNullAsync(Guid id, CancellationToken cancellationToken)
-            => reader.Read<Client>().AnyAsync(x => x.Id == id && !x.DeletedAt.HasValue, cancellationToken);
+            => reader.Read<User>().AnyAsync(x => x.Id == id && !x.DeletedAt.HasValue, cancellationToken);
     }
 }

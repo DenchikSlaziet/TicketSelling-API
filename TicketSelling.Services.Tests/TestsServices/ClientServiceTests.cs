@@ -37,7 +37,7 @@ namespace TicketSelling.Services.Tests.Tests
         }
 
         /// <summary>
-        /// Получение <see cref="Client"/> по идентификатору возвращает null
+        /// Получение <see cref="User"/> по идентификатору возвращает null
         /// </summary>
         [Fact]
         public async Task GetByIdShouldReturnNull()
@@ -49,12 +49,12 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => clientService.GetByIdAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Client>>()
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<User>>()
                .WithMessage($"*{id}*");
         }
 
         /// <summary>
-        /// Получение <see cref="Client"/> по идентификатору возвращает данные
+        /// Получение <see cref="User"/> по идентификатору возвращает данные
         /// </summary>
         [Fact]
         public async Task GetByIdShouldReturnValue()
@@ -120,7 +120,7 @@ namespace TicketSelling.Services.Tests.Tests
         }
 
         /// <summary>
-        /// Удаление несуществуюущего <see cref="Client"/>
+        /// Удаление несуществуюущего <see cref="User"/>
         /// </summary>
         [Fact]
         public async Task DeletingNonExistentCinemaReturnExсeption()
@@ -132,12 +132,12 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => clientService.DeleteAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Client>>()
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<User>>()
                .WithMessage($"*{id}*");
         }
 
         /// <summary>
-        /// Удаление удаленного <see cref="Client"/>
+        /// Удаление удаленного <see cref="User"/>
         /// </summary>
         [Fact]
         public async Task DeletingDeletedCinemaReturnExсeption()
@@ -151,12 +151,12 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => clientService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Client>>()
+            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<User>>()
                 .WithMessage($"*{model.Id}*");
         }      
 
         /// <summary>
-        /// Удаление <see cref="Client"/>
+        /// Удаление <see cref="User"/>
         /// </summary>
         [Fact]
         public async Task DeleteShouldWork()
@@ -177,7 +177,7 @@ namespace TicketSelling.Services.Tests.Tests
         }
 
         /// <summary>
-        /// Добавление <see cref="Client"/>
+        /// Добавление <see cref="User"/>
         /// </summary>
         [Fact]
         public async Task AddShouldWork()
@@ -196,7 +196,7 @@ namespace TicketSelling.Services.Tests.Tests
         }
 
         /// <summary>
-        /// Добавление невалидируемого <see cref="Client"/>
+        /// Добавление невалидируемого <see cref="User"/>
         /// </summary>
         [Fact]
         public async Task AddShouldValidationException()
@@ -212,7 +212,7 @@ namespace TicketSelling.Services.Tests.Tests
         }
 
         /// <summary>
-        /// Изменение несуществующего <see cref="Client"/>
+        /// Изменение несуществующего <see cref="User"/>
         /// </summary>
         [Fact]
         public async Task EditShouldNotFoundException()
@@ -224,12 +224,12 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> act = () => clientService.EditAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableEntityNotFoundException<Client>>()
+            await act.Should().ThrowAsync<TimeTableEntityNotFoundException<User>>()
                 .WithMessage($"*{model.Id}*");
         }
 
         /// <summary>
-        /// Изменение невалидируемого <see cref="Client"/>
+        /// Изменение невалидируемого <see cref="User"/>
         /// </summary>
         [Fact]
         public async Task EditShouldValidationException()
@@ -245,7 +245,7 @@ namespace TicketSelling.Services.Tests.Tests
         }
 
         /// <summary>
-        /// Изменение <see cref="Client"/>
+        /// Изменение <see cref="User"/>
         /// </summary>
         [Fact]
         public async Task EditShouldWork()

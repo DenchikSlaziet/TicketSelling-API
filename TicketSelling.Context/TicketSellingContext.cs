@@ -18,9 +18,9 @@ namespace TicketSelling.Context
     /// </remarks>
     public class TicketSellingContext : DbContext, ITicketSellingContext, IDbRead, IDbWriter, IUnitOfWork
     {
-        public DbSet<Cinema> Cinemas { get; set; }
+        public DbSet<Session> Sessions { get; set; }
 
-        public DbSet<Client> Clients { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public DbSet<Film> Films { get; set; }
 

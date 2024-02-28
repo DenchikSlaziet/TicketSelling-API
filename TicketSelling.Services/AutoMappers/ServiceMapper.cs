@@ -19,7 +19,7 @@ namespace TicketSelling.Services.AutoMappers
 
             CreateMap<Hall, HallModel>(MemberList.Destination).ReverseMap();
             CreateMap<Film, FilmModel>(MemberList.Destination).ReverseMap();
-            CreateMap<Client, ClientModel>(MemberList.Destination).ReverseMap();
+            CreateMap<User, ClientModel>(MemberList.Destination).ReverseMap();
             CreateMap<Cinema, CinemaModel>(MemberList.Destination).ReverseMap();
             CreateMap<Staff, StaffModel>(MemberList.Destination).ReverseMap();
             CreateMap<Ticket, TicketModel>(MemberList.Destination)

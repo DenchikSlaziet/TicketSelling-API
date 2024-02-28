@@ -1,4 +1,6 @@
-﻿namespace TicketSelling.Context.Contracts.Models
+﻿using TicketSelling.Context.Contracts.Enums;
+
+namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Фильм
@@ -18,8 +20,18 @@
         /// <summary>
         /// Ограничение по возросту
         /// </summary>
-        public short Limitation { get; set; }
+        public int Limitation { get; set; }
 
-        public ICollection<Ticket> Tickets { get; set; }
+        /// <summary>
+        /// Жанр
+        /// </summary>
+        public Genre Genre { get; set; }
+
+        /// <summary>
+        /// Превью
+        /// </summary>
+        public byte[]? ImagePreview { get; set; }
+
+        public ICollection<Session> Sessions { get; set; }
     }
 }

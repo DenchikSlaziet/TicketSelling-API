@@ -8,7 +8,7 @@ namespace TicketSelling.Repositories.WriteRepositoriеs
     /// <summary>
     /// Реализация <see cref="IClientWriteRepository"/>
     /// </summary>
-    public class ClientWriteRepository : BaseWriteRepository<Client>, IClientWriteRepository, IRepositoryAnchor
+    public class ClientWriteRepository : BaseWriteRepository<User>, IClientWriteRepository, IRepositoryAnchor
     {
         public ClientWriteRepository(IDbWriterContext writerContext) 
             : base(writerContext)

@@ -1,9 +1,11 @@
-﻿namespace TicketSelling.Context.Contracts.Models
+﻿using TicketSelling.Context.Contracts.Enums;
+
+namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Клиент
     /// </summary>
-    public class Client : BaseAuditEntity
+    public class User : BaseAuditEntity
     {
         /// <summary>
         /// Фамилия
@@ -23,12 +25,24 @@
         /// <summary>
         /// Возраст
         /// </summary>
-        public short Age { get; set; }
+        public int Age { get; set; }
 
         /// <summary>
         /// Адрес электронной почты
         /// </summary>
         public string? Email { get; set; }
+
+        /// <summary>
+        /// Логин
+        /// </summary>
+        public string Login { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Пароль
+        /// </summary>
+        public string Password { get; set; } = string.Empty;
+
+        public Role Role { get; set; } = Role.Quest;
 
         public ICollection<Ticket> Tickets { get; set; }
     }

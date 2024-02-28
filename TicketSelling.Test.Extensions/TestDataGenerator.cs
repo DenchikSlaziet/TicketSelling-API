@@ -9,26 +9,14 @@ namespace TicketSelling.Test.Extensions
     {
 
         private static Random random = new Random();
-
-        static public Cinema Cinema(Action<Cinema>? settings = null)
-        {
-            var result = new Cinema
-            {
-                Title = $"{Guid.NewGuid():N}",
-                Address = $"{Guid.NewGuid():N}"
-            };
-            result.BaseAuditSetParamtrs();
-
-            settings?.Invoke(result);
-            return result;
-        }
-
+        
         static public Film Film(Action<Film>? settings = null)
         {
             var result = new Film
             {
                 Title = $"{Guid.NewGuid():N}",
-                Description = $"{Guid.NewGuid():N}"
+                Description = $"{Guid.NewGuid():N}",
+                Genre = Context.Contracts.Enums.Genre.War
             };
             result.BaseAuditSetParamtrs();
 
@@ -40,8 +28,9 @@ namespace TicketSelling.Test.Extensions
         {
             var result = new Hall
             {
-                Number = (short)random.Next(1,900),
-                NumberOfSeats = (short)random.Next(15,190)
+                Number = random.Next(1,900),
+                CountPlaceInRow= random.Next(3,11),
+                CountRow = random.Next(1, 8)
             };
             result.BaseAuditSetParamtrs();
 
@@ -49,15 +38,18 @@ namespace TicketSelling.Test.Extensions
             return result;
         }
 
-        static public Client Client(Action<Client>? settings = null)
+        static public User User(Action<User>? settings = null)
         {
-            var result = new Client
+            var result = new User
             {
                 FirstName = $"{Guid.NewGuid():N}",
                 LastName = $"{Guid.NewGuid():N}",
                 Patronymic = $"{Guid.NewGuid():N}",
-                Age = (short)random.Next(1, 90),
-                Email = $"{Guid.NewGuid():N}@gmail.com"
+                Age = random.Next(1, 90),
+                Email = $"{Guid.NewGuid():N}@gmail.com",
+                Login = $"{Guid.NewGuid():N}",
+                Password = $"{Guid.NewGuid():N}",
+                Role = Context.Contracts.Enums.Role.Quest
             };
             result.BaseAuditSetParamtrs();
 
@@ -72,8 +64,8 @@ namespace TicketSelling.Test.Extensions
                 FirstName = $"{Guid.NewGuid():N}",
                 LastName = $"{Guid.NewGuid():N}",
                 Patronymic = $"{Guid.NewGuid():N}",
-                Age = (short)random.Next(19, 90),
-                Post = Context.Contracts.Enums.Post.Manager
+                Age = random.Next(19, 90),
+                Post = Context.Contracts.Enums.Post.None
             };
             result.BaseAuditSetParamtrs();
 
@@ -85,25 +77,12 @@ namespace TicketSelling.Test.Extensions
         {
             var result = new Ticket
             {
-                Date = DateTimeOffset.UtcNow.AddDays(1),
-                Place = (short)random.Next(1, 199),
-                Row = (short)random.Next(1, 45),
-                Price = (short)random.Next(100, 4500),
+                DatePayment = DateTimeOffset.UtcNow,
+                Place = (short)random.Next(1, 11),
+                Row = (short)random.Next(1, 8),
+                Price = (short)random.Next(100, 4500)
             };
             result.BaseAuditSetParamtrs();
-
-            settings?.Invoke(result);
-            return result;
-        }
-
-        static public CinemaModel CinemaModel(Action<CinemaModel>? settings = null)
-        {
-            var result = new CinemaModel
-            {
-                Id = Guid.NewGuid(),
-                Title = $"{Guid.NewGuid():N}",
-                Address = $"{Guid.NewGuid():N}"
-            };
 
             settings?.Invoke(result);
             return result;
@@ -116,7 +95,7 @@ namespace TicketSelling.Test.Extensions
                 Id = Guid.NewGuid(),
                 Title = $"{Guid.NewGuid():N}",
                 Description = $"{Guid.NewGuid():N}",
-                Limitation = 16
+                Limitation = 16              
             };
 
             settings?.Invoke(result);

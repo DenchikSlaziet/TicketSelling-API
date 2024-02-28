@@ -3,27 +3,27 @@
 namespace TicketSelling.Repositories.Contracts.ReadInterfaces
 {
     /// <summary>
-    /// Репозиторий чтения <see cref="Client"/>
+    /// Репозиторий чтения <see cref="User"/>
     /// </summary>
     public interface IClientReadRepository
     {
         /// <summary>
-        /// Получить список всех <see cref="Client"/>
+        /// Получить список всех <see cref="User"/>
         /// </summary>
-        Task<IReadOnlyCollection<Client>> GetAllAsync(CancellationToken cancellationToken);
+        Task<IReadOnlyCollection<User>> GetAllAsync(CancellationToken cancellationToken);
 
         /// <summary>
-        /// Получить <see cref="Client"/> по идентификатору
+        /// Получить <see cref="User"/> по идентификатору
         /// </summary>
-        Task<Client?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Получить <see cref="Client"/> по идентификаторам
+        /// Получить <see cref="User"/> по идентификаторам
         /// </summary>
-        Task<Dictionary<Guid,Client>> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
+        Task<Dictionary<Guid,User>> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Проверить есть ли <see cref="Client"/> в коллеции
+        /// Проверить есть ли <see cref="User"/> в коллеции
         /// </summary>
         Task<bool> IsNotNullAsync(Guid id, CancellationToken cancellationToken);
     }

@@ -2,7 +2,7 @@
 
 namespace TicketSelling.Repositories.Contracts.WriteRepositoriesContracts
 {
-    public interface IClientWriteRepository : IRepositoryWriter<Client>
+    public interface IClientWriteRepository : IRepositoryWriter<User>
     {
     }
 }

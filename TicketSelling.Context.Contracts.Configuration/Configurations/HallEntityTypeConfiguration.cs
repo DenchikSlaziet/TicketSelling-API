@@ -20,7 +20,9 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
                 .IsUnique()
                 .HasDatabaseName($"{nameof(Hall)}_{nameof(Hall.Number)}")
                 .HasFilter($"{nameof(Hall.DeletedAt)} is null");
-            builder.HasMany(x => x.Tickets).WithOne(x => x.Hall).HasForeignKey(x => x.HallId);
+            builder.Property(x => x.CountPlaceInRow).IsRequired();
+            builder.Property(x => x.CountRow).IsRequired();
+            builder.HasMany(x => x.Sessions).WithOne(x => x.Hall).HasForeignKey(x => x.HallId);
         }
     }
 }

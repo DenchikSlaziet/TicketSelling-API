@@ -14,7 +14,7 @@ namespace TicketSelling.API.Tests.Tests
     public class TicketIntergrationTests : BaseIntegrationTest
     {
         private readonly Hall hall;
-        private readonly Client client;
+        private readonly User client;
         private readonly Cinema cinema;
         private readonly Film film;
 
