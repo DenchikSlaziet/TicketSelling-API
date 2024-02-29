@@ -91,3 +91,10 @@
 Пример реального бизнес сценария
 ---
 ![Билет](https://static.auction.ru/offer_images/rd48/2020/08/04/08/big/8/8xmZX4dBth1/bilet_kino_teatr_moskva.jpg)
+
+Установка программы
+---
+1.Зайдите в проект TicketSelling.Context/TicketSellingContext  
+2.Выполните 4 команду в консоли диспетчера пакетов  
+3.В случае ошибки выполните 1 команду и повторите попытку  
+4.Запускайте
