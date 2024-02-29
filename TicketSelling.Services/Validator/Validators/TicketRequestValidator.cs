@@ -10,11 +10,11 @@ namespace TicketSelling.Services.Validator.Validators
     public class TicketRequestValidator : AbstractValidator<TicketRequestModel>
     {
         private readonly ICinemaReadRepository cinemaReadRepository;
-        private readonly IClientReadRepository clientReadRepository;
+        private readonly IUserReadRepository clientReadRepository;
         private readonly IFilmReadRepository filmReadRepository;
         private readonly IHallReadRepository hallReadRepository;
 
-        public TicketRequestValidator(ICinemaReadRepository cinemaReadRepository, IClientReadRepository clientReadRepository,
+        public TicketRequestValidator(ICinemaReadRepository cinemaReadRepository, IUserReadRepository clientReadRepository,
             IFilmReadRepository filmReadRepository, IHallReadRepository hallReadRepository)
         {
             this.cinemaReadRepository = cinemaReadRepository;

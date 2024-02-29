@@ -18,7 +18,7 @@ namespace TicketSelling.Services.ReadServices
         private readonly ITicketWriteRepository ticketWriteRepository;
         private readonly ITicketReadRepository ticketReadRepository;
         private readonly ICinemaReadRepository cinemaReadRepository;
-        private readonly IClientReadRepository clientReadRepository;
+        private readonly IUserReadRepository clientReadRepository;
         private readonly IFilmReadRepository filmReadRepository;
         private readonly IHallReadRepository hallReadRepository;
         private readonly IStaffReadRepository staffReadRepository;
@@ -27,7 +27,7 @@ namespace TicketSelling.Services.ReadServices
         private readonly IServiceValidatorService validatorService;
 
         public TicketService(ITicketWriteRepository ticketWriteRepository, ITicketReadRepository ticketReadRepository, ICinemaReadRepository cinemaReadRepository,
-            IClientReadRepository clientReadRepository, IFilmReadRepository filmReadRepository,
+            IUserReadRepository clientReadRepository, IFilmReadRepository filmReadRepository,
             IHallReadRepository hallReadRepository, IStaffReadRepository staffReadRepository,
             IMapper mapper, IUnitOfWork unitOfWork, IServiceValidatorService validatorService)
         {

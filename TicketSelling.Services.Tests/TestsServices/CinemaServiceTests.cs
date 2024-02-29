@@ -33,7 +33,7 @@ namespace TicketSelling.Services.Tests.Tests
 
             cinemaService = new CinemaService(cinemaRead, config.CreateMapper(), 
                 new CinemaWriteRepository(WriterContext), UnitOfWork, 
-                new ServicesValidatorService(cinemaRead, new ClientReadRepository(Reader), new FilmReadRepository(Reader),
+                new ServicesValidatorService(cinemaRead, new UserReadRepository(Reader), new FilmReadRepository(Reader),
                 new HallReadRepository(Reader)));
         }
 

@@ -13,7 +13,7 @@ namespace TicketSelling.Services.Services
     {
         private readonly Dictionary<Type, IValidator> validators = new Dictionary<Type, IValidator>();
 
-        public ServicesValidatorService(ICinemaReadRepository cinemaReadRepository, IClientReadRepository clientReadRepository,
+        public ServicesValidatorService(ICinemaReadRepository cinemaReadRepository, IUserReadRepository clientReadRepository,
             IFilmReadRepository filmReadRepository, IHallReadRepository hallReadRepository)
         {
             validators.Add(typeof(CinemaModel), new CinemaModelValidator());

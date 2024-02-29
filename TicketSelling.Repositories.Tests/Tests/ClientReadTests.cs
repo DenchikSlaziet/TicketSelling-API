@@ -15,11 +15,11 @@ namespace TicketSelling.Repositories.Tests.Tests
 {
     public class ClientReadTests : TicketSellingContextInMemory
     {
-        private readonly IClientReadRepository clientReadRepository;
+        private readonly IUserReadRepository clientReadRepository;
 
         public ClientReadTests()
         {
-            clientReadRepository = new ClientReadRepository(Reader);
+            clientReadRepository = new UserReadRepository(Reader);
         }
 
         /// <summary>

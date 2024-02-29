@@ -8,21 +8,21 @@ using TicketSelling.Repositories.Contracts.ReadInterfaces;
 namespace TicketSelling.Repositories.ReadRepositories
 {
     /// <summary>
-    /// Реализация <see cref="IClientReadRepository"/>
+    /// Реализация <see cref="IUserReadRepository"/>
     /// </summary>
-    public class ClientReadRepository : IClientReadRepository, IRepositoryAnchor
+    public class UserReadRepository : IUserReadRepository, IRepositoryAnchor
     {
         /// <summary>
         /// Контекст для связи с бд
         /// </summary>
         private IDbRead reader;
 
-        public ClientReadRepository(IDbRead reader)
+        public UserReadRepository(IDbRead reader)
         {
             this.reader = reader;
         }
 
-        Task<IReadOnlyCollection<User>> IClientReadRepository.GetAllAsync(CancellationToken cancellationToken) 
+        Task<IReadOnlyCollection<User>> IUserReadRepository.GetAllAsync(CancellationToken cancellationToken) 
             => reader.Read<User>()
                 .NotDeletedAt()
                 .OrderBy(x => x.FirstName)
@@ -30,22 +30,26 @@ namespace TicketSelling.Repositories.ReadRepositories
                 .ThenBy(x => x.Patronymic)
                 .ToReadOnlyCollectionAsync(cancellationToken);
 
-        Task<User?> IClientReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
+        Task<User?> IUserReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
             => reader.Read<User>()
                 .ById(id)
-                .NotDeletedAt()
                 .FirstOrDefaultAsync(cancellationToken);
 
-        Task<Dictionary<Guid, User>> IClientReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
+        Task<Dictionary<Guid, User>> IUserReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
             => reader.Read<User>()
-                .NotDeletedAt()
                 .ByIds(ids)
                 .OrderBy(x => x.FirstName)
                 .ThenBy(x => x.LastName)
                 .ThenBy(x => x.Patronymic)
                 .ToDictionaryAsync(x => x.Id, cancellationToken);
 
-        Task<bool> IClientReadRepository.IsNotNullAsync(Guid id, CancellationToken cancellationToken)
+        Task<User?> IUserReadRepository.GetNotDeletedByIdAsync(Guid id, CancellationToken cancellationToken)
+             => reader.Read<User>()
+                .NotDeletedAt()
+                .ById(id)
+                .FirstOrDefaultAsync(cancellationToken);
+
+        Task<bool> IUserReadRepository.IsNotNullAsync(Guid id, CancellationToken cancellationToken)
             => reader.Read<User>().AnyAsync(x => x.Id == id && !x.DeletedAt.HasValue, cancellationToken);
     }
 }

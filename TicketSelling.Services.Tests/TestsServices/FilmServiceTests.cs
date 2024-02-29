@@ -31,7 +31,7 @@ namespace TicketSelling.Services.Tests.Tests
             filmReadRepository = new FilmReadRepository(Reader);
             filmService = new FilmService(new FilmWriteRepository(WriterContext), filmReadRepository,
                 config.CreateMapper(), UnitOfWork, new ServicesValidatorService(new CinemaReadRepository(Reader), 
-                new ClientReadRepository(Reader), filmReadRepository, new HallReadRepository(Reader)));
+                new UserReadRepository(Reader), filmReadRepository, new HallReadRepository(Reader)));
         }
 
         /// <summary>

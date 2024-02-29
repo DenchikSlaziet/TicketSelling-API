@@ -38,7 +38,7 @@ namespace TicketSelling.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(CinemaEntityTypeConfiguration).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(FilmEntityTypeConfiguration).Assembly);
         }
 
         /// <summary>

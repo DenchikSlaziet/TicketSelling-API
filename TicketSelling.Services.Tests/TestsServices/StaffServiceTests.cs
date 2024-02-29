@@ -30,7 +30,7 @@ namespace TicketSelling.Services.Tests.Tests
 
             staffService = new StaffService(new StaffWriteRepository(WriterContext), new StaffReadRepository(Reader),
                 UnitOfWork, config.CreateMapper(), new ServicesValidatorService(new CinemaReadRepository(Reader), 
-                new ClientReadRepository(Reader), new FilmReadRepository(Reader), new HallReadRepository(Reader)));
+                new UserReadRepository(Reader), new FilmReadRepository(Reader), new HallReadRepository(Reader)));
         }
 
         /// <summary>

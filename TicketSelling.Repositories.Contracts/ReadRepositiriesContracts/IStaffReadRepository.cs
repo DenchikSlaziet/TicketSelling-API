@@ -13,12 +13,17 @@ namespace TicketSelling.Repositories.Contracts.ReadInterfaces
         Task<IReadOnlyCollection<Staff>> GetAllAsync(CancellationToken cancellationToken);
 
         /// <summary>
-        /// Получить <see cref="Staff"/> по идентификатору
+        /// Получить неудаленные <see cref="Staff"/> по идентификатору
+        /// </summary>
+        Task<Staff?> GetNotDeletedByIdAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить любые <see cref="Staff"/> по идентификатору
         /// </summary>
         Task<Staff?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Получить <see cref="Staff"/> по идентификаторам
+        /// Получить любые <see cref="Staff"/> по идентификаторам
         /// </summary>
         Task<Dictionary<Guid, Staff>> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
 

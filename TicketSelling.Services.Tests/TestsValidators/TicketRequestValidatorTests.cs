@@ -13,7 +13,7 @@ namespace TicketSelling.Services.Tests.TestsValidators
 
         public TicketRequestValidatorTests()
         {
-            validator = new TicketRequestValidator(new CinemaReadRepository(Reader), new ClientReadRepository(Reader), 
+            validator = new TicketRequestValidator(new CinemaReadRepository(Reader), new UserReadRepository(Reader), 
                 new FilmReadRepository(Reader), new HallReadRepository(Reader));
         }
 

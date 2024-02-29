@@ -6,11 +6,11 @@ using TicketSelling.Repositories.Contracts.WriteRepositoriesContracts;
 namespace TicketSelling.Repositories.WriteRepositoriеs
 {
     /// <summary>
-    /// Реализация <see cref="IClientWriteRepository"/>
+    /// Реализация <see cref="IUserWriteRepository"/>
     /// </summary>
-    public class ClientWriteRepository : BaseWriteRepository<User>, IClientWriteRepository, IRepositoryAnchor
+    public class UserWriteRepository : BaseWriteRepository<User>, IUserWriteRepository, IRepositoryAnchor
     {
-        public ClientWriteRepository(IDbWriterContext writerContext) 
+        public UserWriteRepository(IDbWriterContext writerContext) 
             : base(writerContext)
         {
             

@@ -17,7 +17,7 @@ namespace TicketSelling.Services.Tests.Tests
     public class ClientServiceTests : TicketSellingContextInMemory
     {
         private readonly IClientService clientService;
-        private readonly ClientReadRepository clientReadRepository;
+        private readonly UserReadRepository clientReadRepository;
 
         /// <summary>
         /// Инициализирует новый экземпляр <see cref="ClientServiceTests"/>
@@ -29,9 +29,9 @@ namespace TicketSelling.Services.Tests.Tests
                 cfg.AddProfile(new ServiceMapper());
             });
 
-            clientReadRepository = new ClientReadRepository(Reader);
+            clientReadRepository = new UserReadRepository(Reader);
 
-            clientService = new ClientService(new ClientWriteRepository(WriterContext), clientReadRepository,
+            clientService = new ClientService(new UserWriteRepository(WriterContext), clientReadRepository,
                 UnitOfWork, config.CreateMapper(), new ServicesValidatorService(new CinemaReadRepository(Reader), 
                 clientReadRepository, new FilmReadRepository(Reader), new HallReadRepository(Reader)));
         }

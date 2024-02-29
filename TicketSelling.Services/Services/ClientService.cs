@@ -13,13 +13,13 @@ namespace TicketSelling.Services.ReadServices
     /// <inheritdoc cref="IClientService"/>
     public class ClientService : IClientService, IServiceAnchor
     {
-        private readonly IClientWriteRepository clientWriteRepository;
-        private readonly IClientReadRepository clientReadRepository;
+        private readonly IUserWriteRepository clientWriteRepository;
+        private readonly IUserReadRepository clientReadRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly IServiceValidatorService validatorService;
 
-        public ClientService(IClientWriteRepository clientWriteRepository, IClientReadRepository clientReadRepository, 
+        public ClientService(IUserWriteRepository clientWriteRepository, IUserReadRepository clientReadRepository, 
             IUnitOfWork unitOfWork, IMapper mapper, IServiceValidatorService validatorService)
         {
             this.clientReadRepository = clientReadRepository;

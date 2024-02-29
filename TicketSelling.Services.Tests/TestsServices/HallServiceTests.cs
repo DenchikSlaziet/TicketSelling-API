@@ -32,7 +32,7 @@ namespace TicketSelling.Services.Tests.Tests
             hallReadRepository = new HallReadRepository(Reader);
             hallService = new HallService(new HallWriteRepository(WriterContext), hallReadRepository,
                 UnitOfWork, config.CreateMapper(), new ServicesValidatorService(new CinemaReadRepository(Reader), 
-                new ClientReadRepository(Reader), new FilmReadRepository(Reader), hallReadRepository));
+                new UserReadRepository(Reader), new FilmReadRepository(Reader), hallReadRepository));
         }
 
         /// <summary>

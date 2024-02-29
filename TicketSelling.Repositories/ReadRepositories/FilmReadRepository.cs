@@ -31,13 +31,24 @@ namespace TicketSelling.Repositories.ReadRepositories
         Task<Film?> IFilmReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken) 
             => reader.Read<Film>()
                 .ById(id)
-                .NotDeletedAt()
                 .FirstOrDefaultAsync(cancellationToken);
 
         Task<Dictionary<Guid, Film>> IFilmReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
             => reader.Read<Film>()
                 .ByIds(ids)
+                .OrderBy(x => x.Title)
+                .ToDictionaryAsync(x => x.Id, cancellationToken);
+
+        Task<Film?> IFilmReadRepository.GetNotDeletedByIdAsync(Guid id, CancellationToken cancellationToken)
+            => reader.Read<Film>()
                 .NotDeletedAt()
+                .ById(id)
+                .FirstOrDefaultAsync(cancellationToken);
+
+        Task<Dictionary<Guid, Film>> IFilmReadRepository.GetNotDeletedByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
+            => reader.Read<Film>()
+                .NotDeletedAt()
+                .ByIds(ids)
                 .OrderBy(x => x.Title)
                 .ToDictionaryAsync(x => x.Id, cancellationToken);
 

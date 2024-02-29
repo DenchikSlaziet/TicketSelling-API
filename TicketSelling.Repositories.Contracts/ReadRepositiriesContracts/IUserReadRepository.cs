@@ -5,7 +5,7 @@ namespace TicketSelling.Repositories.Contracts.ReadInterfaces
     /// <summary>
     /// Репозиторий чтения <see cref="User"/>
     /// </summary>
-    public interface IClientReadRepository
+    public interface IUserReadRepository
     {
         /// <summary>
         /// Получить список всех <see cref="User"/>
@@ -18,7 +18,12 @@ namespace TicketSelling.Repositories.Contracts.ReadInterfaces
         Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Получить <see cref="User"/> по идентификаторам
+        /// Получить неудаленные <see cref="User"/> по идентификатору
+        /// </summary>
+        Task<User?> GetNotDeletedByIdAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить любые <see cref="User"/> по идентификаторам
         /// </summary>
         Task<Dictionary<Guid,User>> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
 

@@ -29,10 +29,10 @@ namespace TicketSelling.Services.Tests.Tests
             });
 
             ticketService = new TicketService(new TicketWriteRepository(WriterContext), new TicketReadRepositiry(Reader),
-                new CinemaReadRepository(Reader), new ClientReadRepository(Reader), new FilmReadRepository(Reader),
+                new CinemaReadRepository(Reader), new UserReadRepository(Reader), new FilmReadRepository(Reader),
                 new HallReadRepository(Reader), new StaffReadRepository(Reader), config.CreateMapper(), UnitOfWork,
                 new ServicesValidatorService(new CinemaReadRepository(Reader),
-                new ClientReadRepository(Reader), new FilmReadRepository(Reader), new HallReadRepository(Reader)));
+                new UserReadRepository(Reader), new FilmReadRepository(Reader), new HallReadRepository(Reader)));
         }
 
         /// <summary>

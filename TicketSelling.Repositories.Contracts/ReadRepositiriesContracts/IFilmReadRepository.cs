@@ -13,14 +13,24 @@ namespace TicketSelling.Repositories.Contracts.ReadInterfaces
         Task<IReadOnlyCollection<Film>> GetAllAsync(CancellationToken cancellationToken);
 
         /// <summary>
-        /// Получить <see cref="Film"/> по идентификатору
+        /// Получить любой <see cref="Film"/> по идентификатору
         /// </summary>
         Task<Film?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить неудаленный <see cref="Film"/> по идентификатору
+        /// </summary>
+        Task<Film?> GetNotDeletedByIdAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Получить <see cref="Film"/> по идентификаторам
         /// </summary>
         Task<Dictionary<Guid, Film>> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить неудаленные <see cref="Film"/> по идентификаторам
+        /// </summary>
+        Task<Dictionary<Guid, Film>> GetNotDeletedByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
 
         /// <summary>
         /// Проверить есть ли <see cref="Film"/> в коллеции
