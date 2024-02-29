@@ -1,9 +1,11 @@
-﻿namespace TicketSelling.API.Models.CreateRequest
+﻿using TicketSelling.Context.Contracts.Enums;
+
+namespace TicketSelling.API.Models.CreateRequest
 {
     /// <summary>
     /// Модель запроса создания клиента
     /// </summary>
-    public class CreateClientRequest
+    public class CreateUserRequest
     {
         /// <summary>
         /// Фамилия
@@ -23,11 +25,23 @@
         /// <summary>
         /// Возраст
         /// </summary>
-        public short Age { get; set; }
+        public int Age { get; set; }
 
         /// <summary>
         /// Адрес электронной почты
         /// </summary>
         public string? Email { get; set; }
+
+        /// <summary>
+        /// Логин
+        /// </summary>
+        public string Login { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Пароль
+        /// </summary>
+        public string Password { get; set; } = string.Empty;
+
+        public Role Role { get; set; } = Role.Quest;
     }
 }

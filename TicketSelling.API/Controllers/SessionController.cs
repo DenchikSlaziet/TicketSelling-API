@@ -3,85 +3,86 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using TicketSelling.API.Exceptions;
 using TicketSelling.API.Models.CreateRequest;
+using TicketSelling.API.Models.Request;
 using TicketSelling.API.Models.Response;
-using TicketSelling.Services.Contracts.Models;
+using TicketSelling.Services.Contracts.ModelsRequest;
 using TicketSelling.Services.Contracts.ServicesContracts;
 
 namespace TicketSelling.API.Controllers
 {
     /// <summary>
-    /// CRUD контроллер по работе с клиентами
+    /// CRUD контроллер по работе с Киносеанасами
     /// </summary>
     [ApiController]
     [Route("[Controller]")]
-    [ApiExplorerSettings(GroupName = "Client")]
-    public class ClientController : ControllerBase
+    [ApiExplorerSettings(GroupName = "Session")]
+    public class SessionController : ControllerBase
     {
-        private readonly IUserService clientService;
+        private readonly ISessionService sessionService;
         private readonly IMapper mapper;
 
-        public ClientController(IUserService clientService, IMapper mapper)
+        public SessionController(ISessionService sessionService, IMapper mapper)
         {
-            this.clientService = clientService;
+            this.sessionService = sessionService;
             this.mapper = mapper;
         }
 
         /// <summary>
-        /// Получить список клиентов
+        /// Получить список киносеансов
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(ICollection<ClientResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ICollection<SessionResponse>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
-            var result = await clientService.GetAllAsync(cancellationToken);
-            return Ok(result.Select(x => mapper.Map<ClientResponse>(x)));
+            var result = await sessionService.GetAllAsync(cancellationToken);
+            var result2 = result.Select(x => mapper.Map<SessionResponse>(x));
+            return Ok(result2);
         }
 
         /// <summary>
-        /// Получить клиента по Id
+        /// Получить киносеанс по Id
         /// </summary>
         [HttpGet("{id:guid}")]
-        [ProducesResponseType(typeof(ClientResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SessionResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById([Required] Guid id, CancellationToken cancellationToken)
         {
-            var item = await clientService.GetByIdAsync(id, cancellationToken);
-            return Ok(mapper.Map<ClientResponse>(item));
+            var item = await sessionService.GetByIdAsync(id, cancellationToken);
+            return Ok(mapper.Map<SessionResponse>(item));
         }
 
         /// <summary>
-        /// Добавить клиента
+        /// Добавить киносеанс
         /// </summary>
         [HttpPost]
-        [ProducesResponseType(typeof(ClientResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SessionResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Add(CreateClientRequest model, CancellationToken cancellationToken)
+        public async Task<IActionResult> Add(CreateSessionRequest request, CancellationToken cancellationToken)
         {
-            var clientModel = mapper.Map<UserModel>(model);
-            var result = await clientService.AddAsync(clientModel, cancellationToken);
-            return Ok(mapper.Map<ClientResponse>(result));
+            var model = mapper.Map<SessionRequestModel>(request);
+            var result = await sessionService.AddAsync(model, cancellationToken);
+            return Ok(mapper.Map<SessionResponse>(result));
         }
 
         /// <summary>
-        /// Изменить клиента по Id
+        /// Изменить киносеанс по Id
         /// </summary>
         [HttpPut]
-        [ProducesResponseType(typeof(ClientResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SessionResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiValidationExceptionDetail), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Edit(ClientRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(SessionRequest request, CancellationToken cancellationToken)
         {
-            var model = mapper.Map<UserModel>(request);
-            var result = await clientService.EditAsync(model, cancellationToken);
-            return Ok(mapper.Map<ClientResponse>(result));
+            var model = mapper.Map<SessionRequestModel>(request);
+            var result = await sessionService.EditAsync(model, cancellationToken);
+            return Ok(mapper.Map<SessionResponse>(result));
         }
 
         /// <summary>
-        /// Удалить клиента по Id
+        /// Удалить киносеанс по Id
         /// </summary>
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -89,7 +90,7 @@ namespace TicketSelling.API.Controllers
         [ProducesResponseType(typeof(ApiExceptionDetail), StatusCodes.Status417ExpectationFailed)]
         public async Task<IActionResult> Delete([Required] Guid id, CancellationToken cancellationToken)
         {
-            await clientService.DeleteAsync(id, cancellationToken);
+            await sessionService.DeleteAsync(id, cancellationToken);
             return Ok();
         }
     }

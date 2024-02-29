@@ -55,8 +55,8 @@ namespace TicketSelling.API.Extensions
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("Cinema", new OpenApiInfo { Title = "Кинотетры", Version = "v1" });
-                c.SwaggerDoc("Client", new OpenApiInfo { Title = "Клиенты", Version = "v1" });
+                c.SwaggerDoc("Session", new OpenApiInfo { Title = "Киносеансы", Version = "v1" });
+                c.SwaggerDoc("User", new OpenApiInfo { Title = "Пользователи", Version = "v1" });
                 c.SwaggerDoc("Film", new OpenApiInfo { Title = "Фильмы", Version = "v1" });
                 c.SwaggerDoc("Hall", new OpenApiInfo { Title = "Залы", Version = "v1" });
                 c.SwaggerDoc("Staff", new OpenApiInfo { Title = "Персонал", Version = "v1" });
@@ -75,8 +75,8 @@ namespace TicketSelling.API.Extensions
             web.UseSwagger();
             web.UseSwaggerUI(x =>
             {
-                x.SwaggerEndpoint("Cinema/swagger.json", "Кинотеатры");
-                x.SwaggerEndpoint("Client/swagger.json", "Клиенты");
+                x.SwaggerEndpoint("Session/swagger.json", "Киносеансы");
+                x.SwaggerEndpoint("User/swagger.json", "Пользователи");
                 x.SwaggerEndpoint("Film/swagger.json", "Фильмы");
                 x.SwaggerEndpoint("Hall/swagger.json", "Залы");
                 x.SwaggerEndpoint("Staff/swagger.json", "Работники");

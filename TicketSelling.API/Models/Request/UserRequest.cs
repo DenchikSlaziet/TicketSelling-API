@@ -1,9 +1,9 @@
 ﻿namespace TicketSelling.API.Models.CreateRequest
 {
     /// <summary>
-    /// Модель запроса создания кинотеатра
+    /// Модель запроса изменения клиента
     /// </summary>
-    public class CinemaRequest : CreateCinemaRequest
+    public class UserRequest : CreateUserRequest
     {
         /// <summary>
         /// Идентификатор

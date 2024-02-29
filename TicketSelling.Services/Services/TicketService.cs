@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using System.Net.Sockets;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;

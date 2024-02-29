@@ -25,11 +25,11 @@ namespace TicketSelling.API.Models.CreateRequest
         /// <summary>
         /// Возраст
         /// </summary>
-        public short Age { get; set; }
+        public int Age { get; set; }
 
         /// <summary>
         /// Должность
         /// </summary>
-        public PostResponse Post { get; set; }
+        public PostResponse Post { get; set; } = PostResponse.None;
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace TicketSelling.API.Models.CreateRequest
 {
     /// <summary>
-    /// Модель запроса создания сотрудника
+    /// Модель запроса изменения сотрудника
     /// </summary>
     public class StaffRequest : CreateStaffRequest
     {

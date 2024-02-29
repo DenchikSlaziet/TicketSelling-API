@@ -1,7 +1,7 @@
 ﻿namespace TicketSelling.API.Models.CreateRequest
 {
     /// <summary>
-    /// Модель запроса создания билета
+    /// Модель запроса изменения билета
     /// </summary>
     public class TicketRequest : CreateTicketRequest
     {

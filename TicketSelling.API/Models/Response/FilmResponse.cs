@@ -1,4 +1,7 @@
-﻿namespace TicketSelling.API.Models.Response
+﻿using TicketSelling.API.Enums;
+using TicketSelling.Context.Contracts.Enums;
+
+namespace TicketSelling.API.Models.Response
 {
     /// <summary>
     /// Модель ответа сущности фильма
@@ -18,6 +21,21 @@
         /// <summary>
         /// Ограничение по возросту
         /// </summary>
-        public short Limitation { get; set; }
+        public int Limitation { get; set; }
+
+        /// <summary>
+        /// Описание
+        /// </summary>
+        public string? Description { get; set; }
+
+        /// <summary>
+        /// Жанр
+        /// </summary>
+        public GenreResponse Genre { get; set; }
+
+        /// <summary>
+        /// Превью
+        /// </summary>
+        public byte[]? ImagePreview { get; set; }
     }
 }

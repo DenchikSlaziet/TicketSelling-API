@@ -13,9 +13,9 @@ namespace TicketSelling.API.Tests.Tests
     /// <summary>
     /// Переделаю
     /// </summary>
-    public class ClientIntergrationTests : BaseIntegrationTest
+    public class UserIntergrationTests : BaseIntegrationTest
     {
-        public ClientIntergrationTests(TicketSellingApiFixture fixture) : base(fixture)
+        public UserIntergrationTests(TicketSellingApiFixture fixture) : base(fixture)
         {
         }
 
@@ -24,14 +24,14 @@ namespace TicketSelling.API.Tests.Tests
         {
             // Arrange
             var clientFactory = factory.CreateClient();
-            var client = mapper.Map<CreateClientRequest>(TestDataGenerator.ClientModel());
+            var client = mapper.Map<CreateUserRequest>(TestDataGenerator.ClientModel());
 
             // Act
             string data = JsonConvert.SerializeObject(client);
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
             var response = await clientFactory.PostAsync("/Client", contextdata);
             var resultString = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<ClientResponse>(resultString);
+            var result = JsonConvert.DeserializeObject<UserResponse>(resultString);
 
             var clientFirst = await context.Clients.FirstAsync(x => x.Id == result!.Id);
 
@@ -49,7 +49,7 @@ namespace TicketSelling.API.Tests.Tests
             await context.Clients.AddAsync(client);
             await unitOfWork.SaveChangesAsync();
 
-            var clientRequest = mapper.Map<ClientRequest>(TestDataGenerator.ClientModel(x =>  x.Id = client.Id));
+            var clientRequest = mapper.Map<UserRequest>(TestDataGenerator.ClientModel(x =>  x.Id = client.Id));
 
             // Act
             string data = JsonConvert.SerializeObject(clientRequest);
@@ -106,7 +106,7 @@ namespace TicketSelling.API.Tests.Tests
             // Assert
             response.EnsureSuccessStatusCode();
             var resultString = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<ClientResponse>(resultString);
+            var result = JsonConvert.DeserializeObject<UserResponse>(resultString);
 
             result.Should()
                 .BeEquivalentTo(new 
@@ -133,7 +133,7 @@ namespace TicketSelling.API.Tests.Tests
             // Assert
             response.EnsureSuccessStatusCode();
             var resultString = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<IEnumerable<ClientResponse>>(resultString);
+            var result = JsonConvert.DeserializeObject<IEnumerable<UserResponse>>(resultString);
 
             result.Should()
                 .NotBeNull()

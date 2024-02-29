@@ -6,26 +6,16 @@
         /// Идентификатор
         /// </summary>
         public Guid Id { get; set; }
-
-        /// <summary>
-        /// Сущность кинотеатра
-        /// </summary>
-        public CinemaResponse? Cinema { get; set; }
-
+ 
         /// <summary>
         /// Сущность клиента
         /// </summary>
-        public ClientResponse? Client { get; set; }
+        public UserResponse? User { get; set; }
 
         /// <summary>
         /// Сущность фильма
         /// </summary>
-        public FilmResponse? Film { get; set; }
-
-        /// <summary>
-        /// Сущность зала
-        /// </summary>
-        public HallResponse? Hall { get; set; }
+        public SessionResponse? Session { get; set; }
 
         /// <summary>
         /// Сущность персонала
@@ -35,12 +25,12 @@
         /// <summary>
         /// Ряд
         /// </summary>
-        public short Row { get; set; }
+        public int Row { get; set; }
 
         /// <summary>
         /// Место
         /// </summary>
-        public short Place { get; set; }
+        public int Place { get; set; }
 
         /// <summary>
         /// Цена
@@ -48,8 +38,8 @@
         public decimal Price { get; set; }
 
         /// <summary>
-        /// Дата и врремя проведения фильма
+        /// Дата и время покупки билета
         /// </summary>
-        public string Date { get; set; } = string.Empty;
+        public DateTimeOffset DatePayment { get; set; }
     }
 }

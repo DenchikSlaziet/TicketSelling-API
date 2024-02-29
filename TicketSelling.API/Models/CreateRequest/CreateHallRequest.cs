@@ -8,11 +8,16 @@
         /// <summary>
         /// Номер зала
         /// </summary>
-        public short Number { get; set; }
+        public int Number { get; set; }
 
         /// <summary>
-        /// Кол-во мест
+        /// Кол-во мест в ряду
         /// </summary>
-        public short NumberOfSeats { get; set; }
+        public int CountPlaceInRow { get; set; }
+
+        /// <summary>
+        /// Кол-во рядов
+        /// </summary>
+        public int CountRow { get; set; }
     }
 }

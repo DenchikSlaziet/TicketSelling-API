@@ -108,7 +108,8 @@ namespace TicketSelling.Test.Extensions
                 Id = Guid.NewGuid(),
                 Title = $"{Guid.NewGuid():N}",
                 Description = $"{Guid.NewGuid():N}",
-                Limitation = 16              
+                Limitation = 16,
+                Genre = GenreModel.War
             };
 
             settings?.Invoke(result);
@@ -120,8 +121,9 @@ namespace TicketSelling.Test.Extensions
             var result = new HallModel
             {
                 Id = Guid.NewGuid(),
-                Number = (short)random.Next(1,900),
-                NumberOfSeats = (short)random.Next(15, 190)
+                Number = random.Next(1,900),
+                CountPlaceInRow = random.Next(3, 11),
+                CountRow = random.Next(1, 8)
             };
 
             settings?.Invoke(result);
@@ -137,7 +139,10 @@ namespace TicketSelling.Test.Extensions
                 LastName = $"{Guid.NewGuid():N}",
                 Patronymic = $"{Guid.NewGuid():N}",
                 Age = (short)random.Next(1, 90),
-                Email = $"{Guid.NewGuid():N}@gmail.com"
+                Email = $"{Guid.NewGuid():N}@gmail.com",
+                Login = $"{Guid.NewGuid():N}",
+                Password = $"{Guid.NewGuid():N}",
+                Role = RoleModel.Quest
             };
 
             settings?.Invoke(result);
@@ -152,8 +157,8 @@ namespace TicketSelling.Test.Extensions
                 FirstName = $"{Guid.NewGuid():N}",
                 LastName = $"{Guid.NewGuid():N}",
                 Patronymic = $"{Guid.NewGuid():N}",
-                Age = (short)random.Next(19, 90),
-                Post = PostModel.None
+                Age = random.Next(19, 90),
+                Post = PostModel.None               
             };
 
             settings?.Invoke(result);
@@ -165,10 +170,22 @@ namespace TicketSelling.Test.Extensions
             var result = new TicketRequestModel
             {
                 Id = Guid.NewGuid(),
-                Date = DateTimeOffset.UtcNow.AddDays(1),
-                Place = (short)random.Next(1, 199),
-                Row = (short)random.Next(1, 45),
-                Price = (short)random.Next(100, 4500),
+                DatePayment = DateTimeOffset.Now,
+                Place = random.Next(1, 11),
+                Row = random.Next(1, 8),
+                Price = random.Next(100, 4500),
+            };
+
+            settings?.Invoke(result);
+            return result;
+        }
+        static public SessionRequestModel SessionRequestModel(Action<SessionRequestModel>? settings = null)
+        {
+            var result = new SessionRequestModel
+            {
+                Id = Guid.NewGuid(),
+                StartDateTime = DateTimeOffset.Now.AddHours(5),
+                EndDateTime = DateTimeOffset.Now.AddHours(7)
             };
 
             settings?.Invoke(result);
