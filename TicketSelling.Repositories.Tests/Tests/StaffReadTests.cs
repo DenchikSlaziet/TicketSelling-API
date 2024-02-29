@@ -102,7 +102,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await staffReadRepository.GetByIdAsync(target.Id, CancellationToken);
+            var result = await staffReadRepository.GetNotDeletedByIdAsync(target.Id, CancellationToken);
 
             // Assert
             result.Should()
@@ -121,7 +121,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await staffReadRepository.GetByIdAsync(target.Id, CancellationToken);
+            var result = await staffReadRepository.GetNotDeletedByIdAsync(target.Id, CancellationToken);
 
             // Assert
             result.Should()

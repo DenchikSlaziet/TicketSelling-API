@@ -1,4 +1,5 @@
 ﻿using FluentValidation.TestHelper;
+using TicketSelling.Services.Contracts.Enums;
 using TicketSelling.Services.Validator.Validators;
 using TicketSelling.Test.Extensions;
 using Xunit;
@@ -21,7 +22,7 @@ namespace TicketSelling.Services.Tests.TestsValidators
         public void ValidatorShouldError()
         {
             //Arrange
-            var model = TestDataGenerator.FilmModel(x => { x.Title = "1"; x.Limitation = 22; x.Description = "1"; });
+            var model = TestDataGenerator.FilmModel(x => { x.Title = "1"; x.Limitation = 22; x.Description = "1"; x.Genre = (GenreModel)78; });
 
             // Act
             var result = validator.TestValidate(model);

@@ -2,6 +2,7 @@
 using FluentAssertions;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Context.Tests;
+using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.ReadRepositories;
 using TicketSelling.Repositories.WriteRepositoriеs;
 using TicketSelling.Services.AutoMappers;
@@ -32,8 +33,8 @@ namespace TicketSelling.Services.Tests.Tests
             clientReadRepository = new UserReadRepository(Reader);
 
             clientService = new UserService(new UserWriteRepository(WriterContext), clientReadRepository,
-                UnitOfWork, config.CreateMapper(), new ServicesValidatorService(new CinemaReadRepository(Reader), 
-                clientReadRepository, new FilmReadRepository(Reader), new HallReadRepository(Reader)));
+                UnitOfWork, config.CreateMapper(), new ServicesValidatorService(new SessionReadRepository(Reader),
+                clientReadRepository, new FilmReadRepository(Reader), new HallReadRepository(Reader), new StaffReadRepository(Reader)));
         }
 
         /// <summary>
@@ -60,8 +61,8 @@ namespace TicketSelling.Services.Tests.Tests
         public async Task GetByIdShouldReturnValue()
         {
             //Arrange
-            var target = TestDataGenerator.Client();
-            await Context.Clients.AddAsync(target);
+            var target = TestDataGenerator.User();
+            await Context.Users.AddAsync(target);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
@@ -77,12 +78,14 @@ namespace TicketSelling.Services.Tests.Tests
                     target.FirstName,
                     target.LastName,
                     target.Email,
-                    target.Patronymic
+                    target.Patronymic,
+                    target.Login,
+                    target.Password
                 });
         }
 
         /// <summary>
-        /// Получение <see cref="IEnumerable{Client}"/> по идентификаторам возвращает пустую коллекцию
+        /// Получение <see cref="IEnumerable{User}"/> по идентификаторам возвращает пустую коллекцию
         /// </summary>
         [Fact]
         public async Task GetAllShouldReturnEmpty()
@@ -97,16 +100,16 @@ namespace TicketSelling.Services.Tests.Tests
         }
 
         /// <summary>
-        /// Получение <see cref="IEnumerable{Client}"/> по идентификаторам возвращает данные
+        /// Получение <see cref="IEnumerable{User}"/> по идентификаторам возвращает данные
         /// </summary>
         [Fact]
         public async Task GetAllShouldReturnValues()
         {
             //Arrange
-            var target = TestDataGenerator.Client();
+            var target = TestDataGenerator.User();
 
-            await Context.Clients.AddRangeAsync(target,
-                TestDataGenerator.Client(x => x.DeletedAt = DateTimeOffset.UtcNow));
+            await Context.Users.AddRangeAsync(target,
+                TestDataGenerator.User(x => x.DeletedAt = DateTimeOffset.UtcNow));
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
@@ -143,8 +146,8 @@ namespace TicketSelling.Services.Tests.Tests
         public async Task DeletingDeletedCinemaReturnExсeption()
         {
             //Arrange
-            var model = TestDataGenerator.Client(x => x.DeletedAt = DateTime.UtcNow);
-            await Context.Clients.AddAsync(model);
+            var model = TestDataGenerator.User(x => x.DeletedAt = DateTime.UtcNow);
+            await Context.Users.AddAsync(model);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
@@ -162,8 +165,8 @@ namespace TicketSelling.Services.Tests.Tests
         public async Task DeleteShouldWork()
         {
             //Arrange
-            var model = TestDataGenerator.Client();
-            await Context.Clients.AddAsync(model);
+            var model = TestDataGenerator.User();
+            await Context.Users.AddAsync(model);
             await UnitOfWork.SaveChangesAsync(CancellationToken);
 
             //Act
@@ -171,7 +174,7 @@ namespace TicketSelling.Services.Tests.Tests
 
             // Assert
             await act.Should().NotThrowAsync();
-            var entity = Context.Clients.Single(x => x.Id == model.Id);
+            var entity = Context.Users.Single(x => x.Id == model.Id);
             entity.Should().NotBeNull();
             entity.DeletedAt.Should().NotBeNull();
         }
@@ -190,7 +193,7 @@ namespace TicketSelling.Services.Tests.Tests
 
             // Assert
             await act.Should().NotThrowAsync();
-            var entity = Context.Clients.Single(x => x.Id == model.Id);
+            var entity = Context.Users.Single(x => x.Id == model.Id);
             entity.Should().NotBeNull();
             entity.DeletedAt.Should().BeNull();
         }
@@ -252,8 +255,8 @@ namespace TicketSelling.Services.Tests.Tests
         {
             //Arrange
             var model = TestDataGenerator.ClientModel();
-            var client = TestDataGenerator.Client(x => x.Id = model.Id);
-            await Context.Clients.AddAsync(client);
+            var client = TestDataGenerator.User(x => x.Id = model.Id);
+            await Context.Users.AddAsync(client);
             await UnitOfWork.SaveChangesAsync(CancellationToken);
 
             //Act
@@ -261,7 +264,7 @@ namespace TicketSelling.Services.Tests.Tests
 
             // Assert
             await act.Should().NotThrowAsync();
-            var entity = Context.Clients.Single(x => x.Id == client.Id);
+            var entity = Context.Users.Single(x => x.Id == client.Id);
             entity.Should().NotBeNull()
                 .And
                 .BeEquivalentTo(new
@@ -270,7 +273,9 @@ namespace TicketSelling.Services.Tests.Tests
                     model.FirstName,
                     model.LastName,
                     model.Patronymic,
-                    model.Email
+                    model.Email,
+                    model.Login,
+                    model.Password
                 });
         }
     }

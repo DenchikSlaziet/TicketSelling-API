@@ -120,7 +120,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await cinemaReadRepository.GetByIdAsync(target.Id, CancellationToken);
+            var result = await cinemaReadRepository.GetNotDeletedByIdAsync(target.Id, CancellationToken);
 
             // Assert
             result.Should()

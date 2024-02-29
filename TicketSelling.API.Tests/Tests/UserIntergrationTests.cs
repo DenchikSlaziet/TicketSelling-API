@@ -29,11 +29,11 @@ namespace TicketSelling.API.Tests.Tests
             // Act
             string data = JsonConvert.SerializeObject(client);
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
-            var response = await clientFactory.PostAsync("/Client", contextdata);
+            var response = await clientFactory.PostAsync("/User", contextdata);
             var resultString = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<UserResponse>(resultString);
 
-            var clientFirst = await context.Clients.FirstAsync(x => x.Id == result!.Id);
+            var clientFirst = await context.Users.FirstAsync(x => x.Id == result!.Id);
 
             // Assert          
             clientFirst.Should()
@@ -45,8 +45,8 @@ namespace TicketSelling.API.Tests.Tests
         {
             // Arrange
             var clientFactory = factory.CreateClient();
-            var client = TestDataGenerator.Client();
-            await context.Clients.AddAsync(client);
+            var client = TestDataGenerator.User();
+            await context.Users.AddAsync(client);
             await unitOfWork.SaveChangesAsync();
 
             var clientRequest = mapper.Map<UserRequest>(TestDataGenerator.ClientModel(x =>  x.Id = client.Id));
@@ -54,9 +54,9 @@ namespace TicketSelling.API.Tests.Tests
             // Act
             string data = JsonConvert.SerializeObject(clientRequest);
             var contextdata = new StringContent(data, Encoding.UTF8, "application/json");
-            await clientFactory.PutAsync("/Client", contextdata);
+            await clientFactory.PutAsync("/User", contextdata);
 
-            var clientFirst = await context.Clients.FirstAsync(x => x.Id == clientRequest.Id);
+            var clientFirst = await context.Users.FirstAsync(x => x.Id == clientRequest.Id);
 
             // Assert           
             clientFirst.Should()
@@ -68,14 +68,14 @@ namespace TicketSelling.API.Tests.Tests
         {
             // Arrange
             var clientFactory = factory.CreateClient();
-            var client = TestDataGenerator.Client();
-            await context.Clients.AddAsync(client);
+            var client = TestDataGenerator.User();
+            await context.Users.AddAsync(client);
             await unitOfWork.SaveChangesAsync();
 
             // Act
-            await clientFactory.DeleteAsync($"/Client/{client.Id}");
+            await clientFactory.DeleteAsync($"/User/{client.Id}");
 
-            var clientFirst = await context.Clients.FirstAsync(x => x.Id == client.Id);
+            var clientFirst = await context.Users.FirstAsync(x => x.Id == client.Id);
 
             // Assert
             clientFirst.DeletedAt.Should()
@@ -85,8 +85,10 @@ namespace TicketSelling.API.Tests.Tests
             .BeEquivalentTo(new
                 {
                     client.Age,
-                    client.Id
-                });
+                    client.Id,
+                    client.Login,
+                    client.Password
+            });
         }
 
         [Fact]
@@ -94,14 +96,14 @@ namespace TicketSelling.API.Tests.Tests
         {
             // Arrange
             var clientFactory = factory.CreateClient();
-            var client1 = TestDataGenerator.Client();
-            var client2 = TestDataGenerator.Client();
+            var client1 = TestDataGenerator.User();
+            var client2 = TestDataGenerator.User();
 
-            await context.Clients.AddRangeAsync(client1, client2);
+            await context.Users.AddRangeAsync(client1, client2);
             await unitOfWork.SaveChangesAsync();
 
             // Act
-            var response = await clientFactory.GetAsync($"/Client/{client1.Id}");
+            var response = await clientFactory.GetAsync($"/User/{client1.Id}");
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -112,7 +114,9 @@ namespace TicketSelling.API.Tests.Tests
                 .BeEquivalentTo(new 
                 {
                     client1.Id,
-                    client1.Age
+                    client1.Age,
+                    client1.Login,
+                    client1.Password
                 });
         }
 
@@ -121,14 +125,14 @@ namespace TicketSelling.API.Tests.Tests
         {
             // Arrange
             var clientFactory = factory.CreateClient();
-            var client1 = TestDataGenerator.Client();
-            var client2 = TestDataGenerator.Client(x => x.DeletedAt = DateTimeOffset.Now);
+            var client1 = TestDataGenerator.User();
+            var client2 = TestDataGenerator.User(x => x.DeletedAt = DateTimeOffset.Now);
 
-            await context.Clients.AddRangeAsync(client1, client2);
+            await context.Users.AddRangeAsync(client1, client2);
             await unitOfWork.SaveChangesAsync();
 
             // Act
-            var response = await clientFactory.GetAsync("/Client");
+            var response = await clientFactory.GetAsync("/User");
 
             // Assert
             response.EnsureSuccessStatusCode();

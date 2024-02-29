@@ -7,14 +7,13 @@ using Xunit;
 
 namespace TicketSelling.Services.Tests.TestsValidators
 {
-    public class TicketRequestValidatorTests : TicketSellingContextInMemory
+    public class SessionRequestValidatorTests : TicketSellingContextInMemory
     {
-        private readonly TicketRequestValidator validator;
+        private readonly SessionRequestValidator validator;
 
-        public TicketRequestValidatorTests()
+        public SessionRequestValidatorTests()
         {
-            validator = new TicketRequestValidator(new UserReadRepository(Reader), 
-                new SessionReadRepository(Reader), new StaffReadRepository(Reader));
+            validator = new SessionRequestValidator(new FilmReadRepository(Reader), new HallReadRepository(Reader));
         }
 
         /// <summary>
@@ -24,10 +23,14 @@ namespace TicketSelling.Services.Tests.TestsValidators
         public async void ValidatorShouldError()
         {
             //Arrange
-            var model = TestDataGenerator.TicketRequestModel(x => { x.Row = -1; x.DatePayment = DateTimeOffset.Now; x.Price = 0; x.Place = -1;});
-            model.UserId = Guid.NewGuid();
-            model.SessionId = Guid.NewGuid();
-            model.StaffId = Guid.Empty;
+            var model = TestDataGenerator.SessionRequestModel(x =>
+            {
+                x.StartDateTime = DateTimeOffset.Now.AddDays(-2);
+                x.EndDateTime = DateTimeOffset.Now.AddDays(-1);
+            });
+
+            model.HallId = Guid.NewGuid();
+            model.FilmId = Guid.NewGuid();
 
             // Act
             var result = await validator.TestValidateAsync(model);
@@ -44,24 +47,18 @@ namespace TicketSelling.Services.Tests.TestsValidators
         {
             //Arrange
             var film = TestDataGenerator.Film();
-            var hall = TestDataGenerator.Hall();
-            var user = TestDataGenerator.User();
-            var session = TestDataGenerator.Session();
+            var hall = TestDataGenerator.Hall();            
+
+            await Context.Films.AddAsync(film);
+            await Context.Halls.AddAsync(hall);
+            await UnitOfWork.SaveChangesAsync(CancellationToken);
+
+            var session = TestDataGenerator.SessionRequestModel();
             session.HallId = hall.Id;
             session.FilmId = film.Id;
 
-            await Context.Users.AddAsync(user);
-            await Context.Films.AddAsync(film);
-            await Context.Halls.AddAsync(hall);
-            await Context.Sessions.AddAsync(session);
-            await UnitOfWork.SaveChangesAsync(CancellationToken);
-
-            var ticket = TestDataGenerator.TicketRequestModel();
-            ticket.UserId = user.Id;
-            ticket.SessionId = session.Id;
-
             // Act
-            var result = await validator.TestValidateAsync(ticket);
+            var result = await validator.TestValidateAsync(session);
 
             // Assert
             result.ShouldNotHaveAnyValidationErrors();

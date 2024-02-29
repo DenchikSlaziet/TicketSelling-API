@@ -66,7 +66,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await filmReadRepository.GetByIdAsync(target.Id, CancellationToken);
+            var result = await filmReadRepository.GetNotDeletedByIdAsync(target.Id, CancellationToken);
 
             // Assert
             result.Should().BeNull();
@@ -84,7 +84,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await filmReadRepository.GetByIdAsync(target.Id, CancellationToken);
+            var result = await filmReadRepository.GetNotDeletedByIdAsync(target.Id, CancellationToken);
 
             // Assert
             result.Should()
@@ -188,7 +188,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await filmReadRepository.GetByIdsAsync(new[] { target1.Id, target2.Id, target3.Id }, CancellationToken);
+            var result = await filmReadRepository.GetNotDeletedByIdsAsync(new[] { target1.Id, target2.Id, target3.Id }, CancellationToken);
 
             // Assert
             result.Should()
@@ -211,7 +211,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await filmReadRepository.GetByIdsAsync(new[] { target1.Id, target2.Id, target4.Id }, CancellationToken);
+            var result = await filmReadRepository.GetNotDeletedByIdsAsync(new[] { target1.Id, target2.Id, target4.Id }, CancellationToken);
 
             // Assert
             result.Should()

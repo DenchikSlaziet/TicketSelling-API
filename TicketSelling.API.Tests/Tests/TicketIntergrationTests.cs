@@ -14,21 +14,21 @@ namespace TicketSelling.API.Tests.Tests
     public class TicketIntergrationTests : BaseIntegrationTest
     {
         private readonly Hall hall;
-        private readonly User client;
-        private readonly Cinema cinema;
+        private readonly User user;
+        private readonly Session session;
         private readonly Film film;
 
         public TicketIntergrationTests(TicketSellingApiFixture fixture) : base(fixture)
         {
             hall = TestDataGenerator.Hall();
-            client = TestDataGenerator.Client();
-            cinema = TestDataGenerator.Cinema();
+            user = TestDataGenerator.User();
             film = TestDataGenerator.Film();
+            session = TestDataGenerator.Session(x => { x.FilmId = film.Id; x.HallId = hall.Id; });
 
-            context.Cinemas.Add(cinema);
+            context.Users.Add(user);
             context.Films.Add(film);
             context.Halls.Add(hall);
-            context.Clients.Add(client);
+            context.Sessions.Add(session);
             unitOfWork.SaveChangesAsync();
         }
 
@@ -39,10 +39,8 @@ namespace TicketSelling.API.Tests.Tests
             var clientFactory = factory.CreateClient();
 
             var ticket = mapper.Map<CreateTicketRequest>(TestDataGenerator.TicketRequestModel());
-            ticket.ClientId = client.Id;
-            ticket.FilmId = film.Id;
-            ticket.HallId = hall.Id;
-            ticket.CinemaId = cinema.Id;
+            ticket.UserId = user.Id;
+            ticket.SessionId = session.Id;
 
             // Act
             string data = JsonConvert.SerializeObject(ticket);
@@ -171,31 +169,23 @@ namespace TicketSelling.API.Tests.Tests
             ticketFirst.Should()
                 .BeEquivalentTo(new
                 {
-                    ticket.Date,
+                    ticket.DatePayment,
                     ticket.Place,
                     ticket.Price,
-                    ticket.Row,
-                    ticket.ClientId,
-                    ticket.FilmId,
-                    ticket.HallId,
-                    ticket.CinemaId
+                    ticket.Row
                 });
         }
 
         private void SetDependenciesOrTicket(Ticket ticket)
         {
-            ticket.ClientId = client.Id;
-            ticket.FilmId = film.Id;
-            ticket.HallId = hall.Id;
-            ticket.CinemaId = cinema.Id;
+            ticket.UserId = user.Id;
+            ticket.SessionId = session.Id;
         }
 
         private void SetDependenciesOrTicketRequestModelWithTicket(Ticket ticket, TicketRequest ticketRequest)
         {
-            ticketRequest.CinemaId = ticket.CinemaId;
-            ticketRequest.ClientId = ticket.ClientId;
-            ticketRequest.FilmId = ticket.FilmId;
-            ticketRequest.HallId = ticket.HallId;
+            ticketRequest.SessionId = ticket.SessionId;
+            ticketRequest.UserId = ticket.UserId;
         }
     }
 }

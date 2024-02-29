@@ -61,7 +61,7 @@ namespace TicketSelling.Test.Extensions
                 Age = random.Next(1, 90),
                 Email = $"{Guid.NewGuid():N}@gmail.com",
                 Login = $"{Guid.NewGuid():N}",
-                Password = $"{Guid.NewGuid():N}",
+                Password = string.Join("", Guid.NewGuid().ToString().Take(10)),
                 Role = Context.Contracts.Enums.Role.Quest
             };
             result.BaseAuditSetParamtrs();
@@ -90,10 +90,10 @@ namespace TicketSelling.Test.Extensions
         {
             var result = new Ticket
             {
-                DatePayment = DateTimeOffset.UtcNow,
-                Place = (short)random.Next(1, 11),
-                Row = (short)random.Next(1, 8),
-                Price = (short)random.Next(100, 4500)
+                DatePayment = DateTimeOffset.Now,
+                Place = random.Next(1, 11),
+                Row = random.Next(1, 8),
+                Price = random.Next(100, 4500)
             };
             result.BaseAuditSetParamtrs();
 
@@ -121,7 +121,7 @@ namespace TicketSelling.Test.Extensions
             var result = new HallModel
             {
                 Id = Guid.NewGuid(),
-                Number = random.Next(1,900),
+                Number = random.Next(1,1000),
                 CountPlaceInRow = random.Next(3, 11),
                 CountRow = random.Next(1, 8)
             };
@@ -138,10 +138,10 @@ namespace TicketSelling.Test.Extensions
                 FirstName = $"{Guid.NewGuid():N}",
                 LastName = $"{Guid.NewGuid():N}",
                 Patronymic = $"{Guid.NewGuid():N}",
-                Age = (short)random.Next(1, 90),
+                Age = random.Next(1, 90),
                 Email = $"{Guid.NewGuid():N}@gmail.com",
                 Login = $"{Guid.NewGuid():N}",
-                Password = $"{Guid.NewGuid():N}",
+                Password = string.Join("",Guid.NewGuid().ToString().Take(10)),
                 Role = RoleModel.Quest
             };
 
@@ -171,9 +171,9 @@ namespace TicketSelling.Test.Extensions
             {
                 Id = Guid.NewGuid(),
                 DatePayment = DateTimeOffset.Now,
-                Place = random.Next(1, 11),
-                Row = random.Next(1, 8),
-                Price = random.Next(100, 4500),
+                Place = random.Next(1, 10),
+                Row = random.Next(1, 7),
+                Price = random.Next(500, 4500)               
             };
 
             settings?.Invoke(result);

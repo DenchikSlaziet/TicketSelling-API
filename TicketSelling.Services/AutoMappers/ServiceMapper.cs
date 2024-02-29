@@ -46,6 +46,7 @@ namespace TicketSelling.Services.AutoMappers
             CreateMap<SessionRequestModel, Session>(MemberList.Destination)
                 .ForMember(x => x.Hall, opt => opt.Ignore())
                 .ForMember(x => x.Film, opt => opt.Ignore())
+                .ForMember(x => x.Tickets, opt => opt.Ignore())
                 .ForMember(x => x.CreatedAt, opt => opt.Ignore())
                 .ForMember(x => x.DeletedAt, opt => opt.Ignore())
                 .ForMember(x => x.CreatedBy, opt => opt.Ignore())

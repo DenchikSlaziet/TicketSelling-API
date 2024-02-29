@@ -102,7 +102,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await hallReadRepository.GetByIdAsync(target.Id, CancellationToken);
+            var result = await hallReadRepository.GetNotDeletedByIdAsync(target.Id, CancellationToken);
 
             // Assert
             result.Should().BeNull();
@@ -120,7 +120,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await hallReadRepository.GetByIdAsync(target.Id, CancellationToken);
+            var result = await hallReadRepository.GetNotDeletedByIdAsync(target.Id, CancellationToken);
 
             // Assert
             result.Should()
@@ -188,7 +188,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await hallReadRepository.GetByIdsAsync(new[] { target1.Id, target1.Id, target3.Id }, CancellationToken);
+            var result = await hallReadRepository.GetNotDeletedByIdsAsync(new[] { target1.Id, target1.Id, target3.Id }, CancellationToken);
 
             // Assert
             result.Should()
@@ -211,7 +211,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await hallReadRepository.GetByIdsAsync(new[] { target1.Id, target2.Id, target4.Id }, CancellationToken);
+            var result = await hallReadRepository.GetNotDeletedByIdsAsync(new[] { target1.Id, target2.Id, target4.Id }, CancellationToken);
 
             // Assert
             result.Should()

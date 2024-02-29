@@ -38,10 +38,10 @@ namespace TicketSelling.Repositories.Tests.Tests
         public async Task GetAllShouldReturnValues()
         {
             //Arrange
-            var target = TestDataGenerator.Session();
+            var target = TestDataGenerator.User();
 
-            await Context.Sessions.AddRangeAsync(target,
-                TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.UtcNow));
+            await Context.Users.AddRangeAsync(target,
+                TestDataGenerator.User(x => x.DeletedAt = DateTimeOffset.UtcNow));
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
@@ -77,8 +77,8 @@ namespace TicketSelling.Repositories.Tests.Tests
         public async Task GetNotDeletedByIdShouldReturnValue()
         {
             //Arrange
-            var target = TestDataGenerator.Session();
-            await Context.Sessions.AddAsync(target);
+            var target = TestDataGenerator.User();
+            await Context.Users.AddAsync(target);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
@@ -97,8 +97,8 @@ namespace TicketSelling.Repositories.Tests.Tests
         public async Task GetNotDeletedByIdShouldReturnNull()
         {
             //Arrange
-            var target = TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.Now);
-            await Context.Sessions.AddAsync(target);
+            var target = TestDataGenerator.User(x => x.DeletedAt = DateTimeOffset.Now);
+            await Context.Users.AddAsync(target);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
@@ -116,8 +116,8 @@ namespace TicketSelling.Repositories.Tests.Tests
         public async Task GetByIdShouldReturnValue()
         {
             //Arrange
-            var target = TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.Now);
-            await Context.Sessions.AddAsync(target);
+            var target = TestDataGenerator.User(x => x.DeletedAt = DateTimeOffset.Now);
+            await Context.Users.AddAsync(target);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
@@ -156,11 +156,11 @@ namespace TicketSelling.Repositories.Tests.Tests
         public async Task GetByIdsShouldReturnValue()
         {
             //Arrange
-            var target1 = TestDataGenerator.Session();
-            var target2 = TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.UtcNow);
-            var target3 = TestDataGenerator.Session();
-            var target4 = TestDataGenerator.Session();
-            await Context.Sessions.AddRangeAsync(target1, target2, target3, target4);
+            var target1 = TestDataGenerator.User();
+            var target2 = TestDataGenerator.User(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            var target3 = TestDataGenerator.User();
+            var target4 = TestDataGenerator.User();
+            await Context.Users.AddRangeAsync(target1, target2, target3, target4);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
@@ -182,8 +182,8 @@ namespace TicketSelling.Repositories.Tests.Tests
         public async Task IsNotNullEntityReturnTrue()
         {
             //Arrange
-            var target1 = TestDataGenerator.Session();
-            await Context.Sessions.AddAsync(target1);
+            var target1 = TestDataGenerator.User();
+            await Context.Users.AddAsync(target1);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
@@ -216,8 +216,8 @@ namespace TicketSelling.Repositories.Tests.Tests
         public async Task IsNotNullDeletedEntityReturnFalse()
         {
             //Arrange
-            var target1 = TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.UtcNow);
-            await Context.Sessions.AddAsync(target1);
+            var target1 = TestDataGenerator.User(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            await Context.Users.AddAsync(target1);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act

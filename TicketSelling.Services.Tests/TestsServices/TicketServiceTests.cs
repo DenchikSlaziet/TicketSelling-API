@@ -2,6 +2,7 @@
 using FluentAssertions;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Context.Tests;
+using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.ReadRepositories;
 using TicketSelling.Repositories.WriteRepositoriеs;
 using TicketSelling.Services.AutoMappers;
@@ -29,10 +30,11 @@ namespace TicketSelling.Services.Tests.Tests
             });
 
             ticketService = new TicketService(new TicketWriteRepository(WriterContext), new TicketReadRepositiry(Reader),
-                new CinemaReadRepository(Reader), new UserReadRepository(Reader), new FilmReadRepository(Reader),
+                new UserReadRepository(Reader), new FilmReadRepository(Reader),
                 new HallReadRepository(Reader), new StaffReadRepository(Reader), config.CreateMapper(), UnitOfWork,
-                new ServicesValidatorService(new CinemaReadRepository(Reader),
-                new UserReadRepository(Reader), new FilmReadRepository(Reader), new HallReadRepository(Reader)));
+                new ServicesValidatorService(new SessionReadRepository(Reader),
+                new UserReadRepository(Reader), new FilmReadRepository(Reader), new HallReadRepository(Reader), new StaffReadRepository(Reader)),
+                new SessionReadRepository(Reader));
         }
 
         /// <summary>
@@ -59,7 +61,19 @@ namespace TicketSelling.Services.Tests.Tests
         public async Task GetByIdShouldReturnValue()
         {
             //Arrange
+            var session = TestDataGenerator.Session();
+            var film = TestDataGenerator.Film();
+            var hall = TestDataGenerator.Hall();
+
+            session.HallId = hall.Id;
+            session.FilmId = film.Id;
+
             var target = TestDataGenerator.Ticket();
+            target.SessionId = session.Id;
+
+            await Context.Halls.AddAsync(hall);
+            await Context.Films.AddAsync(film);
+            await Context.Sessions.AddAsync(session);
             await Context.Tickets.AddAsync(target);
             await Context.SaveChangesAsync(CancellationToken);
 
@@ -72,7 +86,7 @@ namespace TicketSelling.Services.Tests.Tests
                 .And.BeEquivalentTo(new
                 {
                     target.Id,
-                    target.Date,
+                    target.DatePayment,
                     target.Row,
                     target.Place,
                     target.Price
@@ -179,22 +193,22 @@ namespace TicketSelling.Services.Tests.Tests
         public async Task AddShouldWork()
         {
             //Arrange
-            var cinema = TestDataGenerator.Cinema();
             var film = TestDataGenerator.Film();
             var hall = TestDataGenerator.Hall();
-            var client = TestDataGenerator.Client();
+            var user = TestDataGenerator.User();
+            var session = TestDataGenerator.Session();
+            session.HallId = hall.Id;
+            session.FilmId = film.Id;
 
-            await Context.Cinemas.AddAsync(cinema);
+            await Context.Users.AddAsync(user);
             await Context.Films.AddAsync(film);
             await Context.Halls.AddAsync(hall);
-            await Context.Clients.AddAsync(client);
+            await Context.Sessions.AddAsync(session);
             await UnitOfWork.SaveChangesAsync(CancellationToken);
 
             var model = TestDataGenerator.TicketRequestModel();
-            model.ClientId = client.Id;
-            model.FilmId = film.Id;
-            model.HallId = hall.Id;
-            model.CinemaId = cinema.Id;
+            model.UserId = user.Id;
+            model.SessionId = session.Id;
 
             //Act
             Func<Task> act = () => ticketService.AddAsync(model, CancellationToken);
@@ -229,23 +243,22 @@ namespace TicketSelling.Services.Tests.Tests
         public async Task EditShouldNotFoundException()
         {
             //Arrange
-            var cinema = TestDataGenerator.Cinema();
             var film = TestDataGenerator.Film();
             var hall = TestDataGenerator.Hall();
-            var client = TestDataGenerator.Client();
+            var user = TestDataGenerator.User();
+            var session = TestDataGenerator.Session();
+            session.HallId = hall.Id;
+            session.FilmId = film.Id;
 
-            await Context.Cinemas.AddAsync(cinema);
+            await Context.Users.AddAsync(user);
             await Context.Films.AddAsync(film);
             await Context.Halls.AddAsync(hall);
-            await Context.Clients.AddAsync(client);
+            await Context.Sessions.AddAsync(session);
             await UnitOfWork.SaveChangesAsync(CancellationToken);
 
             var model = TestDataGenerator.TicketRequestModel();
-            model.ClientId = client.Id;
-            model.FilmId = film.Id;
-            model.HallId = hall.Id;
-            model.CinemaId = cinema.Id;
-
+            model.UserId = user.Id;
+            model.SessionId = session.Id;
             //Act
             Func<Task> act = () => ticketService.EditAsync(model, CancellationToken);
 
@@ -277,31 +290,28 @@ namespace TicketSelling.Services.Tests.Tests
         public async Task EditShouldWork()
         {
             //Arrange
-            var cinema = TestDataGenerator.Cinema();
             var film = TestDataGenerator.Film();
             var hall = TestDataGenerator.Hall();
-            var client = TestDataGenerator.Client();
+            var user = TestDataGenerator.User();
+            var session = TestDataGenerator.Session();
+            session.HallId = hall.Id;
+            session.FilmId = film.Id;
 
-            await Context.Cinemas.AddAsync(cinema);
+            await Context.Users.AddAsync(user);
             await Context.Films.AddAsync(film);
             await Context.Halls.AddAsync(hall);
-            await Context.Clients.AddAsync(client);
+            await Context.Sessions.AddAsync(session);
             await UnitOfWork.SaveChangesAsync(CancellationToken);
 
             var ticket = TestDataGenerator.Ticket();
-            ticket.ClientId = client.Id;
-            ticket.FilmId = film.Id;
-            ticket.HallId = hall.Id;
-            ticket.CinemaId = cinema.Id;
+            ticket.UserId = user.Id;
+            ticket.SessionId = session.Id;
 
-            var model = TestDataGenerator.TicketRequestModel();
-            model.Id = ticket.Id;
-            model.ClientId = client.Id;
-            model.FilmId = film.Id;
-            model.HallId = hall.Id;
-            model.CinemaId = cinema.Id;
+            var model = TestDataGenerator.TicketRequestModel(x => x.Id = ticket.Id);
+            model.UserId = ticket.UserId;
+            model.SessionId = ticket.SessionId;
 
-            await Context.Tickets.AddAsync(ticket);
+            await Context.Tickets.AddAsync(ticket, CancellationToken);
             await UnitOfWork.SaveChangesAsync(CancellationToken);
 
             //Act
@@ -318,7 +328,7 @@ namespace TicketSelling.Services.Tests.Tests
                     model.Place,
                     model.Price,
                     model.Row,
-                    model.Date
+                    model.DatePayment
                 });
         }
     }

@@ -21,7 +21,7 @@ namespace TicketSelling.Services.Tests.TestsValidators
         public void ValidatorShouldError()
         {
             //Arrange
-            var model = TestDataGenerator.HallModel(x => { x.Number = -1; x.NumberOfSeats = -1; });
+            var model = TestDataGenerator.HallModel(x => { x.Number = -1; x.CountRow = -1; x.CountPlaceInRow = -1; });
 
             // Act
             var result = validator.TestValidate(model);
