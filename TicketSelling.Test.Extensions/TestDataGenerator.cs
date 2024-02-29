@@ -10,6 +10,19 @@ namespace TicketSelling.Test.Extensions
 
         private static Random random = new Random();
         
+        static public Session Session(Action<Session>? settings = null)
+        {
+            var result = new Session
+            {
+                StartDateTime = DateTimeOffset.Now.AddDays(2),
+                EndDateTime = DateTimeOffset.Now.AddDays(2).AddHours(2)
+            };
+            result.BaseAuditSetParamtrs();
+
+            settings?.Invoke(result);
+            return result;
+        }
+
         static public Film Film(Action<Film>? settings = null)
         {
             var result = new Film

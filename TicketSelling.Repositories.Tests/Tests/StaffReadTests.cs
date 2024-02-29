@@ -77,6 +77,45 @@ namespace TicketSelling.Repositories.Tests.Tests
         public async Task GetByIdShouldReturnValue()
         {
             //Arrange
+            var target = TestDataGenerator.Staff(x => x.DeletedAt = DateTimeOffset.Now);
+            await Context.Staffs.AddAsync(target);
+            await Context.SaveChangesAsync(CancellationToken);
+
+            // Act
+            var result = await staffReadRepository.GetByIdAsync(target.Id, CancellationToken);
+
+            // Assert
+            result.Should()
+                .NotBeNull()
+                .And.BeEquivalentTo(target);
+        }
+
+        /// <summary>
+        /// Получение работника по идентификатору возвращает null
+        /// </summary>
+        [Fact]
+        public async Task GetNotDeletedByIdShouldReturnNull()
+        {
+            //Arrange
+            var target = TestDataGenerator.Staff(x => x.DeletedAt = DateTimeOffset.Now);
+            await Context.Staffs.AddAsync(target);
+            await Context.SaveChangesAsync(CancellationToken);
+
+            // Act
+            var result = await staffReadRepository.GetByIdAsync(target.Id, CancellationToken);
+
+            // Assert
+            result.Should()
+                .BeNull();
+        }
+
+        /// <summary>
+        /// Получение работника по идентификатору возвращает null
+        /// </summary>
+        [Fact]
+        public async Task GetNotDeletedByIdShouldReturnValue()
+        {
+            //Arrange
             var target = TestDataGenerator.Staff();
             await Context.Staffs.AddAsync(target);
             await Context.SaveChangesAsync(CancellationToken);
@@ -130,9 +169,10 @@ namespace TicketSelling.Repositories.Tests.Tests
             // Assert
             result.Should()
                 .NotBeNull()
-                .And.HaveCount(2)
+                .And.HaveCount(3)
                 .And.ContainKey(target1.Id)
-                .And.ContainKey(target4.Id);
+                .And.ContainKey(target4.Id)
+                .And.ContainKey(target2.Id);
         }
 
         /// <summary>

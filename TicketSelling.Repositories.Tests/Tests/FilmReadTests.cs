@@ -58,6 +58,44 @@ namespace TicketSelling.Repositories.Tests.Tests
         /// Получение фильмов по идентификатору возвращает null
         /// </summary>
         [Fact]
+        public async Task GetNotDeletedByIdShouldReturnNull()
+        {
+            //Arrange
+            var target = TestDataGenerator.Film(x => x.DeletedAt = DateTimeOffset.Now);
+            await Context.Films.AddAsync(target);
+            await Context.SaveChangesAsync(CancellationToken);
+
+            // Act
+            var result = await filmReadRepository.GetByIdAsync(target.Id, CancellationToken);
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Получение фильмов по идентификатору возвращает данные
+        /// </summary>
+        [Fact]
+        public async Task GetNotDeletedByIdShouldReturnValue()
+        {
+            //Arrange
+            var target = TestDataGenerator.Film();
+            await Context.Films.AddAsync(target);
+            await Context.SaveChangesAsync(CancellationToken);
+
+            // Act
+            var result = await filmReadRepository.GetByIdAsync(target.Id, CancellationToken);
+
+            // Assert
+            result.Should()
+                .NotBeNull()
+                .And.BeEquivalentTo(target);
+        }
+
+        /// <summary>
+        /// Получение фильмов по идентификатору возвращает null
+        /// </summary>
+        [Fact]
         public async Task GetByIdShouldReturnNull()
         {
             //Arrange
@@ -77,7 +115,7 @@ namespace TicketSelling.Repositories.Tests.Tests
         public async Task GetByIdShouldReturnValue()
         {
             //Arrange
-            var target = TestDataGenerator.Film();
+            var target = TestDataGenerator.Film(x => x.DeletedAt = DateTimeOffset.Now);
             await Context.Films.AddAsync(target);
             await Context.SaveChangesAsync(CancellationToken);
 
@@ -115,6 +153,54 @@ namespace TicketSelling.Repositories.Tests.Tests
         /// </summary>
         [Fact]
         public async Task GetByIdsShouldReturnValue()
+        {
+            //Arrange
+            var target1 = TestDataGenerator.Film();
+            var target2 = TestDataGenerator.Film(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            var target3 = TestDataGenerator.Film();
+            var target4 = TestDataGenerator.Film();
+            await Context.Films.AddRangeAsync(target1, target2, target3, target4);
+            await Context.SaveChangesAsync(CancellationToken);
+
+            // Act
+            var result = await filmReadRepository.GetByIdsAsync(new[] { target1.Id, target2.Id, target4.Id }, CancellationToken);
+
+            // Assert
+            result.Should()
+                .NotBeNull()
+                .And.HaveCount(3)
+                .And.ContainKey(target1.Id)
+                .And.ContainKey(target4.Id)
+                .And.ContainKey(target2.Id);
+        }
+
+        /// <summary>
+        /// Получение списка фильмов по идентификаторам возвращает пустую коллекцию
+        /// </summary>
+        [Fact]
+        public async Task GetNotDeletedByIdsShouldReturnEmpty()
+        {
+            //Arrange
+            var target1 = TestDataGenerator.Film(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            var target2 = TestDataGenerator.Film(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            var target3 = TestDataGenerator.Film(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            await Context.Films.AddRangeAsync(target1, target2, target3);
+            await Context.SaveChangesAsync(CancellationToken);
+
+            // Act
+            var result = await filmReadRepository.GetByIdsAsync(new[] { target1.Id, target2.Id, target3.Id }, CancellationToken);
+
+            // Assert
+            result.Should()
+                .NotBeNull()
+                .And.BeEmpty();
+        }
+
+        /// <summary>
+        /// Получение списка фильмов по идентификаторам возвращает данные
+        /// </summary>
+        [Fact]
+        public async Task GetNotDeletedByIdsShouldReturnValue()
         {
             //Arrange
             var target1 = TestDataGenerator.Film();

@@ -1,23 +1,23 @@
 ﻿using FluentAssertions;
 using TicketSelling.Context.Tests;
-using TicketSelling.Repositories.Contracts.ReadInterfaces;
+using TicketSelling.Repositories.Contracts.ReadRepositiriesContracts;
 using TicketSelling.Repositories.ReadRepositories;
 using TicketSelling.Test.Extensions;
 using Xunit;
 
 namespace TicketSelling.Repositories.Tests.Tests
 {
-    public class CinemaReadTests : TicketSellingContextInMemory
+    public class SessionReadTests : TicketSellingContextInMemory
     {
-        private readonly ICinemaReadRepository cinemaReadRepository;
+        private readonly ISessionReadRepository cinemaReadRepository;
 
-        public CinemaReadTests()
+        public SessionReadTests()
         {
-            cinemaReadRepository = new CinemaReadRepository(Reader);
+            cinemaReadRepository = new SessionReadRepository(Reader);
         }
 
         /// <summary>
-        /// Возвращает пустой список кинотеатров
+        /// Возвращает пустой список киносеансов
         /// </summary>
         [Fact]
         public async Task GetAllShouldReturnEmpty()
@@ -32,16 +32,16 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Возвращает список кинотетаров
+        /// Возвращает список киносеансов
         /// </summary>
         [Fact]
         public async Task GetAllShouldReturnValues()
         {
             //Arrange
-            var target = TestDataGenerator.Cinema();
+            var target = TestDataGenerator.Session();
 
-            await Context.Cinemas.AddRangeAsync(target,
-                TestDataGenerator.Cinema(x => x.DeletedAt = DateTimeOffset.UtcNow));
+            await Context.Sessions.AddRangeAsync(target,
+                TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.UtcNow));
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
@@ -55,7 +55,7 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Получение кинотетара по идентификатору возвращает null
+        /// Получение киносеанса по идентификатору возвращает null
         /// </summary>
         [Fact]
         public async Task GetByIdShouldReturnNull()
@@ -71,14 +71,14 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Получение кинотеатра по идентификатору возвращает данные
+        /// Получение киносеанса по идентификатору возвращает данные
         /// </summary>
         [Fact]
         public async Task GetByIdShouldReturnValue()
         {
             //Arrange
-            var target = TestDataGenerator.Cinema();
-            await Context.Cinemas.AddAsync(target);
+            var target = TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.Now);
+            await Context.Sessions.AddAsync(target);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
@@ -91,7 +91,45 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Получение списка кинотеатров по идентификаторам возвращает пустую коллекцию
+        /// Получение киносеанса по идентификатору возвращает null
+        /// </summary>
+        [Fact]
+        public async Task GetNotDeletedByIdShouldReturnNull()
+        {
+            //Arrange
+            var target = TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.Now);
+            await Context.Sessions.AddAsync(target);
+            await Context.SaveChangesAsync(CancellationToken);
+
+            // Act
+            var result = await cinemaReadRepository.GetNotDeletedByIdAsync(target.Id, CancellationToken);
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Получение киносеанса по идентификатору возвращает данные
+        /// </summary>
+        [Fact]
+        public async Task GetNotDeletedByIdShouldReturnValue()
+        {
+            //Arrange
+            var target = TestDataGenerator.Session();
+            await Context.Sessions.AddAsync(target);
+            await Context.SaveChangesAsync(CancellationToken);
+
+            // Act
+            var result = await cinemaReadRepository.GetByIdAsync(target.Id, CancellationToken);
+
+            // Assert
+            result.Should()
+                .NotBeNull()
+                .And.BeEquivalentTo(target);
+        }
+
+        /// <summary>
+        /// Получение списка киносеансов по идентификаторам возвращает пустую коллекцию
         /// </summary>
         [Fact]
         public async Task GetByIdsShouldReturnEmpty()
@@ -111,17 +149,17 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Получение списка кинотеатров по идентификаторам возвращает данные
+        /// Получение списка киносеансов по идентификаторам возвращает данные
         /// </summary>
         [Fact]
         public async Task GetByIdsShouldReturnValue()
         {
             //Arrange
-            var target1 = TestDataGenerator.Cinema();
-            var target2 = TestDataGenerator.Cinema(x => x.DeletedAt = DateTimeOffset.UtcNow);
-            var target3 = TestDataGenerator.Cinema();
-            var target4 = TestDataGenerator.Cinema();
-            await Context.Cinemas.AddRangeAsync(target1, target2, target3, target4);
+            var target1 = TestDataGenerator.Session();
+            var target2 = TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            var target3 = TestDataGenerator.Session();
+            var target4 = TestDataGenerator.Session();
+            await Context.Sessions.AddRangeAsync(target1, target2, target3, target4);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
@@ -130,20 +168,21 @@ namespace TicketSelling.Repositories.Tests.Tests
             // Assert
             result.Should()
                 .NotBeNull()
-                .And.HaveCount(2)
+                .And.HaveCount(3)
                 .And.ContainKey(target1.Id)
-                .And.ContainKey(target4.Id);
+                .And.ContainKey(target4.Id)
+                .And.ContainKey(target2.Id);
         }
 
         /// <summary>
-        /// Поиск кинотетра в коллекции по идентификатору (true)
+        /// Поиск киносеанса в коллекции по идентификатору (true)
         /// </summary>
         [Fact]
         public async Task IsNotNullEntityReturnTrue()
         {
             //Arrange
-            var target1 = TestDataGenerator.Cinema();           
-            await Context.Cinemas.AddAsync(target1);
+            var target1 = TestDataGenerator.Session();           
+            await Context.Sessions.AddAsync(target1);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
@@ -154,7 +193,7 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Поиск кинотетра в коллекции по идентификатору (false)
+        /// Поиск киносеанса в коллекции по идентификатору (false)
         /// </summary>
         [Fact]
         public async Task IsNotNullEntityReturnFalse()
@@ -170,14 +209,14 @@ namespace TicketSelling.Repositories.Tests.Tests
         }
 
         /// <summary>
-        /// Поиск удаленного кинотетра в коллекции по идентификатору
+        /// Поиск удаленного киносеанса в коллекции по идентификатору
         /// </summary>
         [Fact]
         public async Task IsNotNullDeletedEntityReturnFalse()
         {
             //Arrange
-            var target1 = TestDataGenerator.Cinema(x => x.DeletedAt = DateTimeOffset.UtcNow);
-            await Context.Cinemas.AddAsync(target1);
+            var target1 = TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            await Context.Sessions.AddAsync(target1);
             await Context.SaveChangesAsync(CancellationToken);           
 
             // Act

@@ -1,10 +1,4 @@
 ﻿using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Threading.Tasks;
 using TicketSelling.Context.Tests;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.ReadRepositories;
@@ -13,13 +7,13 @@ using Xunit;
 
 namespace TicketSelling.Repositories.Tests.Tests
 {
-    public class ClientReadTests : TicketSellingContextInMemory
+    public class UserReadTests : TicketSellingContextInMemory
     {
-        private readonly IUserReadRepository clientReadRepository;
+        private readonly IUserReadRepository userReadRepository;
 
-        public ClientReadTests()
+        public UserReadTests()
         {
-            clientReadRepository = new UserReadRepository(Reader);
+            userReadRepository = new UserReadRepository(Reader);
         }
 
         /// <summary>
@@ -29,7 +23,7 @@ namespace TicketSelling.Repositories.Tests.Tests
         public async Task GetAllShouldReturnEmpty()
         {
             // Act
-            var result = await clientReadRepository.GetAllAsync(CancellationToken);
+            var result = await userReadRepository.GetAllAsync(CancellationToken);
 
             // Assert
             result.Should()
@@ -44,14 +38,14 @@ namespace TicketSelling.Repositories.Tests.Tests
         public async Task GetAllShouldReturnValues()
         {
             //Arrange
-            var target = TestDataGenerator.Client();
+            var target = TestDataGenerator.Session();
 
-            await Context.Clients.AddRangeAsync(target,
-                TestDataGenerator.Client(x => x.DeletedAt = DateTimeOffset.UtcNow));
+            await Context.Sessions.AddRangeAsync(target,
+                TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.UtcNow));
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await clientReadRepository.GetAllAsync(CancellationToken);
+            var result = await userReadRepository.GetAllAsync(CancellationToken);
 
             // Assert
             result.Should()
@@ -70,7 +64,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             var id = Guid.NewGuid();
 
             // Act
-            var result = await clientReadRepository.GetByIdAsync(id, CancellationToken);
+            var result = await userReadRepository.GetByIdAsync(id, CancellationToken);
 
             // Assert
             result.Should().BeNull();
@@ -80,15 +74,54 @@ namespace TicketSelling.Repositories.Tests.Tests
         /// Получение клиента по идентификатору возвращает данные
         /// </summary>
         [Fact]
-        public async Task GetByIdShouldReturnValue()
+        public async Task GetNotDeletedByIdShouldReturnValue()
         {
             //Arrange
-            var target = TestDataGenerator.Client();
-            await Context.Clients.AddAsync(target);
+            var target = TestDataGenerator.Session();
+            await Context.Sessions.AddAsync(target);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await clientReadRepository.GetByIdAsync(target.Id, CancellationToken);
+            var result = await userReadRepository.GetNotDeletedByIdAsync(target.Id, CancellationToken);
+
+            // Assert
+            result.Should()
+                .NotBeNull()
+                .And.BeEquivalentTo(target);
+        }
+
+        /// <summary>
+        /// Получение клиента по идентификатору возвращает null
+        /// </summary>
+        [Fact]
+        public async Task GetNotDeletedByIdShouldReturnNull()
+        {
+            //Arrange
+            var target = TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.Now);
+            await Context.Sessions.AddAsync(target);
+            await Context.SaveChangesAsync(CancellationToken);
+
+            // Act
+            var result = await userReadRepository.GetNotDeletedByIdAsync(target.Id, CancellationToken);
+
+            // Assert
+            result.Should()
+                .BeNull();
+        }
+
+        /// <summary>
+        /// Получение клиента по идентификатору возвращает данные
+        /// </summary>
+        [Fact]
+        public async Task GetByIdShouldReturnValue()
+        {
+            //Arrange
+            var target = TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.Now);
+            await Context.Sessions.AddAsync(target);
+            await Context.SaveChangesAsync(CancellationToken);
+
+            // Act
+            var result = await userReadRepository.GetByIdAsync(target.Id, CancellationToken);
 
             // Assert
             result.Should()
@@ -108,7 +141,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             var id3 = Guid.NewGuid();
 
             // Act
-            var result = await clientReadRepository.GetByIdsAsync(new[] { id1, id2, id3 }, CancellationToken);
+            var result = await userReadRepository.GetByIdsAsync(new[] { id1, id2, id3 }, CancellationToken);
 
             // Assert
             result.Should()
@@ -123,22 +156,23 @@ namespace TicketSelling.Repositories.Tests.Tests
         public async Task GetByIdsShouldReturnValue()
         {
             //Arrange
-            var target1 = TestDataGenerator.Client();
-            var target2 = TestDataGenerator.Client(x => x.DeletedAt = DateTimeOffset.UtcNow);
-            var target3 = TestDataGenerator.Client();
-            var target4 = TestDataGenerator.Client();
-            await Context.Clients.AddRangeAsync(target1, target2, target3, target4);
+            var target1 = TestDataGenerator.Session();
+            var target2 = TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            var target3 = TestDataGenerator.Session();
+            var target4 = TestDataGenerator.Session();
+            await Context.Sessions.AddRangeAsync(target1, target2, target3, target4);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await clientReadRepository.GetByIdsAsync(new[] { target1.Id, target2.Id, target4.Id }, CancellationToken);
+            var result = await userReadRepository.GetByIdsAsync(new[] { target1.Id, target2.Id, target4.Id }, CancellationToken);
 
             // Assert
             result.Should()
                 .NotBeNull()
-                .And.HaveCount(2)
+                .And.HaveCount(3)
                 .And.ContainKey(target1.Id)
-                .And.ContainKey(target4.Id);
+                .And.ContainKey(target4.Id)
+                .And.ContainKey(target2.Id);
         }
 
         /// <summary>
@@ -148,12 +182,12 @@ namespace TicketSelling.Repositories.Tests.Tests
         public async Task IsNotNullEntityReturnTrue()
         {
             //Arrange
-            var target1 = TestDataGenerator.Client();
-            await Context.Clients.AddAsync(target1);
+            var target1 = TestDataGenerator.Session();
+            await Context.Sessions.AddAsync(target1);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await clientReadRepository.IsNotNullAsync(target1.Id, CancellationToken);
+            var result = await userReadRepository.IsNotNullAsync(target1.Id, CancellationToken);
 
             // Assert
             result.Should().BeTrue();
@@ -169,7 +203,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             var target1 = Guid.NewGuid();
 
             // Act
-            var result = await clientReadRepository.IsNotNullAsync(target1, CancellationToken);
+            var result = await userReadRepository.IsNotNullAsync(target1, CancellationToken);
 
             // Assert
             result.Should().BeFalse();
@@ -182,12 +216,12 @@ namespace TicketSelling.Repositories.Tests.Tests
         public async Task IsNotNullDeletedEntityReturnFalse()
         {
             //Arrange
-            var target1 = TestDataGenerator.Client(x => x.DeletedAt = DateTimeOffset.UtcNow);
-            await Context.Clients.AddAsync(target1);
+            var target1 = TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            await Context.Sessions.AddAsync(target1);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await clientReadRepository.IsNotNullAsync(target1.Id, CancellationToken);
+            var result = await userReadRepository.IsNotNullAsync(target1.Id, CancellationToken);
 
             // Assert
             result.Should().BeFalse();
