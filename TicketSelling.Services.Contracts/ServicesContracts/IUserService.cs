@@ -3,29 +3,29 @@
 namespace TicketSelling.Services.Contracts.ServicesContracts
 {
     /// <summary>
-    /// Сервис <see cref="ClientModel"/>
+    /// Сервис <see cref="UserModel"/>
     /// </summary>
-    public interface IClientService
+    public interface IUserService
     {
         /// <summary>
-        /// Получить список всех <see cref="ClientModel"/>
+        /// Получить список всех <see cref="UserModel"/>
         /// </summary>
-        Task<IEnumerable<ClientModel>> GetAllAsync(CancellationToken cancellationToken);
+        Task<IEnumerable<UserModel>> GetAllAsync(CancellationToken cancellationToken);
 
         /// <summary>
-        /// Получить <see cref="ClientModel"/> по идентификатору
+        /// Получить <see cref="UserModel"/> по идентификатору
         /// </summary>
-        Task<ClientModel?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<UserModel?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Добавляет нового клиента
         /// </summary>
-        Task<ClientModel> AddAsync(ClientModel model, CancellationToken cancellationToken);
+        Task<UserModel> AddAsync(UserModel model, CancellationToken cancellationToken);
 
         /// <summary>
         /// Редактирует существующего клиента
         /// </summary>
-        Task<ClientModel> EditAsync(ClientModel source, CancellationToken cancellationToken);
+        Task<UserModel> EditAsync(UserModel source, CancellationToken cancellationToken);
 
         /// <summary>
         /// Удаляет существующего клиента

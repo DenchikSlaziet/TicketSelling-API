@@ -128,9 +128,9 @@ namespace TicketSelling.Test.Extensions
             return result;
         }
 
-        static public ClientModel ClientModel(Action<ClientModel>? settings = null)
+        static public UserModel ClientModel(Action<UserModel>? settings = null)
         {
-            var result = new ClientModel
+            var result = new UserModel
             {
                 Id = Guid.NewGuid(),
                 FirstName = $"{Guid.NewGuid():N}",

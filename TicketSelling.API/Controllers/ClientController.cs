@@ -17,10 +17,10 @@ namespace TicketSelling.API.Controllers
     [ApiExplorerSettings(GroupName = "Client")]
     public class ClientController : ControllerBase
     {
-        private readonly IClientService clientService;
+        private readonly IUserService clientService;
         private readonly IMapper mapper;
 
-        public ClientController(IClientService clientService, IMapper mapper)
+        public ClientController(IUserService clientService, IMapper mapper)
         {
             this.clientService = clientService;
             this.mapper = mapper;
@@ -59,7 +59,7 @@ namespace TicketSelling.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Add(CreateClientRequest model, CancellationToken cancellationToken)
         {
-            var clientModel = mapper.Map<ClientModel>(model);
+            var clientModel = mapper.Map<UserModel>(model);
             var result = await clientService.AddAsync(clientModel, cancellationToken);
             return Ok(mapper.Map<ClientResponse>(result));
         }
@@ -75,7 +75,7 @@ namespace TicketSelling.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Edit(ClientRequest request, CancellationToken cancellationToken)
         {
-            var model = mapper.Map<ClientModel>(request);
+            var model = mapper.Map<UserModel>(request);
             var result = await clientService.EditAsync(model, cancellationToken);
             return Ok(mapper.Map<ClientResponse>(result));
         }

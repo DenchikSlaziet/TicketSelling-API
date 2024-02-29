@@ -53,6 +53,8 @@ namespace TicketSelling.Repositories.ReadRepositories
                 .ToDictionaryAsync(x => x.Id, cancellationToken);
 
         Task<bool> IFilmReadRepository.IsNotNullAsync(Guid id, CancellationToken cancellationToken)
-            => reader.Read<Film>().AnyAsync(x => x.Id == id && !x.DeletedAt.HasValue, cancellationToken);
+            => reader.Read<Film>()
+            .NotDeletedAt()
+            .AnyAsync(x => x.Id == id, cancellationToken);
     }
 }

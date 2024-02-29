@@ -43,6 +43,8 @@ namespace TicketSelling.Repositories.ReadRepositories
                 .FirstOrDefaultAsync(cancellationToken);
 
         Task<bool> ISessionReadRepository.IsNotNullAsync(Guid id, CancellationToken cancellationToken)
-            => reader.Read<Session>().AnyAsync(x => x.Id == id && !x.DeletedAt.HasValue, cancellationToken);
+            => reader.Read<Session>()
+            .NotDeletedAt()
+            .AnyAsync(x => x.Id == id, cancellationToken);
     }
 }

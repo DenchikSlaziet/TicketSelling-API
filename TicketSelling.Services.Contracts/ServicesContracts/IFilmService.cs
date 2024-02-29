@@ -31,6 +31,5 @@ namespace TicketSelling.Services.Contracts.ServicesContracts
         /// Удаляет существующий фильм
         /// </summary>
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
-
     }
 }

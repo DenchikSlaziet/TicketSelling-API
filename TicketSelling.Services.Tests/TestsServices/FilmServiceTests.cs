@@ -47,7 +47,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => filmService.GetByIdAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Film>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Film>>()
                 .WithMessage($"*{id}*");
         }
 
@@ -127,7 +127,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => filmService.DeleteAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Film>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Film>>()
                 .WithMessage($"*{id}*");
         }
 
@@ -146,7 +146,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => filmService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Film>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Film>>()
                 .WithMessage($"*{model.Id}*");
         }
   
@@ -203,7 +203,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> act = () => filmService.AddAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableValidationException>();
+            await act.Should().ThrowAsync<TicketSellingValidationException>();
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> act = () => filmService.EditAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableEntityNotFoundException<Film>>()
+            await act.Should().ThrowAsync<TicketSellingEntityNotFoundException<Film>>()
                 .WithMessage($"*{model.Id}*");
         }
 
@@ -236,7 +236,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> act = () => filmService.EditAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableValidationException>();
+            await act.Should().ThrowAsync<TicketSellingValidationException>();
         }
 
         /// <summary>

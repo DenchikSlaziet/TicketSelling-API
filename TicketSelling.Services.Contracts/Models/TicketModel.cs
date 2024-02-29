@@ -11,39 +11,29 @@
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Идентификатор Зала
+        /// Киносеанс
         /// </summary>
-        public HallModel Hall { get; set; }
+        public SessionModel Session { get; set; }
 
         /// <summary>
-        /// Идентификатор Кинотеатра
+        /// Клиент
         /// </summary>
-        public CinemaModel Cinema { get; set; }
+        public UserModel User { get; set; }
 
         /// <summary>
-        /// Идентификатор Фильма
-        /// </summary>
-        public FilmModel Film{ get; set; }
-
-        /// <summary>
-        /// Идентификатор Клиента
-        /// </summary>
-        public ClientModel Client { get; set; }
-
-        /// <summary>
-        /// Идентификатор завхоза
+        /// Завхоз
         /// </summary>
         public StaffModel? Staff { get; set; }
 
         /// <summary>
         /// Ряд
         /// </summary>
-        public short Row { get; set; }
+        public int Row { get; set; }
 
         /// <summary>
         /// Место
         /// </summary>
-        public short Place { get; set; }
+        public int Place { get; set; }
 
         /// <summary>
         /// Цена
@@ -51,8 +41,8 @@
         public decimal Price { get; set; }
 
         /// <summary>
-        /// Дата и врремя проведения фильма
+        /// Дата и время покупки билета
         /// </summary>
-        public DateTimeOffset Date { get; set; }
+        public DateTimeOffset DatePayment { get; set; }
     }
 }

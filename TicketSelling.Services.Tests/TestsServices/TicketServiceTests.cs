@@ -48,7 +48,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => ticketService.GetByIdAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Ticket>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Ticket>>()
                 .WithMessage($"*{id}*");
         }
 
@@ -128,7 +128,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => ticketService.DeleteAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Ticket>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Ticket>>()
                 .WithMessage($"*{id}*");
         }
 
@@ -147,7 +147,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => ticketService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Ticket>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Ticket>>()
                 .WithMessage($"*{model.Id}*");
         }
         
@@ -219,7 +219,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> act = () => ticketService.AddAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableValidationException>();
+            await act.Should().ThrowAsync<TicketSellingValidationException>();
         }
 
         /// <summary>
@@ -250,7 +250,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> act = () => ticketService.EditAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableEntityNotFoundException<Ticket>>()
+            await act.Should().ThrowAsync<TicketSellingEntityNotFoundException<Ticket>>()
                 .WithMessage($"*{model.Id}*");
         }
 
@@ -267,7 +267,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> act = () => ticketService.EditAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableValidationException>();
+            await act.Should().ThrowAsync<TicketSellingValidationException>();
         }
 
         /// <summary>

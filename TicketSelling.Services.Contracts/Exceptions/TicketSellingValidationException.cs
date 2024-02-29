@@ -5,7 +5,7 @@ namespace TicketSelling.Services.Contracts.Exceptions
     /// <summary>
     /// Ошибки валидации
     /// </summary>
-    public class TimeTableValidationException : TimeTableException
+    public class TicketSellingValidationException : TicketSellingException
     {
         /// <summary>
         /// Ошибки
@@ -15,7 +15,7 @@ namespace TicketSelling.Services.Contracts.Exceptions
         /// <summary>
         /// Инициализирует новый экземпляр <see cref="AdministrationValidationException"/>
         /// </summary>
-        public TimeTableValidationException(IEnumerable<InvalidateItemModel> errors)
+        public TicketSellingValidationException(IEnumerable<InvalidateItemModel> errors)
         {
             Errors = errors;
         }

@@ -7,11 +7,11 @@ namespace TicketSelling.Services.Tests.TestsValidators
 {
     public class ClientModelValidatorTests
     {
-        private readonly ClientModelValidator validator;
+        private readonly UserModelValidator validator;
 
         public ClientModelValidatorTests()
         {
-            validator = new ClientModelValidator();
+            validator = new UserModelValidator();
         }
 
         /// <summary>

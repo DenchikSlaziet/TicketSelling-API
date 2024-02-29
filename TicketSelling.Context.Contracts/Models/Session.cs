@@ -8,13 +8,13 @@
         /// <summary>
         /// Идентификатор фильма
         /// </summary>
-        public int FilmId { get; set; }
+        public Guid FilmId { get; set; }
         public Film Film { get; set; }
 
         /// <summary>
         /// Идентификатор зала
         /// </summary>
-        public int HallId { get; set; }
+        public Guid HallId { get; set; }
         public Hall Hall { get; set; }
 
         /// <summary>

@@ -1,4 +1,6 @@
-﻿namespace TicketSelling.Services.Contracts.Models
+﻿using TicketSelling.Services.Contracts.Enums;
+
+namespace TicketSelling.Services.Contracts.Models
 {
     /// <summary>
     /// Модель фильма
@@ -23,6 +25,16 @@
         /// <summary>
         /// Ограничение по возросту
         /// </summary>
-        public short Limitation { get; set; }
+        public int Limitation { get; set; }
+
+        /// <summary>
+        /// Жанр
+        /// </summary>
+        public GenreModel Genre { get; set; }
+
+        /// <summary>
+        /// Превью
+        /// </summary>
+        public byte[]? ImagePreview { get; set; }
     }
 }

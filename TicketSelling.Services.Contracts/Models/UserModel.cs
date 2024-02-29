@@ -1,9 +1,11 @@
-﻿namespace TicketSelling.Services.Contracts.Models
+﻿using TicketSelling.Services.Contracts.Enums;
+
+namespace TicketSelling.Services.Contracts.Models
 {
     /// <summary>
     /// Модель клиента
     /// </summary>
-    public class ClientModel
+    public class UserModel
     {
         /// <summary>
         /// Идентификатор
@@ -26,13 +28,28 @@
         public string Patronymic { get; set; } = string.Empty;
 
         /// <summary>
-        /// Почта
-        /// </summary>
-        public string Email { get; set; } = string.Empty;
-
-        /// <summary>
         /// Возраст
         /// </summary>
-        public short Age { get; set; }
+        public int Age { get; set; }
+
+        /// <summary>
+        /// Адрес электронной почты
+        /// </summary>
+        public string? Email { get; set; }
+
+        /// <summary>
+        /// Логин
+        /// </summary>
+        public string Login { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Пароль
+        /// </summary>
+        public string Password { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Роль в системе
+        /// </summary>
+        public RoleModel Role { get; set; }
     }
 }

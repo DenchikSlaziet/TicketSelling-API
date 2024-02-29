@@ -50,7 +50,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => cinemaService.GetByIdAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Cinema>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Cinema>>()
                .WithMessage($"*{id}*");
         }
 
@@ -130,7 +130,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => cinemaService.DeleteAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Cinema>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Cinema>>()
                 .WithMessage($"*{id}*");
         }
 
@@ -149,7 +149,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => cinemaService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Cinema>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Cinema>>()
                 .WithMessage($"*{model.Id}*");
         }
 
@@ -206,7 +206,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> act = () => cinemaService.AddAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableValidationException>();
+            await act.Should().ThrowAsync<TicketSellingValidationException>();
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> act = () => cinemaService.EditAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableEntityNotFoundException<Cinema>>()
+            await act.Should().ThrowAsync<TicketSellingEntityNotFoundException<Cinema>>()
                 .WithMessage($"*{model.Id}*");
         }
 
@@ -239,7 +239,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> act = () => cinemaService.EditAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableValidationException>();
+            await act.Should().ThrowAsync<TicketSellingValidationException>();
         }
 
         /// <summary>

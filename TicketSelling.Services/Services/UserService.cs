@@ -10,8 +10,8 @@ using TicketSelling.Services.Contracts.ServicesContracts;
 
 namespace TicketSelling.Services.ReadServices
 {
-    /// <inheritdoc cref="IClientService"/>
-    public class ClientService : IClientService, IServiceAnchor
+    /// <inheritdoc cref="IUserService"/>
+    public class UserService : IUserService, IServiceAnchor
     {
         private readonly IUserWriteRepository clientWriteRepository;
         private readonly IUserReadRepository clientReadRepository;
@@ -19,7 +19,7 @@ namespace TicketSelling.Services.ReadServices
         private readonly IMapper mapper;
         private readonly IServiceValidatorService validatorService;
 
-        public ClientService(IUserWriteRepository clientWriteRepository, IUserReadRepository clientReadRepository, 
+        public UserService(IUserWriteRepository clientWriteRepository, IUserReadRepository clientReadRepository, 
             IUnitOfWork unitOfWork, IMapper mapper, IServiceValidatorService validatorService)
         {
             this.clientReadRepository = clientReadRepository;
@@ -29,7 +29,7 @@ namespace TicketSelling.Services.ReadServices
             this.validatorService = validatorService;
         }
 
-        async Task<ClientModel> IClientService.AddAsync(ClientModel model, CancellationToken cancellationToken)
+        async Task<UserModel> IUserService.AddAsync(UserModel model, CancellationToken cancellationToken)
         {
             model.Id = Guid.NewGuid();
             await validatorService.ValidateAsync(model, cancellationToken);
@@ -39,29 +39,31 @@ namespace TicketSelling.Services.ReadServices
             clientWriteRepository.Add(item);
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return mapper.Map<ClientModel>(item);
+            return mapper.Map<UserModel>(item);
         }
 
-        async Task IClientService.DeleteAsync(Guid id, CancellationToken cancellationToken)
+        async Task IUserService.DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            var targetClient = await clientReadRepository.GetByIdAsync(id, cancellationToken);
+            var targetClient = await clientReadRepository.GetNotDeletedByIdAsync(id, cancellationToken);
+
             if (targetClient == null)
             {
-                throw new TimeTableEntityNotFoundException<User>(id);
+                throw new TicketSellingEntityNotFoundException<User>(id);
             }
 
             clientWriteRepository.Delete(targetClient);
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        async Task<ClientModel> IClientService.EditAsync(ClientModel source, CancellationToken cancellationToken)
+        async Task<UserModel> IUserService.EditAsync(UserModel source, CancellationToken cancellationToken)
         {
             await validatorService.ValidateAsync(source, cancellationToken);
 
-            var targetClient = await clientReadRepository.GetByIdAsync(source.Id, cancellationToken);
+            var targetClient = await clientReadRepository.GetNotDeletedByIdAsync(source.Id, cancellationToken);
+
             if (targetClient == null)
             {
-                throw new TimeTableEntityNotFoundException<User>(source.Id);
+                throw new TicketSellingEntityNotFoundException<User>(source.Id);
             }
 
             targetClient = mapper.Map<User>(source);
@@ -69,25 +71,25 @@ namespace TicketSelling.Services.ReadServices
             clientWriteRepository.Update(targetClient);
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return mapper.Map<ClientModel>(targetClient);
+            return mapper.Map<UserModel>(targetClient);
         }
 
-        async Task<IEnumerable<ClientModel>> IClientService.GetAllAsync(CancellationToken cancellationToken)
+        async Task<IEnumerable<UserModel>> IUserService.GetAllAsync(CancellationToken cancellationToken)
         {
             var result = await clientReadRepository.GetAllAsync(cancellationToken);
-            return result.Select(x => mapper.Map<ClientModel>(x));
+            return result.Select(x => mapper.Map<UserModel>(x));
         }
 
-        async Task<ClientModel?> IClientService.GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        async Task<UserModel?> IUserService.GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var item = await clientReadRepository.GetByIdAsync(id, cancellationToken);
+            var item = await clientReadRepository.GetNotDeletedByIdAsync(id, cancellationToken);
 
             if(item == null) 
             {
-                throw new TimeTableEntityNotFoundException<User>(id);
+                throw new TicketSellingEntityNotFoundException<User>(id);
             }
 
-            return mapper.Map<ClientModel>(item);
+            return mapper.Map<UserModel>(item);
         }
     }
 }

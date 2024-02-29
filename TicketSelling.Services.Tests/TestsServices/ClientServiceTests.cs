@@ -16,7 +16,7 @@ namespace TicketSelling.Services.Tests.Tests
 {
     public class ClientServiceTests : TicketSellingContextInMemory
     {
-        private readonly IClientService clientService;
+        private readonly IUserService clientService;
         private readonly UserReadRepository clientReadRepository;
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace TicketSelling.Services.Tests.Tests
 
             clientReadRepository = new UserReadRepository(Reader);
 
-            clientService = new ClientService(new UserWriteRepository(WriterContext), clientReadRepository,
+            clientService = new UserService(new UserWriteRepository(WriterContext), clientReadRepository,
                 UnitOfWork, config.CreateMapper(), new ServicesValidatorService(new CinemaReadRepository(Reader), 
                 clientReadRepository, new FilmReadRepository(Reader), new HallReadRepository(Reader)));
         }
@@ -49,7 +49,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => clientService.GetByIdAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<User>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<User>>()
                .WithMessage($"*{id}*");
         }
 
@@ -132,7 +132,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => clientService.DeleteAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<User>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<User>>()
                .WithMessage($"*{id}*");
         }
 
@@ -151,7 +151,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => clientService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<User>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<User>>()
                 .WithMessage($"*{model.Id}*");
         }      
 
@@ -208,7 +208,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> act = () => clientService.AddAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableValidationException>();
+            await act.Should().ThrowAsync<TicketSellingValidationException>();
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> act = () => clientService.EditAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableEntityNotFoundException<User>>()
+            await act.Should().ThrowAsync<TicketSellingEntityNotFoundException<User>>()
                 .WithMessage($"*{model.Id}*");
         }
 
@@ -241,7 +241,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> act = () => clientService.EditAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableValidationException>();
+            await act.Should().ThrowAsync<TicketSellingValidationException>();
         }
 
         /// <summary>

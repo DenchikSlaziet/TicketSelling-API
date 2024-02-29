@@ -44,11 +44,11 @@ namespace TicketSelling.Services.ReadServices
 
         async Task IStaffService.DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            var targetStaff = await staffReadRepository.GetByIdAsync(id, cancellationToken);
+            var targetStaff = await staffReadRepository.GetNotDeletedByIdAsync(id, cancellationToken);
 
             if (targetStaff == null)
             {
-                throw new TimeTableEntityNotFoundException<Staff>(id);
+                throw new TicketSellingEntityNotFoundException<Staff>(id);
             }
 
             staffWriteRepository.Delete(targetStaff);
@@ -59,11 +59,11 @@ namespace TicketSelling.Services.ReadServices
         {
             await validatorService.ValidateAsync(source, cancellationToken);
 
-            var targetStaff = await staffReadRepository.GetByIdAsync(source.Id, cancellationToken);
+            var targetStaff = await staffReadRepository.GetNotDeletedByIdAsync(source.Id, cancellationToken);
 
             if (targetStaff == null)
             {
-                throw new TimeTableEntityNotFoundException<Staff>(source.Id);
+                throw new TicketSellingEntityNotFoundException<Staff>(source.Id);
             }
 
             targetStaff = mapper.Map<Staff>(source);
@@ -82,11 +82,11 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<StaffModel?> IStaffService.GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var item = await staffReadRepository.GetByIdAsync(id, cancellationToken);
+            var item = await staffReadRepository.GetNotDeletedByIdAsync(id, cancellationToken);
 
             if (item == null)
             {
-                throw new TimeTableEntityNotFoundException<Staff>(id);
+                throw new TicketSellingEntityNotFoundException<Staff>(id);
             }
 
             return mapper.Map<StaffModel>(item);

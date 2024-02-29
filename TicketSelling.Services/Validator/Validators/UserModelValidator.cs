@@ -4,11 +4,11 @@ using TicketSelling.Services.Contracts.Models;
 namespace TicketSelling.Services.Validator.Validators
 {
     /// <summary>
-    /// Валидатор <see cref="ClientModel"/>
+    /// Валидатор <see cref="UserModel"/>
     /// </summary>
-    public class ClientModelValidator : AbstractValidator<ClientModel>
+    public class UserModelValidator : AbstractValidator<UserModel>
     {
-        public ClientModelValidator()
+        public UserModelValidator()
         {
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage(MessageForValidation.DefaultMessage)
@@ -25,11 +25,20 @@ namespace TicketSelling.Services.Validator.Validators
                 .NotNull().WithMessage(MessageForValidation.DefaultMessage)
                 .Length(2, 50).WithMessage(MessageForValidation.LengthMessage);
 
-            RuleFor(x => (int)x.Age)
+            RuleFor(x => x.Age)
                 .InclusiveBetween(0, 99).WithMessage(MessageForValidation.InclusiveBetweenMessage);
 
             RuleFor(x => x.Email)
                 .EmailAddress().WithMessage(MessageForValidation.DefaultMessage).When(x => !string.IsNullOrWhiteSpace(x.Email));
+
+            RuleFor(x => x.Login)
+                .Length(5, 100).WithMessage(MessageForValidation.LengthMessage);
+
+            RuleFor(x => x.Password)
+                .Length(5, 20).WithMessage(MessageForValidation.LengthMessage);
+
+            RuleFor(x => x.Role).IsInEnum().WithMessage(MessageForValidation.DefaultMessage);
+
         }
     }
 }

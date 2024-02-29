@@ -31,6 +31,5 @@ namespace TicketSelling.Services.Contracts.ServicesContracts
         /// Удаляет существующий зал
         /// </summary>
         Task DeleteAsync(Guid id, CancellationToken cancellationToken);
-
     }
 }

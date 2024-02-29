@@ -27,7 +27,7 @@ namespace TicketSelling.API.AutoMappers
             CreateMap<CreateHallRequest, HallModel>(MemberList.Destination)
                 .ForMember(x => x.Id, opt => opt.Ignore()).ReverseMap();
 
-            CreateMap<CreateClientRequest, ClientModel>(MemberList.Destination)
+            CreateMap<CreateClientRequest, UserModel>(MemberList.Destination)
                 .ForMember(x => x.Id, opt => opt.Ignore()).ReverseMap();
 
             CreateMap<CreateStaffRequest, StaffModel>(MemberList.Destination)
@@ -36,7 +36,7 @@ namespace TicketSelling.API.AutoMappers
             CreateMap<CinemaRequest, CinemaModel>(MemberList.Destination).ReverseMap();
             CreateMap<FilmRequest, FilmModel>(MemberList.Destination).ReverseMap();
             CreateMap<HallRequest, HallModel>(MemberList.Destination).ReverseMap();
-            CreateMap<ClientRequest, ClientModel>(MemberList.Destination).ReverseMap();
+            CreateMap<ClientRequest, UserModel>(MemberList.Destination).ReverseMap();
             CreateMap<StaffRequest, StaffModel>(MemberList.Destination).ReverseMap();
             CreateMap<TicketRequest, TicketModel>(MemberList.Destination)
                 .ForMember(x => x.Hall, opt => opt.Ignore())
@@ -56,7 +56,7 @@ namespace TicketSelling.API.AutoMappers
             CreateMap<StaffModel, StaffResponse>(MemberList.Destination)
                 .ForMember(x => x.Name, opt => opt.MapFrom(src => $"{src.LastName} {src.FirstName} {src.Patronymic}"));
 
-            CreateMap<ClientModel, ClientResponse>(MemberList.Destination)
+            CreateMap<UserModel, ClientResponse>(MemberList.Destination)
                 .ForMember(x => x.Name, opt => opt.MapFrom(src => $"{src.LastName} {src.FirstName} {src.Patronymic}"));
         }
     }

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
+using TicketSelling.Repositories.Contracts.ReadRepositiriesContracts;
 using TicketSelling.Services.Contracts.ModelsRequest;
 
 namespace TicketSelling.Services.Validator.Validators
@@ -9,52 +10,42 @@ namespace TicketSelling.Services.Validator.Validators
     /// </summary>
     public class TicketRequestValidator : AbstractValidator<TicketRequestModel>
     {
-        private readonly ICinemaReadRepository cinemaReadRepository;
-        private readonly IUserReadRepository clientReadRepository;
-        private readonly IFilmReadRepository filmReadRepository;
-        private readonly IHallReadRepository hallReadRepository;
+        private readonly IUserReadRepository userReadRepository;
+        private readonly ISessionReadRepository sessionReadRepository;
+        private readonly IStaffReadRepository staffReadRepository;
 
-        public TicketRequestValidator(ICinemaReadRepository cinemaReadRepository, IUserReadRepository clientReadRepository,
-            IFilmReadRepository filmReadRepository, IHallReadRepository hallReadRepository)
+        public TicketRequestValidator(IUserReadRepository userReadRepository,
+            ISessionReadRepository sessionReadRepository, IStaffReadRepository staffReadRepository)
         {
-            this.cinemaReadRepository = cinemaReadRepository;
-            this.clientReadRepository = clientReadRepository;
-            this.filmReadRepository = filmReadRepository;
-            this.hallReadRepository = hallReadRepository;
+            this.userReadRepository = userReadRepository;
+            this.sessionReadRepository = sessionReadRepository;
+            this.staffReadRepository = staffReadRepository;
 
             RuleFor(x => x.StaffId)
                 .NotEmpty().WithMessage(MessageForValidation.DefaultMessage)
+                .MustAsync(async (x, cancellationToken) => await this.staffReadRepository.IsNotNullAsync(x!.Value, cancellationToken))
+                .WithMessage(MessageForValidation.NotFoundGuidMessage)
                 .When(x => x.StaffId.HasValue);
 
-            RuleFor(x => x.HallId)
+            RuleFor(x => x.SessionId)
                 .NotEmpty().WithMessage(MessageForValidation.DefaultMessage)
-                .MustAsync(async (x, cancellationToken) => await this.hallReadRepository.IsNotNullAsync(x, cancellationToken))
-                .WithMessage(MessageForValidation.NotFoundGuidMessage);
+                .MustAsync(async (x, cancellationToken) => await this.sessionReadRepository.IsNotNullAsync(x, cancellationToken))
+                .WithMessage(MessageForValidation.NotFoundGuidMessage);           
 
-            RuleFor(x => x.CinemaId)
+            RuleFor(x => x.UserId)
                 .NotEmpty().WithMessage(MessageForValidation.DefaultMessage)
-                .MustAsync(async (x, cancellationToken) => await this.cinemaReadRepository.IsNotNullAsync(x, cancellationToken))
-                .WithMessage(MessageForValidation.NotFoundGuidMessage);
+                .MustAsync(async (x, cancellationToken) => await this.userReadRepository.IsNotNullAsync(x, cancellationToken))
+                .WithMessage(MessageForValidation.NotFoundGuidMessage);         
 
-            RuleFor(x => x.ClientId)
+            RuleFor(x => x.DatePayment)
                 .NotEmpty().WithMessage(MessageForValidation.DefaultMessage)
-                .MustAsync(async (x, cancellationToken) => await this.clientReadRepository.IsNotNullAsync(x, cancellationToken))
-                .WithMessage(MessageForValidation.NotFoundGuidMessage);
+                .GreaterThan(DateTimeOffset.Now.AddMinutes(-1)).WithMessage(MessageForValidation.InclusiveBetweenMessage);
 
-            RuleFor(x => x.FilmId)
-                .NotEmpty().WithMessage(MessageForValidation.DefaultMessage)
-                .MustAsync(async (x, cancellationToken) => await this.filmReadRepository.IsNotNullAsync(x, cancellationToken))
-                .WithMessage(MessageForValidation.NotFoundGuidMessage);
+            RuleFor(x => x.Place)
+                .InclusiveBetween(1, 10).WithMessage(MessageForValidation.InclusiveBetweenMessage);
 
-            RuleFor(x => x.Date)
-                .NotEmpty().WithMessage(MessageForValidation.DefaultMessage)
-                .GreaterThan(DateTimeOffset.Now.AddMinutes(1)).WithMessage(MessageForValidation.InclusiveBetweenMessage);
-
-            RuleFor(x => (int)x.Place)
-                .InclusiveBetween(1, 200).WithMessage(MessageForValidation.InclusiveBetweenMessage);
-
-            RuleFor(x => (int)x.Row)
-                .InclusiveBetween(1, 50).WithMessage(MessageForValidation.InclusiveBetweenMessage);
+            RuleFor(x => x.Row)
+                .InclusiveBetween(1, 7).WithMessage(MessageForValidation.InclusiveBetweenMessage);
 
             RuleFor(x => x.Price)
                 .InclusiveBetween(100, 5000).WithMessage(MessageForValidation.InclusiveBetweenMessage);
