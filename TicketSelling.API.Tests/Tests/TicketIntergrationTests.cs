@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System;
 using System.Text;
 using TicketSelling.API.Models.CreateRequest;
 using TicketSelling.API.Models.Response;
@@ -13,23 +14,25 @@ namespace TicketSelling.API.Tests.Tests
 {
     public class TicketIntergrationTests : BaseIntegrationTest
     {
-        private readonly Hall hall;
-        private readonly User user;
-        private readonly Session session;
-        private readonly Film film;
+        //private readonly Hall hall;
+        //private readonly User user;
+        //private readonly Session session;
+        //private readonly Film film;
 
         public TicketIntergrationTests(TicketSellingApiFixture fixture) : base(fixture)
         {
-            hall = TestDataGenerator.Hall();
-            user = TestDataGenerator.User();
-            film = TestDataGenerator.Film();
-            session = TestDataGenerator.Session(x => { x.FilmId = film.Id; x.HallId = hall.Id; });
+            //var hall = TestDataGenerator.Hall();
+            //var user = TestDataGenerator.User();
+            //var film = TestDataGenerator.Film();
+            //var session = TestDataGenerator.Session();
+            //session.FilmId = film.Id;
+            //session.HallId = hall.Id;
 
-            context.Users.Add(user);
-            context.Films.Add(film);
-            context.Halls.Add(hall);
-            context.Sessions.Add(session);
-            unitOfWork.SaveChangesAsync();
+            //await context.Users.AddAsync(user);
+            //await context.Films.AddAsync(film);
+            //await context.Halls.AddAsync(hall);
+            //await context.Sessions.AddAsync(session);
+            //unitOfWork.SaveChangesAsync();
         }
 
         [Fact]
@@ -39,8 +42,21 @@ namespace TicketSelling.API.Tests.Tests
             var clientFactory = factory.CreateClient();
 
             var ticket = mapper.Map<CreateTicketRequest>(TestDataGenerator.TicketRequestModel());
+            var hall = TestDataGenerator.Hall();
+            var user = TestDataGenerator.User();
+            var film = TestDataGenerator.Film();
+            var session = TestDataGenerator.Session();
+
+            session.FilmId = film.Id;
+            session.HallId = hall.Id;
             ticket.UserId = user.Id;
             ticket.SessionId = session.Id;
+
+            await context.Users.AddAsync(user);
+            await context.Films.AddAsync(film);
+            await context.Halls.AddAsync(hall);
+            await context.Sessions.AddAsync(session);
+            await unitOfWork.SaveChangesAsync();
 
             // Act
             string data = JsonConvert.SerializeObject(ticket);
@@ -62,13 +78,26 @@ namespace TicketSelling.API.Tests.Tests
             // Arrange
             var client = factory.CreateClient();
             var ticket = TestDataGenerator.Ticket();
+            var hall = TestDataGenerator.Hall();
+            var user = TestDataGenerator.User();
+            var film = TestDataGenerator.Film();
+            var session = TestDataGenerator.Session();
 
-            SetDependenciesOrTicket(ticket);
+            session.FilmId = film.Id;
+            session.HallId = hall.Id;
+            ticket.SessionId = session.Id;
+            ticket.UserId = user.Id;
+
+            await context.Users.AddAsync(user);
+            await context.Films.AddAsync(film);
+            await context.Halls.AddAsync(hall);
+            await context.Sessions.AddAsync(session);
             await context.Tickets.AddAsync(ticket);
             await unitOfWork.SaveChangesAsync();
 
             var ticketRequest = mapper.Map<TicketRequest>(TestDataGenerator.TicketRequestModel(x => x.Id = ticket.Id));
-            SetDependenciesOrTicketRequestModelWithTicket(ticket, ticketRequest);
+            ticketRequest.SessionId = session.Id;
+            ticketRequest.UserId = user.Id;
 
             // Act
             string data = JsonConvert.SerializeObject(ticketRequest);
@@ -88,11 +117,33 @@ namespace TicketSelling.API.Tests.Tests
             // Arrange
             var client = factory.CreateClient();
             var ticket1 = TestDataGenerator.Ticket();
+            var hall1 = TestDataGenerator.Hall();
+            var user1 = TestDataGenerator.User();
+            var film1 = TestDataGenerator.Film();
+            var session1 = TestDataGenerator.Session();
+            session1.FilmId = film1.Id;
+            session1.HallId = hall1.Id;
+            ticket1.SessionId = session1.Id;
+            ticket1.UserId = user1.Id;
+
             var ticket2 = TestDataGenerator.Ticket();
+            var hall2 = TestDataGenerator.Hall();
+            var user2 = TestDataGenerator.User();
+            var film2 = TestDataGenerator.Film();
+            var session2 = TestDataGenerator.Session();
+            session2.FilmId = film2.Id;
+            session2.HallId = hall2.Id;
+            ticket2.SessionId = session2.Id;
+            ticket2.UserId = user2.Id;
 
-            SetDependenciesOrTicket(ticket1);
-            SetDependenciesOrTicket(ticket2);
-
+            await context.Users.AddAsync(user1);
+            await context.Films.AddAsync(film1);
+            await context.Halls.AddAsync(hall1);
+            await context.Sessions.AddAsync(session1);
+            await context.Users.AddAsync(user2);
+            await context.Films.AddAsync(film2);
+            await context.Halls.AddAsync(hall2);
+            await context.Sessions.AddAsync(session2);
             await context.Tickets.AddRangeAsync(ticket1, ticket2);
             await unitOfWork.SaveChangesAsync();
 
@@ -122,11 +173,33 @@ namespace TicketSelling.API.Tests.Tests
             // Arrange
             var client = factory.CreateClient();
             var ticket1 = TestDataGenerator.Ticket();
+            var hall1 = TestDataGenerator.Hall();
+            var user1 = TestDataGenerator.User();
+            var film1 = TestDataGenerator.Film();
+            var session1 = TestDataGenerator.Session();
+            session1.FilmId = film1.Id;
+            session1.HallId = hall1.Id;
+            ticket1.SessionId = session1.Id;
+            ticket1.UserId = user1.Id;
+
             var ticket2 = TestDataGenerator.Ticket(x => x.DeletedAt = DateTimeOffset.Now);
+            var hall2 = TestDataGenerator.Hall();
+            var user2 = TestDataGenerator.User();
+            var film2 = TestDataGenerator.Film();
+            var session2 = TestDataGenerator.Session();
+            session2.FilmId = film2.Id;
+            session2.HallId = hall2.Id;
+            ticket2.SessionId = session2.Id;
+            ticket2.UserId = user2.Id;
 
-            SetDependenciesOrTicket(ticket1);
-            SetDependenciesOrTicket(ticket2);
-
+            await context.Users.AddAsync(user1);
+            await context.Films.AddAsync(film1);
+            await context.Halls.AddAsync(hall1);
+            await context.Sessions.AddAsync(session1);
+            await context.Users.AddAsync(user2);
+            await context.Films.AddAsync(film2);
+            await context.Halls.AddAsync(hall2);
+            await context.Sessions.AddAsync(session2);
             await context.Tickets.AddRangeAsync(ticket1, ticket2);
             await unitOfWork.SaveChangesAsync();
 
@@ -152,8 +225,20 @@ namespace TicketSelling.API.Tests.Tests
             // Arrange
             var client = factory.CreateClient();
             var ticket = TestDataGenerator.Ticket();
+            var hall = TestDataGenerator.Hall();
+            var user = TestDataGenerator.User();
+            var film = TestDataGenerator.Film();
+            var session = TestDataGenerator.Session();
 
-            SetDependenciesOrTicket(ticket);
+            session.FilmId = film.Id;
+            session.HallId = hall.Id;
+            ticket.SessionId = session.Id;
+            ticket.UserId = user.Id;
+
+            await context.Users.AddAsync(user);
+            await context.Films.AddAsync(film);
+            await context.Halls.AddAsync(hall);
+            await context.Sessions.AddAsync(session);
             await context.Tickets.AddAsync(ticket);
             await unitOfWork.SaveChangesAsync();
 
@@ -174,18 +259,6 @@ namespace TicketSelling.API.Tests.Tests
                     ticket.Price,
                     ticket.Row
                 });
-        }
-
-        private void SetDependenciesOrTicket(Ticket ticket)
-        {
-            ticket.UserId = user.Id;
-            ticket.SessionId = session.Id;
-        }
-
-        private void SetDependenciesOrTicketRequestModelWithTicket(Ticket ticket, TicketRequest ticketRequest)
-        {
-            ticketRequest.SessionId = ticket.SessionId;
-            ticketRequest.UserId = ticket.UserId;
-        }
+        }      
     }
 }

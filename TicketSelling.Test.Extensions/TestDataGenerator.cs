@@ -184,8 +184,8 @@ namespace TicketSelling.Test.Extensions
             var result = new SessionRequestModel
             {
                 Id = Guid.NewGuid(),
-                StartDateTime = DateTimeOffset.Now.AddHours(5),
-                EndDateTime = DateTimeOffset.Now.AddHours(7)
+                StartDateTime = DateTimeOffset.Now.AddHours(6),
+                EndDateTime = DateTimeOffset.Now.AddHours(8)
             };
 
             settings?.Invoke(result);

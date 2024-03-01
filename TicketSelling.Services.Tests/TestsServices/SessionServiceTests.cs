@@ -7,37 +7,31 @@ using TicketSelling.Repositories.WriteRepositoriеs;
 using TicketSelling.Services.AutoMappers;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.ServicesContracts;
-using TicketSelling.Services.ReadServices;
 using TicketSelling.Services.Services;
 using TicketSelling.Test.Extensions;
 using Xunit;
 
-namespace TicketSelling.Services.Tests.Tests
+namespace TicketSelling.Services.Tests.TestsServices
 {
-    public class TicketServiceTests : TicketSellingContextInMemory
+    public class SessionServiceTests : TicketSellingContextInMemory
     {
-        private readonly ITicketService ticketService;
+        private readonly ISessionService sessionService;
 
-        /// <summary>
-        /// Инициализирует новый экземпляр <see cref="TicketServiceTests"/>
-        /// </summary>
-        public TicketServiceTests()
+        public SessionServiceTests()
         {
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new ServiceMapper());
             });
 
-            ticketService = new TicketService(new TicketWriteRepository(WriterContext), new TicketReadRepositiry(Reader),
-                new UserReadRepository(Reader), new FilmReadRepository(Reader),
-                new HallReadRepository(Reader), new StaffReadRepository(Reader), config.CreateMapper(), UnitOfWork,
+            sessionService = new SessionService(new SessionReadRepository(Reader), new SessionWriteRepository(WriterContext),
+                config.CreateMapper(), UnitOfWork, new HallReadRepository(Reader), new FilmReadRepository(Reader),
                 new ServicesValidatorService(new SessionReadRepository(Reader),
-                new UserReadRepository(Reader), new FilmReadRepository(Reader), new HallReadRepository(Reader), new StaffReadRepository(Reader)),
-                new SessionReadRepository(Reader));
+                new UserReadRepository(Reader), new FilmReadRepository(Reader), new HallReadRepository(Reader), new StaffReadRepository(Reader)));
         }
 
         /// <summary>
-        /// Получение <see cref="Ticket"/> по идентификатору возвращает null
+        /// Получение <see cref="Session"/> по идентификатору возвращает null
         /// </summary>
         [Fact]
         public async Task GetByIdShouldReturnNull()
@@ -46,15 +40,15 @@ namespace TicketSelling.Services.Tests.Tests
             var id = Guid.NewGuid();
 
             // Act
-            Func<Task> result = () => ticketService.GetByIdAsync(id, CancellationToken);
+            Func<Task> result = () => sessionService.GetByIdAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Ticket>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Session>>()
                 .WithMessage($"*{id}*");
         }
 
         /// <summary>
-        /// Получение <see cref="Ticket"/> по идентификатору возвращает данные
+        /// Получение <see cref="Session"/> по идентификатору возвращает данные
         /// </summary>
         [Fact]
         public async Task GetByIdShouldReturnValue()
@@ -67,39 +61,33 @@ namespace TicketSelling.Services.Tests.Tests
             session.HallId = hall.Id;
             session.FilmId = film.Id;
 
-            var target = TestDataGenerator.Ticket();
-            target.SessionId = session.Id;
-
             await Context.Halls.AddAsync(hall);
             await Context.Films.AddAsync(film);
             await Context.Sessions.AddAsync(session);
-            await Context.Tickets.AddAsync(target);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await ticketService.GetByIdAsync(target.Id, CancellationToken);
+            var result = await sessionService.GetByIdAsync(session.Id, CancellationToken);
 
             // Assert
             result.Should()
                 .NotBeNull()
                 .And.BeEquivalentTo(new
                 {
-                    target.Id,
-                    target.DatePayment,
-                    target.Row,
-                    target.Place,
-                    target.Price
+                    session.Id,
+                    session.StartDateTime,
+                    session.EndDateTime
                 });
         }
 
         /// <summary>
-        /// Получение <see cref="IEnumerable{Ticket}"/> по идентификаторам возвращает пустйю коллекцию
+        /// Получение <see cref="IEnumerable{Session}"/> по идентификаторам возвращает пустйю коллекцию
         /// </summary>
         [Fact]
         public async Task GetAllShouldReturnEmpty()
         {
             // Act
-            var result = await ticketService.GetAllAsync(CancellationToken);
+            var result = await sessionService.GetAllAsync(CancellationToken);
 
             // Assert
             result.Should()
@@ -108,19 +96,19 @@ namespace TicketSelling.Services.Tests.Tests
         }
 
         /// <summary>
-        /// Получение <see cref="IEnumerable{Ticket}"/> по идентификаторам возвращает данные
+        /// Получение <see cref="IEnumerable{Session}"/> по идентификаторам возвращает данные
         /// </summary>
         [Fact]
         public async Task GetAllShouldReturnValues()
         {
             //Arrange
-            var target = TestDataGenerator.Ticket();         
-            await Context.Tickets.AddRangeAsync(target,
-                TestDataGenerator.Ticket(x => x.DeletedAt = DateTimeOffset.UtcNow));
+            var target = TestDataGenerator.Session();
+            await Context.Sessions.AddRangeAsync(target,
+                TestDataGenerator.Session(x => x.DeletedAt = DateTimeOffset.UtcNow)); ////////
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await ticketService.GetAllAsync(CancellationToken);
+            var result = await sessionService.GetAllAsync(CancellationToken);
 
             // Assert
             result.Should()
@@ -129,7 +117,7 @@ namespace TicketSelling.Services.Tests.Tests
         }
 
         /// <summary>
-        /// Удаление не существуюущего <see cref="Ticket"/>
+        /// Удаление не существуюущего <see cref="Session"/>
         /// </summary>
         [Fact]
         public async Task DeletingNonExistentCinemaReturnExсeption()
@@ -138,55 +126,55 @@ namespace TicketSelling.Services.Tests.Tests
             var id = Guid.NewGuid();
 
             // Act
-            Func<Task> result = () => ticketService.DeleteAsync(id, CancellationToken);
+            Func<Task> result = () => sessionService.DeleteAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Ticket>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Session>>()
                 .WithMessage($"*{id}*");
         }
 
         /// <summary>
-        /// Удаление удаленного <see cref="Ticket"/>
+        /// Удаление удаленного <see cref="Session"/>
         /// </summary>
         [Fact]
         public async Task DeletingDeletedCinemaReturnExсeption()
         {
             //Arrange
-            var model = TestDataGenerator.Ticket(x => x.DeletedAt = DateTime.UtcNow);
-            await Context.Tickets.AddAsync(model);
+            var model = TestDataGenerator.Session(x => x.DeletedAt = DateTime.UtcNow);
+            await Context.Sessions.AddAsync(model);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            Func<Task> result = () => ticketService.DeleteAsync(model.Id, CancellationToken);
+            Func<Task> result = () => sessionService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Ticket>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Session>>()
                 .WithMessage($"*{model.Id}*");
         }
-        
+
         /// <summary>
-        /// Удаление <see cref="Ticket"/>
+        /// Удаление <see cref="Session"/>
         /// </summary>
         [Fact]
         public async Task DeleteShouldWork()
         {
             //Arrange
-            var model = TestDataGenerator.Ticket();
-            await Context.Tickets.AddAsync(model);
+            var model = TestDataGenerator.Session();
+            await Context.Sessions.AddAsync(model);
             await UnitOfWork.SaveChangesAsync(CancellationToken);
 
             //Act
-            Func<Task> act = () => ticketService.DeleteAsync(model.Id, CancellationToken);
+            Func<Task> act = () => sessionService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
             await act.Should().NotThrowAsync();
-            var entity = Context.Tickets.Single(x => x.Id == model.Id);
+            var entity = Context.Sessions.Single(x => x.Id == model.Id);
             entity.Should().NotBeNull();
             entity.DeletedAt.Should().NotBeNull();
         }
 
         /// <summary>
-        /// Добавление <see cref="Ticket"/>
+        /// Добавление <see cref="Session"/>
         /// </summary>
         [Fact]
         public async Task AddShouldWork()
@@ -194,49 +182,47 @@ namespace TicketSelling.Services.Tests.Tests
             //Arrange
             var film = TestDataGenerator.Film();
             var hall = TestDataGenerator.Hall();
-            var user = TestDataGenerator.User();
             var session = TestDataGenerator.Session();
             session.HallId = hall.Id;
             session.FilmId = film.Id;
 
-            await Context.Users.AddAsync(user);
             await Context.Films.AddAsync(film);
             await Context.Halls.AddAsync(hall);
             await Context.Sessions.AddAsync(session);
             await UnitOfWork.SaveChangesAsync(CancellationToken);
 
-            var model = TestDataGenerator.TicketRequestModel();
-            model.UserId = user.Id;
-            model.SessionId = session.Id;
+            var model = TestDataGenerator.SessionRequestModel();
+            model.FilmId = film.Id;
+            model.HallId = hall.Id;
 
             //Act
-            Func<Task> act = () => ticketService.AddAsync(model, CancellationToken);
+            Func<Task> act = () => sessionService.AddAsync(model, CancellationToken);
 
             // Assert
             await act.Should().NotThrowAsync();
-            var entity = Context.Tickets.Single(x => x.Id == model.Id);
+            var entity = Context.Sessions.Single(x => x.Id == model.Id);
             entity.Should().NotBeNull();
             entity.DeletedAt.Should().BeNull();
         }
 
         /// <summary>
-        /// Добавление не валидируемого <see cref="Ticket"/>
+        /// Добавление не валидируемого <see cref="Session"/>
         /// </summary>
         [Fact]
         public async Task AddShouldValidationException()
         {
             //Arrange
-            var model = TestDataGenerator.TicketRequestModel();
+            var model = TestDataGenerator.SessionRequestModel();
 
             //Act
-            Func<Task> act = () => ticketService.AddAsync(model, CancellationToken);
+            Func<Task> act = () => sessionService.AddAsync(model, CancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<TicketSellingValidationException>();
         }
 
         /// <summary>
-        /// Изменение несуществующего <see cref="Ticket"/>
+        /// Изменение несуществующего <see cref="Session"/>
         /// </summary>
         [Fact]
         public async Task EditShouldNotFoundException()
@@ -244,46 +230,43 @@ namespace TicketSelling.Services.Tests.Tests
             //Arrange
             var film = TestDataGenerator.Film();
             var hall = TestDataGenerator.Hall();
-            var user = TestDataGenerator.User();
             var session = TestDataGenerator.Session();
             session.HallId = hall.Id;
             session.FilmId = film.Id;
 
-            await Context.Users.AddAsync(user);
             await Context.Films.AddAsync(film);
             await Context.Halls.AddAsync(hall);
-            await Context.Sessions.AddAsync(session);
             await UnitOfWork.SaveChangesAsync(CancellationToken);
 
-            var model = TestDataGenerator.TicketRequestModel();
-            model.UserId = user.Id;
-            model.SessionId = session.Id;
+            var model = TestDataGenerator.SessionRequestModel();
+            model.FilmId = film.Id;
+            model.HallId = hall.Id;
             //Act
-            Func<Task> act = () => ticketService.EditAsync(model, CancellationToken);
+            Func<Task> act = () => sessionService.EditAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TicketSellingEntityNotFoundException<Ticket>>()
+            await act.Should().ThrowAsync<TicketSellingEntityNotFoundException<Session>>()
                 .WithMessage($"*{model.Id}*");
         }
 
         /// <summary>
-        /// Изменение невалидируемого <see cref="Ticket"/>
+        /// Изменение невалидируемого <see cref="Session"/>
         /// </summary>
         [Fact]
         public async Task EditShouldValidationException()
         {
             //Arrange
-            var model = TestDataGenerator.TicketRequestModel();
+            var model = TestDataGenerator.SessionRequestModel();
 
             //Act
-            Func<Task> act = () => ticketService.EditAsync(model, CancellationToken);
+            Func<Task> act = () => sessionService.EditAsync(model, CancellationToken);
 
             // Assert
             await act.Should().ThrowAsync<TicketSellingValidationException>();
         }
 
         /// <summary>
-        /// Изменение <see cref="Ticket"/>
+        /// Изменение <see cref="Session"/>
         /// </summary>
         [Fact]
         public async Task EditShouldWork()
@@ -291,43 +274,34 @@ namespace TicketSelling.Services.Tests.Tests
             //Arrange
             var film = TestDataGenerator.Film();
             var hall = TestDataGenerator.Hall();
-            var user = TestDataGenerator.User();
             var session = TestDataGenerator.Session();
             session.HallId = hall.Id;
             session.FilmId = film.Id;
 
-            await Context.Users.AddAsync(user);
             await Context.Films.AddAsync(film);
             await Context.Halls.AddAsync(hall);
             await Context.Sessions.AddAsync(session);
             await UnitOfWork.SaveChangesAsync(CancellationToken);
 
-            var ticket = TestDataGenerator.Ticket();
-            ticket.UserId = user.Id;
-            ticket.SessionId = session.Id;
-
-            var model = TestDataGenerator.TicketRequestModel(x => x.Id = ticket.Id);
-            model.UserId = ticket.UserId;
-            model.SessionId = ticket.SessionId;
-
-            await Context.Tickets.AddAsync(ticket, CancellationToken);
-            await UnitOfWork.SaveChangesAsync(CancellationToken);
+            var model = TestDataGenerator.SessionRequestModel(x => x.Id = session.Id);
+            model.HallId = hall.Id;
+            model.FilmId = film.Id;
 
             //Act
-            Func<Task> act = () => ticketService.EditAsync(model, CancellationToken);
+            Func<Task> act = () => sessionService.EditAsync(model, CancellationToken);
 
             // Assert
             await act.Should().NotThrowAsync();
-            var entity = Context.Tickets.Single(x => x.Id == ticket.Id);
+            var entity = Context.Sessions.Single(x => x.Id == session.Id);
             entity.Should().NotBeNull()
                 .And
                 .BeEquivalentTo(new
                 {
                     model.Id,
-                    model.Place,
-                    model.Price,
-                    model.Row,
-                    model.DatePayment
+                    model.FilmId,
+                    model.HallId,
+                    model.StartDateTime,
+                    model.EndDateTime
                 });
         }
     }

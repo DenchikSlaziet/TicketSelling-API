@@ -148,7 +148,7 @@ namespace TicketSelling.Services.ReadServices
             var sessionIds = await sessionReadRepository
                 .GetByIdsAsync(tickets.Select(x => x.SessionId).Distinct(), cancellationToken);
 
-            var result = new List<TicketModel>();
+            var result = new List<TicketModel>(tickets.Count);
 
             foreach (var ticket in tickets)
             {
