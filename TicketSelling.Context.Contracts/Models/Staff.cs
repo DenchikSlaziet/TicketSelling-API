@@ -1,5 +1,4 @@
-﻿using TicketSelling.Common.Entity.EntityInterface;
-using TicketSelling.Context.Contracts.Enums;
+﻿using TicketSelling.Context.Contracts.Enums;
 
 namespace TicketSelling.Context.Contracts.Models
 {
@@ -26,7 +25,7 @@ namespace TicketSelling.Context.Contracts.Models
         /// <summary>
         /// Возраст
         /// </summary>
-        public short Age { get; set; }
+        public int Age { get; set; }
 
         /// <summary>
         /// Должность

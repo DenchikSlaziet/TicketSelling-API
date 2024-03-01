@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using TicketSelling.General;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
+using TicketSelling.Repositories.Contracts.ReadRepositiriesContracts;
 using TicketSelling.Services.Contracts.Exceptions;
 using TicketSelling.Services.Contracts.Models;
 using TicketSelling.Services.Contracts.ModelsRequest;
@@ -13,16 +14,16 @@ namespace TicketSelling.Services.Services
     {
         private readonly Dictionary<Type, IValidator> validators = new Dictionary<Type, IValidator>();
 
-        public ServicesValidatorService(ICinemaReadRepository cinemaReadRepository, IClientReadRepository clientReadRepository,
-            IFilmReadRepository filmReadRepository, IHallReadRepository hallReadRepository)
+        public ServicesValidatorService(ISessionReadRepository sessionReadRepository, IUserReadRepository userReadRepository,
+            IFilmReadRepository filmReadRepository, IHallReadRepository hallReadRepository, IStaffReadRepository staffReadRepository)
         {
-            validators.Add(typeof(CinemaModel), new CinemaModelValidator());
-            validators.Add(typeof(ClientModel), new ClientModelValidator());
+            validators.Add(typeof(SessionRequestModel), new SessionRequestValidator(filmReadRepository, hallReadRepository));
+            validators.Add(typeof(UserModel), new UserModelValidator());
             validators.Add(typeof(FilmModel), new FilmModelValidator());
             validators.Add(typeof(HallModel), new HallModelValidator());
             validators.Add(typeof(StaffModel), new StaffModelValidator());
-            validators.Add(typeof(TicketRequestModel), new TicketRequestValidator(cinemaReadRepository,
-                clientReadRepository, filmReadRepository, hallReadRepository));
+            validators.Add(typeof(TicketRequestModel), new TicketRequestValidator(userReadRepository, sessionReadRepository,
+               staffReadRepository));
         }
 
         public async Task ValidateAsync<TModel>(TModel model, CancellationToken cancellationToken)
@@ -39,7 +40,7 @@ namespace TicketSelling.Services.Services
 
             if (!result.IsValid)
             {
-                throw new TimeTableValidationException(result.Errors.Select(x =>
+                throw new TicketSellingValidationException(result.Errors.Select(x =>
                 InvalidateItemModel.New(x.PropertyName, x.ErrorMessage)));
             }
         }

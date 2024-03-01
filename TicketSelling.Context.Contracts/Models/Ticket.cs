@@ -1,6 +1,4 @@
-﻿using TicketSelling.Common.Entity.EntityInterface;
-
-namespace TicketSelling.Context.Contracts.Models
+﻿namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Билет
@@ -8,28 +6,16 @@ namespace TicketSelling.Context.Contracts.Models
     public class Ticket : BaseAuditEntity
     {
         /// <summary>
-        /// Идентификатор Зала
+        /// Идентификатор киносеанса
         /// </summary>
-        public Guid HallId { get; set; }
-        public Hall Hall { get; set; }
-
-        /// <summary>
-        /// Идентификатор Кинотеатра
-        /// </summary>
-        public Guid CinemaId { get; set; }
-        public Cinema Cinema { get; set; }
-
-        /// <summary>
-        /// Идентификатор Фильма
-        /// </summary>
-        public Guid FilmId { get; set; }
-        public Film Film { get; set; }
+        public Guid SessionId { get; set; }
+        public Session Session { get; set; }
 
         /// <summary>
         /// Идентификатор Клиента
         /// </summary>
-        public Guid ClientId { get; set; }
-        public Client Client { get; set; }
+        public Guid UserId { get; set; }
+        public User User { get; set; }
 
         /// <summary>
         /// Идентификатор завхоза
@@ -40,12 +26,12 @@ namespace TicketSelling.Context.Contracts.Models
         /// <summary>
         /// Ряд
         /// </summary>
-        public short Row { get; set; }
+        public int Row { get; set; }
 
         /// <summary>
         /// Место
         /// </summary>
-        public short Place { get; set; }
+        public int Place { get; set; }
 
         /// <summary>
         /// Цена
@@ -53,8 +39,8 @@ namespace TicketSelling.Context.Contracts.Models
         public decimal Price { get; set; }
 
         /// <summary>
-        /// Дата и врремя проведения фильма
+        /// Дата и время покупки билета
         /// </summary>
-        public DateTimeOffset Date { get; set; }
+        public DateTimeOffset DatePayment { get; set; }
     }
 }

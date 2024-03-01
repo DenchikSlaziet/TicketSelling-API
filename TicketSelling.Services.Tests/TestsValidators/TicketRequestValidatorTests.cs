@@ -13,8 +13,8 @@ namespace TicketSelling.Services.Tests.TestsValidators
 
         public TicketRequestValidatorTests()
         {
-            validator = new TicketRequestValidator(new CinemaReadRepository(Reader), new ClientReadRepository(Reader), 
-                new FilmReadRepository(Reader), new HallReadRepository(Reader));
+            validator = new TicketRequestValidator(new UserReadRepository(Reader), 
+                new SessionReadRepository(Reader), new StaffReadRepository(Reader));
         }
 
         /// <summary>
@@ -24,11 +24,9 @@ namespace TicketSelling.Services.Tests.TestsValidators
         public async void ValidatorShouldError()
         {
             //Arrange
-            var model = TestDataGenerator.TicketRequestModel(x => { x.Row = -1; x.Date = DateTimeOffset.Now; x.Price = 0; x.Place = -1;});
-            model.ClientId = Guid.NewGuid();
-            model.CinemaId = Guid.NewGuid();
-            model.FilmId = Guid.NewGuid();
-            model.HallId = Guid.NewGuid();
+            var model = TestDataGenerator.TicketRequestModel(x => { x.Row = -1; x.DatePayment = DateTimeOffset.Now; x.Price = 0; x.Place = -1;});
+            model.UserId = Guid.NewGuid();
+            model.SessionId = Guid.NewGuid();
             model.StaffId = Guid.Empty;
 
             // Act
@@ -45,26 +43,25 @@ namespace TicketSelling.Services.Tests.TestsValidators
         async public void ValidatorShouldSuccess()
         {
             //Arrange
-            var cinema = TestDataGenerator.Cinema();
             var film = TestDataGenerator.Film();
             var hall = TestDataGenerator.Hall();
-            var client = TestDataGenerator.Client();
+            var user = TestDataGenerator.User();
+            var session = TestDataGenerator.Session();
+            session.HallId = hall.Id;
+            session.FilmId = film.Id;
 
-            await Context.Cinemas.AddAsync(cinema);
+            await Context.Users.AddAsync(user);
             await Context.Films.AddAsync(film);
             await Context.Halls.AddAsync(hall);
-            await Context.Clients.AddAsync(client);
+            await Context.Sessions.AddAsync(session);
             await UnitOfWork.SaveChangesAsync(CancellationToken);
 
-            var model = TestDataGenerator.TicketRequestModel();
-            model.ClientId = client.Id;
-            model.FilmId = film.Id;
-            model.HallId = hall.Id;
-            model.CinemaId = cinema.Id;
-            model.StaffId = Guid.Empty;
+            var ticket = TestDataGenerator.TicketRequestModel();
+            ticket.UserId = user.Id;
+            ticket.SessionId = session.Id;
 
             // Act
-            var result = await validator.TestValidateAsync(model);
+            var result = await validator.TestValidateAsync(ticket);
 
             // Assert
             result.ShouldNotHaveAnyValidationErrors();

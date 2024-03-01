@@ -1,7 +1,7 @@
 ﻿namespace TicketSelling.API.Models.CreateRequest
 {
     /// <summary>
-    /// Модель запроса создания фильма
+    /// Модель запроса изменения фильма
     /// </summary>
     public class FilmRequest : CreateFilmRequest
     {

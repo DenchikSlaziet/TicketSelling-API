@@ -44,11 +44,11 @@ namespace TicketSelling.Services.ReadServices
 
         async Task IFilmService.DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            var targetFilm = await filmReadRepository.GetByIdAsync(id, cancellationToken);
+            var targetFilm = await filmReadRepository.GetNotDeletedByIdAsync(id, cancellationToken);
 
             if(targetFilm == null)
             {
-                throw new TimeTableEntityNotFoundException<Film>(id);
+                throw new TicketSellingEntityNotFoundException<Film>(id);
             }
 
             filmWriteRepository.Delete(targetFilm);
@@ -59,11 +59,11 @@ namespace TicketSelling.Services.ReadServices
         {
             await validatorService.ValidateAsync(source, cancellationToken);
 
-            var targetFilm = await filmReadRepository.GetByIdAsync(source.Id, cancellationToken);
+            var targetFilm = await filmReadRepository.GetNotDeletedByIdAsync(source.Id, cancellationToken);
 
             if (targetFilm == null)
             {
-                throw new TimeTableEntityNotFoundException<Film>(source.Id);
+                throw new TicketSellingEntityNotFoundException<Film>(source.Id);
             }
 
             targetFilm = mapper.Map<Film>(source);
@@ -82,11 +82,11 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<FilmModel?> IFilmService.GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var item = await filmReadRepository.GetByIdAsync(id, cancellationToken);
+            var item = await filmReadRepository.GetNotDeletedByIdAsync(id, cancellationToken);
 
             if(item == null) 
             {
-                throw new TimeTableEntityNotFoundException<Film>(id);
+                throw new TicketSellingEntityNotFoundException<Film>(id);
             }
 
             return mapper.Map<FilmModel>(item);

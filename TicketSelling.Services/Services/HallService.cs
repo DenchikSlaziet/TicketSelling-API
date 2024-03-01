@@ -44,11 +44,11 @@ namespace TicketSelling.Services.ReadServices
 
         async Task IHallService.DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            var targetHall = await hallReadRepository.GetByIdAsync(id, cancellationToken);
+            var targetHall = await hallReadRepository.GetNotDeletedByIdAsync(id, cancellationToken);
 
             if (targetHall == null)
             {
-                throw new TimeTableEntityNotFoundException<Hall>(id);
+                throw new TicketSellingEntityNotFoundException<Hall>(id);
             }
 
             hallWriteRepository.Delete(targetHall);
@@ -59,11 +59,11 @@ namespace TicketSelling.Services.ReadServices
         {
             await validatorService.ValidateAsync(source, cancellationToken);
 
-            var targetHall = await hallReadRepository.GetByIdAsync(source.Id, cancellationToken);
+            var targetHall = await hallReadRepository.GetNotDeletedByIdAsync(source.Id, cancellationToken);
 
             if (targetHall == null)
             {
-                throw new TimeTableEntityNotFoundException<Hall>(source.Id);
+                throw new TicketSellingEntityNotFoundException<Hall>(source.Id);
             }
 
             targetHall = mapper.Map<Hall>(source);
@@ -82,11 +82,11 @@ namespace TicketSelling.Services.ReadServices
 
         async Task<HallModel?> IHallService.GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var item = await hallReadRepository.GetByIdAsync(id, cancellationToken);
+            var item = await hallReadRepository.GetNotDeletedByIdAsync(id, cancellationToken);
 
             if (item == null)
             {
-                throw new TimeTableEntityNotFoundException<Hall>(id);
+                throw new TicketSellingEntityNotFoundException<Hall>(id);
             }
             
             return mapper.Map<HallModel>(item);

@@ -1,7 +1,7 @@
 ﻿namespace TicketSelling.API.Models.CreateRequest
 {
     /// <summary>
-    /// Модель запроса создания зала
+    /// Модель запроса изменения зала
     /// </summary>
     public class HallRequest : CreateHallRequest
     {

@@ -3,6 +3,7 @@ using FluentValidation;
 using TicketSelling.Common.Entity.InterfaceDB;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Repositories.Contracts.ReadInterfaces;
+using TicketSelling.Repositories.Contracts.ReadRepositiriesContracts;
 using TicketSelling.Repositories.Contracts.WriteRepositoriesContracts;
 using TicketSelling.Services.Anchors;
 using TicketSelling.Services.Contracts.Exceptions;
@@ -17,30 +18,31 @@ namespace TicketSelling.Services.ReadServices
     {
         private readonly ITicketWriteRepository ticketWriteRepository;
         private readonly ITicketReadRepository ticketReadRepository;
-        private readonly ICinemaReadRepository cinemaReadRepository;
-        private readonly IClientReadRepository clientReadRepository;
+        private readonly IUserReadRepository userReadRepository;
         private readonly IFilmReadRepository filmReadRepository;
         private readonly IHallReadRepository hallReadRepository;
         private readonly IStaffReadRepository staffReadRepository;
+        private readonly ISessionReadRepository sessionReadRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly IServiceValidatorService validatorService;
 
-        public TicketService(ITicketWriteRepository ticketWriteRepository, ITicketReadRepository ticketReadRepository, ICinemaReadRepository cinemaReadRepository,
-            IClientReadRepository clientReadRepository, IFilmReadRepository filmReadRepository,
+        public TicketService(ITicketWriteRepository ticketWriteRepository, ITicketReadRepository ticketReadRepository,
+            IUserReadRepository userReadRepository, IFilmReadRepository filmReadRepository,
             IHallReadRepository hallReadRepository, IStaffReadRepository staffReadRepository,
-            IMapper mapper, IUnitOfWork unitOfWork, IServiceValidatorService validatorService)
+            IMapper mapper, IUnitOfWork unitOfWork, IServiceValidatorService validatorService,
+            ISessionReadRepository sessionReadRepository)
         {
             this.ticketWriteRepository = ticketWriteRepository;
             this.ticketReadRepository = ticketReadRepository;
-            this.clientReadRepository = clientReadRepository;
-            this.cinemaReadRepository = cinemaReadRepository;
+            this.userReadRepository = userReadRepository;
             this.filmReadRepository = filmReadRepository;
             this.hallReadRepository = hallReadRepository;
             this.staffReadRepository = staffReadRepository;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
             this.validatorService = validatorService;
+            this.sessionReadRepository = sessionReadRepository;
         }
 
         async Task<TicketModel> ITicketService.AddAsync(TicketRequestModel model, CancellationToken cancellationToken)
@@ -52,16 +54,39 @@ namespace TicketSelling.Services.ReadServices
             ticketWriteRepository.Add(ticket);
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return await GetTicketModelOnMapping(ticket, cancellationToken);
+            var ticketModel = mapper.Map<TicketModel>(ticket);
+            var session = await sessionReadRepository.GetByIdAsync(model.SessionId, cancellationToken);
+
+            if (session == null)
+            {
+                throw new TicketSellingEntityNotFoundException<Session>(model.SessionId);
+            }
+
+            var staff = model.StaffId.HasValue
+                ? await staffReadRepository.GetByIdAsync(model.StaffId.Value, cancellationToken)
+                : null;
+            var user = await userReadRepository.GetByIdAsync(model.UserId, cancellationToken);
+            var hall = await hallReadRepository.GetByIdAsync(session!.HallId, cancellationToken);
+            var film = await filmReadRepository.GetByIdAsync(session!.FilmId, cancellationToken);
+            var sessionModel = mapper.Map<SessionModel>(session);
+
+            sessionModel.Film = mapper.Map<FilmModel>(film);
+            sessionModel.Hall = mapper.Map<HallModel>(hall);
+
+            ticketModel.Session = sessionModel;
+            ticketModel.Staff = mapper.Map<StaffModel>(staff);
+            ticketModel.User = mapper.Map<UserModel>(user);
+
+            return ticketModel;
         }
 
         async Task ITicketService.DeleteAsync(Guid id, CancellationToken cancellationToken)
         {
-            var targetTicket = await ticketReadRepository.GetByIdAsync(id, cancellationToken);
+            var targetTicket = await ticketReadRepository.GetNotDeletedByIdAsync(id, cancellationToken);
 
             if (targetTicket == null)
             {
-                throw new TimeTableEntityNotFoundException<Ticket>(id);
+                throw new TicketSellingEntityNotFoundException<Ticket>(id);
             }
 
             ticketWriteRepository.Delete(targetTicket);
@@ -72,61 +97,82 @@ namespace TicketSelling.Services.ReadServices
         {
             await validatorService.ValidateAsync(model, cancellationToken);
 
-            var ticket = await ticketReadRepository.GetByIdAsync(model.Id, cancellationToken);
+            var ticket = await ticketReadRepository.GetNotDeletedByIdAsync(model.Id, cancellationToken);
 
             if (ticket == null)
             {
-                throw new TimeTableEntityNotFoundException<Ticket>(model.Id);
+                throw new TicketSellingEntityNotFoundException<Ticket>(model.Id);
             }
 
             ticket = mapper.Map<Ticket>(model);       
             ticketWriteRepository.Update(ticket);
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return await GetTicketModelOnMapping(ticket, cancellationToken);
+            var ticketModel = mapper.Map<TicketModel>(ticket);
+            var session = await sessionReadRepository.GetByIdAsync(model.SessionId, cancellationToken);
+
+            if (session == null)
+            {
+                throw new TicketSellingEntityNotFoundException<Session>(model.SessionId);
+            }
+
+            var staff = model.StaffId.HasValue
+                ? await staffReadRepository.GetByIdAsync(model.StaffId.Value, cancellationToken)
+                : null;
+            var user = await userReadRepository.GetByIdAsync(model.UserId, cancellationToken);
+            var hall = await hallReadRepository.GetByIdAsync(session!.HallId, cancellationToken);
+            var film = await filmReadRepository.GetByIdAsync(session!.FilmId, cancellationToken);
+            var sessionModel = mapper.Map<SessionModel>(session);
+
+            sessionModel.Film = mapper.Map<FilmModel>(film);
+            sessionModel.Hall = mapper.Map<HallModel>(hall);
+
+            ticketModel.Session = sessionModel;
+            ticketModel.Staff = mapper.Map<StaffModel>(staff);
+            ticketModel.User = mapper.Map<UserModel>(user);
+
+            return ticketModel;
         }
 
+        //TODO: Вывожу не удаленные, но с информацией возможно удаленной
         async Task<IEnumerable<TicketModel>> ITicketService.GetAllAsync(CancellationToken cancellationToken)
         {
             var tickets = await ticketReadRepository.GetAllAsync(cancellationToken);
-            var cinemas = await cinemaReadRepository
-                .GetByIdsAsync(tickets.Select(x => x.CinemaId).Distinct(), cancellationToken);
 
-            var clients = await clientReadRepository
-                .GetByIdsAsync(tickets.Select(x => x.ClientId).Distinct(), cancellationToken);
+            var userIds = await userReadRepository
+                .GetByIdsAsync(tickets.Select(x => x.UserId).Distinct(), cancellationToken);
 
-            var films = await filmReadRepository
-                .GetByIdsAsync(tickets.Select(x => x.FilmId).Distinct(), cancellationToken);
-
-            var halls = await hallReadRepository
-                .GetByIdsAsync(tickets.Select(x => x.HallId).Distinct(), cancellationToken);
-
-            var staffs = await staffReadRepository
+            var staffIds = await staffReadRepository
                 .GetByIdsAsync(tickets.Where(x => x.StaffId.HasValue).Select(x => x.StaffId!.Value).Distinct(), cancellationToken);
 
-            var result = new List<TicketModel>();
+            var sessionIds = await sessionReadRepository
+                .GetByIdsAsync(tickets.Select(x => x.SessionId).Distinct(), cancellationToken);
+
+            var result = new List<TicketModel>(tickets.Count);
 
             foreach (var ticket in tickets)
             {
-                if (!cinemas.TryGetValue(ticket.CinemaId, out var cinema) ||
-                !clients.TryGetValue(ticket.ClientId, out var client) ||
-                !films.TryGetValue(ticket.FilmId, out var film) ||
-                !halls.TryGetValue(ticket.HallId, out var hall))
+                if (!userIds.TryGetValue(ticket.UserId, out var user) ||
+                    !sessionIds.TryGetValue(ticket.SessionId, out var session))
                 {
                     continue;
                 }
                 else
                 {
                     var ticketModel = mapper.Map<TicketModel>(ticket);
+                   
+                    var hall = await hallReadRepository.GetByIdAsync(session!.HallId, cancellationToken);
+                    var film = await filmReadRepository.GetByIdAsync(session!.FilmId, cancellationToken);
+                    var sessionModel = mapper.Map<SessionModel>(session);
+                    var staffModel = ticket.StaffId.HasValue && staffIds.TryGetValue(ticket.StaffId.Value, out var staff)
+                        ? mapper.Map<StaffModel>(staff) : null;
 
-                    ticketModel.Hall = mapper.Map<HallModel>(hall);
-                    ticketModel.Film = mapper.Map<FilmModel>(film);
-                    ticketModel.Staff = ticket.StaffId.HasValue &&
-                                              staffs.TryGetValue(ticket.StaffId!.Value, out var staff)
-                        ? mapper.Map<StaffModel>(staff)
-                        : null;
-                    ticketModel.Cinema = mapper.Map<CinemaModel>(cinema);
-                    ticketModel.Client = mapper.Map<ClientModel>(client);
+                    sessionModel.Film = mapper.Map<FilmModel>(film);
+                    sessionModel.Hall = mapper.Map<HallModel>(hall);
+
+                    ticketModel.Session = sessionModel;
+                    ticketModel.Staff = staffModel;
+                    ticketModel.User = mapper.Map<UserModel>(user);
 
                     result.Add(ticketModel);
                 }
@@ -135,30 +181,41 @@ namespace TicketSelling.Services.ReadServices
             return result;
         }
 
+        //TODO: Вывожу не удаленные, но с информацией возможно удаленной
         async Task<TicketModel?> ITicketService.GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var item = await ticketReadRepository.GetByIdAsync(id, cancellationToken);
+            var item = await ticketReadRepository.GetNotDeletedByIdAsync(id, cancellationToken);
 
             if (item == null)
             {
-                throw new TimeTableEntityNotFoundException<Ticket>(id);
+                throw new TicketSellingEntityNotFoundException<Ticket>(id);
             }
 
-           return await GetTicketModelOnMapping(item, cancellationToken);
-        }
+            var ticketModel = mapper.Map<TicketModel>(item);
 
-        async private Task<TicketModel> GetTicketModelOnMapping(Ticket ticket, CancellationToken cancellationToken)
-        {
-            var ticketModel = mapper.Map<TicketModel>(ticket);
-            ticketModel.Cinema = mapper.Map<CinemaModel>(await cinemaReadRepository.GetByIdAsync(ticket.CinemaId, cancellationToken));
-            ticketModel.Hall = mapper.Map<HallModel>(await hallReadRepository.GetByIdAsync(ticket.HallId, cancellationToken));
-            ticketModel.Film = mapper.Map<FilmModel>(await filmReadRepository.GetByIdAsync(ticket.FilmId, cancellationToken));
-            ticketModel.Staff = mapper.Map<StaffModel>(ticket.StaffId.HasValue
-                ? await staffReadRepository.GetByIdAsync(ticket.StaffId.Value, cancellationToken)
-                : null);
-            ticketModel.Client = mapper.Map<ClientModel>(await clientReadRepository.GetByIdAsync(ticket.ClientId, cancellationToken));
+            var session = await sessionReadRepository.GetByIdAsync(item.SessionId, cancellationToken);
+
+            if(session == null)
+            {
+                throw new TicketSellingEntityNotFoundException<Session>(item.SessionId);
+            }
+
+            var hall = await hallReadRepository.GetByIdAsync(session!.HallId, cancellationToken);
+            var film = await filmReadRepository.GetByIdAsync(session!.FilmId, cancellationToken);
+            var sessionModel = mapper.Map<SessionModel>(session);
+            var staff = item.StaffId.HasValue
+                ? await staffReadRepository.GetByIdAsync(item.StaffId.Value, cancellationToken)
+                : null;
+            var user = await userReadRepository.GetByIdAsync(item.UserId, cancellationToken);
+
+            sessionModel.Film = mapper.Map<FilmModel>(film);
+            sessionModel.Hall = mapper.Map<HallModel>(hall);
+         
+            ticketModel.Session = sessionModel;
+            ticketModel.Staff = mapper.Map<StaffModel>(staff);
+            ticketModel.User = mapper.Map<UserModel>(user);
 
             return ticketModel;
-        }
+        }        
     }
 }

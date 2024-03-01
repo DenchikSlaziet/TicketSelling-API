@@ -45,7 +45,7 @@ namespace TicketSelling.API.Tests.Tests
         /// Коллекция контроллеров по администрированию
         /// </summary>
         public static IEnumerable<object[]>? ApiControllerCore =>
-            Assembly.GetAssembly(typeof(CinemaController))
+            Assembly.GetAssembly(typeof(SessionController))
                 ?.DefinedTypes
                 .Where(type => typeof(ControllerBase).IsAssignableFrom(type))
                 .Where(type => !type.IsAbstract)

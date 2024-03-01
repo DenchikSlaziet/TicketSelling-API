@@ -1,6 +1,4 @@
-﻿using TicketSelling.Common.Entity.EntityInterface;
-
-namespace TicketSelling.Context.Contracts.Models
+﻿namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Зал
@@ -10,13 +8,18 @@ namespace TicketSelling.Context.Contracts.Models
         /// <summary>
         /// Номер зала
         /// </summary>
-        public short Number { get; set; }
+        public int Number { get; set; }
 
         /// <summary>
-        /// Кол-во мест
+        /// Кол-во мест в ряду
         /// </summary>
-        public short NumberOfSeats { get; set; }
+        public int CountPlaceInRow { get; set; }
 
-        public ICollection<Ticket> Tickets { get; set; }
+        /// <summary>
+        /// Кол-во рядов
+        /// </summary>
+        public int CountRow { get; set; }
+
+        public ICollection<Session> Sessions { get; set; }
     }
 }

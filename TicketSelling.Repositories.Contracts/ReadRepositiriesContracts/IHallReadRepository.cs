@@ -13,14 +13,24 @@ namespace TicketSelling.Repositories.Contracts.ReadInterfaces
         Task<IReadOnlyCollection<Hall>> GetAllAsync(CancellationToken cancellationToken);
 
         /// <summary>
-        /// Получить <see cref="Hall"/> по идентификатору
+        /// Получить любой <see cref="Hall"/> по идентификатору
         /// </summary>
         Task<Hall?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Получить <see cref="Hall"/> по идентификаторам
+        /// Получить неудаленный <see cref="Hall"/> по идентификатору
+        /// </summary>
+        Task<Hall?> GetNotDeletedByIdAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить любые <see cref="Hall"/> по идентификаторам
         /// </summary>
         Task<Dictionary<Guid, Hall>> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить неудаленные <see cref="Hall"/> по идентификаторам
+        /// </summary>
+        Task<Dictionary<Guid, Hall>> GetNotDeletedByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
 
         /// <summary>
         /// Проверить есть ли <see cref="Hall"/> в коллеции

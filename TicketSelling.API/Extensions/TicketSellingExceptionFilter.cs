@@ -13,7 +13,7 @@ namespace TicketSelling.API.Extensions
         /// <inheritdoc/>
         public void OnException(ExceptionContext context)
         {
-            var exception = context.Exception as TimeTableException;
+            var exception = context.Exception as TicketSellingException;
             if (exception == null)
             {
                 return;
@@ -21,7 +21,7 @@ namespace TicketSelling.API.Extensions
 
             switch (exception)
             {
-                case TimeTableValidationException ex:
+                case TicketSellingValidationException ex:
                     SetDataToContext(
                         new ConflictObjectResult(new ApiValidationExceptionDetail
                         {
@@ -30,7 +30,7 @@ namespace TicketSelling.API.Extensions
                         context);
                     break;
 
-                case TimeTableInvalidOperationException ex:
+                case TicketSellingInvalidOperationException ex:
                     SetDataToContext(
                         new BadRequestObjectResult(new ApiExceptionDetail { Message = ex.Message, })
                         {
@@ -39,7 +39,7 @@ namespace TicketSelling.API.Extensions
                         context);
                     break;
 
-                case TimeTableNotFoundException ex:
+                case TicketSellingNotFoundException ex:
                     SetDataToContext(new NotFoundObjectResult(new ApiExceptionDetail
                     {
                         Message = ex.Message,

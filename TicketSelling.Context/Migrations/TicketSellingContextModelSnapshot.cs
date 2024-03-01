@@ -22,112 +22,6 @@ namespace TicketSelling.Context.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Cinema", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Address")
-                        .IsUnique()
-                        .HasDatabaseName("Cinema_Address")
-                        .HasFilter("DeletedAt is null");
-
-                    b.HasIndex("Title")
-                        .HasDatabaseName("Cinema_Title");
-
-                    b.ToTable("Cinemas", (string)null);
-                });
-
-            modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Client", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<short>("Age")
-                        .HasColumnType("smallint");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Patronymic")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasDatabaseName("Client_Email")
-                        .HasFilter("DeletedAt is null");
-
-                    b.ToTable("Clients", (string)null);
-                });
-
             modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Film", b =>
                 {
                     b.Property<Guid>("Id")
@@ -148,8 +42,14 @@ namespace TicketSelling.Context.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<short>("Limitation")
-                        .HasColumnType("smallint");
+                    b.Property<int>("Genre")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("ImagePreview")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("Limitation")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -180,6 +80,12 @@ namespace TicketSelling.Context.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("CountPlaceInRow")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountRow")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
@@ -191,11 +97,8 @@ namespace TicketSelling.Context.Migrations
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<short>("Number")
-                        .HasColumnType("smallint");
-
-                    b.Property<short>("NumberOfSeats")
-                        .HasColumnType("smallint");
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
@@ -215,14 +118,60 @@ namespace TicketSelling.Context.Migrations
                     b.ToTable("Halls", (string)null);
                 });
 
+            modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Session", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("EndDateTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("FilmId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("HallId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("StartDateTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilmId");
+
+                    b.HasIndex("HallId");
+
+                    b.ToTable("Sessions", (string)null);
+                });
+
             modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Staff", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<short>("Age")
-                        .HasColumnType("smallint");
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
@@ -263,10 +212,6 @@ namespace TicketSelling.Context.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Post")
-                        .HasDatabaseName("Staff_Post")
-                        .HasFilter("DeletedAt is null");
-
                     b.ToTable("Staffs", (string)null);
                 });
 
@@ -274,12 +219,6 @@ namespace TicketSelling.Context.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CinemaId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ClientId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreatedAt")
@@ -290,26 +229,23 @@ namespace TicketSelling.Context.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTimeOffset>("Date")
+                    b.Property<DateTimeOffset>("DatePayment")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid>("FilmId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("HallId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<short>("Place")
-                        .HasColumnType("smallint");
+                    b.Property<int>("Place")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<short>("Row")
-                        .HasColumnType("smallint");
+                    b.Property<int>("Row")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("SessionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("StaffId")
                         .HasColumnType("uniqueidentifier");
@@ -322,48 +258,114 @@ namespace TicketSelling.Context.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CinemaId");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("Date")
-                        .HasDatabaseName("Ticket_Date")
-                        .HasFilter("DeletedAt is null");
-
-                    b.HasIndex("FilmId");
-
-                    b.HasIndex("HallId");
+                    b.HasIndex("SessionId");
 
                     b.HasIndex("StaffId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Tickets", (string)null);
                 });
 
-            modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Ticket", b =>
+            modelBuilder.Entity("TicketSelling.Context.Contracts.Models.User", b =>
                 {
-                    b.HasOne("TicketSelling.Context.Contracts.Models.Cinema", "Cinema")
-                        .WithMany("Tickets")
-                        .HasForeignKey("CinemaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasOne("TicketSelling.Context.Contracts.Models.Client", "Client")
-                        .WithMany("Tickets")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
 
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Patronymic")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Login")
+                        .IsUnique()
+                        .HasDatabaseName("User_Login")
+                        .HasFilter("DeletedAt is null");
+
+                    b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Session", b =>
+                {
                     b.HasOne("TicketSelling.Context.Contracts.Models.Film", "Film")
-                        .WithMany("Tickets")
+                        .WithMany("Sessions")
                         .HasForeignKey("FilmId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TicketSelling.Context.Contracts.Models.Hall", "Hall")
-                        .WithMany("Tickets")
+                        .WithMany("Sessions")
                         .HasForeignKey("HallId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Film");
+
+                    b.Navigation("Hall");
+                });
+
+            modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Ticket", b =>
+                {
+                    b.HasOne("TicketSelling.Context.Contracts.Models.Session", "Session")
+                        .WithMany("Tickets")
+                        .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -371,38 +373,40 @@ namespace TicketSelling.Context.Migrations
                         .WithMany("Tickets")
                         .HasForeignKey("StaffId");
 
-                    b.Navigation("Cinema");
+                    b.HasOne("TicketSelling.Context.Contracts.Models.User", "User")
+                        .WithMany("Tickets")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Client");
-
-                    b.Navigation("Film");
-
-                    b.Navigation("Hall");
+                    b.Navigation("Session");
 
                     b.Navigation("Staff");
-                });
 
-            modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Cinema", b =>
-                {
-                    b.Navigation("Tickets");
-                });
-
-            modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Client", b =>
-                {
-                    b.Navigation("Tickets");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Film", b =>
                 {
-                    b.Navigation("Tickets");
+                    b.Navigation("Sessions");
                 });
 
             modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Hall", b =>
+                {
+                    b.Navigation("Sessions");
+                });
+
+            modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Session", b =>
                 {
                     b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("TicketSelling.Context.Contracts.Models.Staff", b =>
+                {
+                    b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("TicketSelling.Context.Contracts.Models.User", b =>
                 {
                     b.Navigation("Tickets");
                 });

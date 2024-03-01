@@ -28,13 +28,13 @@ namespace TicketSelling.Services.Contracts.Models
         public string Patronymic { get; set; } = string.Empty;
 
         /// <summary>
-        /// Должность
-        /// </summary>
-        public PostModel Post { get; set; } 
-
-        /// <summary>
         /// Возраст
         /// </summary>
-        public short Age { get; set; }
+        public int Age { get; set; }
+
+        /// <summary>
+        /// Должность
+        /// </summary>
+        public PostModel Post { get; set; }
     }
 }

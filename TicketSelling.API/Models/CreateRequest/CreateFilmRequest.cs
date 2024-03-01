@@ -1,4 +1,6 @@
-﻿namespace TicketSelling.API.Models.CreateRequest
+﻿using TicketSelling.API.Enums;
+
+namespace TicketSelling.API.Models.CreateRequest
 {
     /// <summary>
     /// Модель запроса создания фильма
@@ -11,13 +13,23 @@
         public string Title { get; set; } = string.Empty;
 
         /// <summary>
-        /// Ограничение по возросту
-        /// </summary>
-        public short Limitation { get; set; }
-
-        /// <summary>
         /// Описание
         /// </summary>
         public string? Description { get; set; }
+
+        /// <summary>
+        /// Ограничение по возросту
+        /// </summary>
+        public int Limitation { get; set; }
+
+        /// <summary>
+        /// Жанр
+        /// </summary>
+        public GenreResponse Genre { get; set; }
+
+        /// <summary>
+        /// Превью
+        /// </summary>
+        public byte[]? ImagePreview { get; set; }
     }
 }

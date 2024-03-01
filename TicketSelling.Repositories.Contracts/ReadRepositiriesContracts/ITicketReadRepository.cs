@@ -15,7 +15,7 @@ namespace TicketSelling.Repositories.Contracts.ReadInterfaces
         /// <summary>
         /// Получить <see cref="Ticket"/> по идентификатору
         /// </summary>
-        Task<Ticket?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<Ticket?> GetNotDeletedByIdAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Проверить есть ли <see cref="Ticket"/> в коллеции

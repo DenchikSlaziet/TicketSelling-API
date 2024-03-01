@@ -18,8 +18,10 @@ namespace TicketSelling.Services.Validator.Validators
             RuleFor(x => x.Description)
                 .Length(3, 500).WithMessage(MessageForValidation.LengthMessage).When(x => !string.IsNullOrWhiteSpace(x.Description));
 
-            RuleFor(x => (int)x.Limitation)
+            RuleFor(x => x.Limitation)
                .InclusiveBetween(0, 18).WithMessage(MessageForValidation.InclusiveBetweenMessage);
+
+            RuleFor(x => x.Genre).IsInEnum().WithMessage(MessageForValidation.DefaultMessage);
         }
     }
 }

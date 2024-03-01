@@ -31,16 +31,27 @@ namespace TicketSelling.Repositories.ReadRepositories
         Task<Hall?> IHallReadRepository.GetByIdAsync(Guid id, CancellationToken cancellationToken)
             => reader.Read<Hall>()
                 .ById(id)
-                .NotDeletedAt()
                 .FirstOrDefaultAsync(cancellationToken);
 
         Task<Dictionary<Guid, Hall>> IHallReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
+            => reader.Read<Hall>()
+                .ByIds(ids)
+                .OrderBy(x => x.Number).ToDictionaryAsync(x => x.Id, cancellationToken);
+
+        Task<Hall?> IHallReadRepository.GetNotDeletedByIdAsync(Guid id, CancellationToken cancellationToken)
+            => reader.Read<Hall>()
+                .NotDeletedAt()
+                .ById(id)
+                .FirstOrDefaultAsync(cancellationToken);
+
+        Task<Dictionary<Guid, Hall>> IHallReadRepository.GetNotDeletedByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
             => reader.Read<Hall>()
                 .NotDeletedAt()
                 .ByIds(ids)
                 .OrderBy(x => x.Number).ToDictionaryAsync(x => x.Id, cancellationToken);
 
         Task<bool> IHallReadRepository.IsNotNullAsync(Guid id, CancellationToken cancellationToken)
-            => reader.Read<Hall>().AnyAsync(x => x.Id == id && !x.DeletedAt.HasValue, cancellationToken);
+            => reader.Read<Hall>().NotDeletedAt()
+            .AnyAsync(x => x.Id == id, cancellationToken);
     }
 }

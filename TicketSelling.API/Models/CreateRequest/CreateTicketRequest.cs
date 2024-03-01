@@ -6,39 +6,29 @@
     public class CreateTicketRequest
     {
         /// <summary>
-        /// Идентификатор Зала
-        /// </summary>
-        public Guid HallId { get; set; }
-
-        /// <summary>
-        /// Идентификатор Кинотеатра
-        /// </summary>
-        public Guid CinemaId { get; set; }
-
-        /// <summary>
-        /// Идентификатор Фильма
-        /// </summary>
-        public Guid FilmId { get; set; }
-
-        /// <summary>
         /// Идентификатор Клиента
         /// </summary>
-        public Guid ClientId { get; set; }
+        public Guid UserId { get; set; }
 
         /// <summary>
-        /// Идентификатор сотрудника, продавшего билет 
+        /// Идентификатор Сеанса
+        /// </summary>
+        public Guid SessionId { get; set; }
+
+        /// <summary>
+        /// Идентификатор Завхоза
         /// </summary>
         public Guid? StaffId { get; set; }
 
         /// <summary>
         /// Ряд
         /// </summary>
-        public short Row { get; set; }
+        public int Row { get; set; }
 
         /// <summary>
         /// Место
         /// </summary>
-        public short Place { get; set; }
+        public int Place { get; set; }
 
         /// <summary>
         /// Цена
@@ -46,8 +36,8 @@
         public decimal Price { get; set; }
 
         /// <summary>
-        /// Дата и врремя проведения фильма
+        /// Дата и время покупки билета
         /// </summary>
-        public DateTimeOffset Date { get; set; }
+        public DateTimeOffset DatePayment { get; set; }
     }
 }

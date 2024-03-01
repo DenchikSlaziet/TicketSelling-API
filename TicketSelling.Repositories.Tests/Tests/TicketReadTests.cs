@@ -64,7 +64,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             var id = Guid.NewGuid();
 
             // Act
-            var result = await ticketReadRepository.GetByIdAsync(id, CancellationToken);
+            var result = await ticketReadRepository.GetNotDeletedByIdAsync(id, CancellationToken);
 
             // Assert
             result.Should().BeNull();
@@ -82,7 +82,7 @@ namespace TicketSelling.Repositories.Tests.Tests
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
-            var result = await ticketReadRepository.GetByIdAsync(target.Id, CancellationToken);
+            var result = await ticketReadRepository.GetNotDeletedByIdAsync(target.Id, CancellationToken);
 
             // Assert
             result.Should()

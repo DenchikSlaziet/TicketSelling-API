@@ -2,6 +2,7 @@
 using FluentAssertions;
 using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Context.Tests;
+using TicketSelling.Repositories.Contracts.ReadInterfaces;
 using TicketSelling.Repositories.ReadRepositories;
 using TicketSelling.Repositories.WriteRepositoriеs;
 using TicketSelling.Services.AutoMappers;
@@ -31,8 +32,8 @@ namespace TicketSelling.Services.Tests.Tests
 
             hallReadRepository = new HallReadRepository(Reader);
             hallService = new HallService(new HallWriteRepository(WriterContext), hallReadRepository,
-                UnitOfWork, config.CreateMapper(), new ServicesValidatorService(new CinemaReadRepository(Reader), 
-                new ClientReadRepository(Reader), new FilmReadRepository(Reader), hallReadRepository));
+                UnitOfWork, config.CreateMapper(), new ServicesValidatorService(new SessionReadRepository(Reader),
+                new UserReadRepository(Reader), new FilmReadRepository(Reader), hallReadRepository, new StaffReadRepository(Reader)));
         }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => hallService.GetByIdAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Hall>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Hall>>()
                 .WithMessage($"*{id}*");
         }
 
@@ -72,8 +73,9 @@ namespace TicketSelling.Services.Tests.Tests
                 .And.BeEquivalentTo(new
                 {
                     target.Id,
-                    target.NumberOfSeats,
-                    target.Number
+                    target.CountPlaceInRow,
+                    target.Number,
+                    target.CountRow
                 });
         }
 
@@ -128,7 +130,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => hallService.DeleteAsync(id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Hall>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Hall>>()
                 .WithMessage($"*{id}*");
         }
 
@@ -147,7 +149,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> result = () => hallService.DeleteAsync(model.Id, CancellationToken);
 
             // Assert
-            await result.Should().ThrowAsync<TimeTableEntityNotFoundException<Hall>>()
+            await result.Should().ThrowAsync<TicketSellingEntityNotFoundException<Hall>>()
                 .WithMessage($"*{model.Id}*");
         }        
 
@@ -198,13 +200,13 @@ namespace TicketSelling.Services.Tests.Tests
         public async Task AddShouldValidationException()
         {
             //Arrange
-            var model = TestDataGenerator.HallModel(x => x.NumberOfSeats = -1);
+            var model = TestDataGenerator.HallModel(x => x.CountPlaceInRow = -1);
 
             //Act
             Func<Task> act = () => hallService.AddAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableValidationException>();
+            await act.Should().ThrowAsync<TicketSellingValidationException>();
         }
 
         /// <summary>
@@ -220,7 +222,7 @@ namespace TicketSelling.Services.Tests.Tests
             Func<Task> act = () => hallService.EditAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableEntityNotFoundException<Hall>>()
+            await act.Should().ThrowAsync<TicketSellingEntityNotFoundException<Hall>>()
                 .WithMessage($"*{model.Id}*");
         }
 
@@ -231,13 +233,13 @@ namespace TicketSelling.Services.Tests.Tests
         public async Task EditShouldValidationException()
         {
             //Arrange
-            var model = TestDataGenerator.HallModel(x => x.NumberOfSeats = -1);
+            var model = TestDataGenerator.HallModel(x => x.CountPlaceInRow = -1);
 
             //Act
             Func<Task> act = () => hallService.EditAsync(model, CancellationToken);
 
             // Assert
-            await act.Should().ThrowAsync<TimeTableValidationException>();
+            await act.Should().ThrowAsync<TicketSellingValidationException>();
         }
 
         /// <summary>
@@ -263,8 +265,9 @@ namespace TicketSelling.Services.Tests.Tests
                 .BeEquivalentTo(new
                 {
                     model.Id,
+                    model.CountPlaceInRow,
                     model.Number,
-                    model.NumberOfSeats
+                    model.CountRow
                 });
         }
     }

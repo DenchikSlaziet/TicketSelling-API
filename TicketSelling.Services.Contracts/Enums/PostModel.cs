@@ -11,11 +11,6 @@
         Cashier,
 
         /// <summary>
-        /// Менеджер
-        /// </summary>
-        Manager,
-
-        /// <summary>
         /// Нет поста
         /// </summary>
         None

@@ -5,6 +5,7 @@ using System.Text;
 using TicketSelling.API.Models.CreateRequest;
 using TicketSelling.API.Models.Response;
 using TicketSelling.API.Tests.Infrastructures;
+using TicketSelling.Context.Contracts.Models;
 using TicketSelling.Test.Extensions;
 using Xunit;
 
@@ -85,7 +86,8 @@ namespace TicketSelling.API.Tests.Tests
             .BeEquivalentTo(new
             {
                 hall.Number,
-                hall.NumberOfSeats
+                hall.CountPlaceInRow,
+                hall.CountRow
             });
         }
 
@@ -113,7 +115,8 @@ namespace TicketSelling.API.Tests.Tests
                 .BeEquivalentTo(new
                 {
                     hall1.Id,
-                    hall1.NumberOfSeats,
+                    hall1.CountPlaceInRow,
+                    hall1.CountRow,
                     hall1.Number
                 });
         }

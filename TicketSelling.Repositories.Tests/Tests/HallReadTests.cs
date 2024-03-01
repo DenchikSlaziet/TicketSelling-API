@@ -77,12 +77,50 @@ namespace TicketSelling.Repositories.Tests.Tests
         public async Task GetByIdShouldReturnValue()
         {
             //Arrange
-            var target = TestDataGenerator.Hall();
+            var target = TestDataGenerator.Hall(x => x.DeletedAt = DateTimeOffset.Now);
             await Context.Halls.AddAsync(target);
             await Context.SaveChangesAsync(CancellationToken);
 
             // Act
             var result = await hallReadRepository.GetByIdAsync(target.Id, CancellationToken);
+
+            // Assert
+            result.Should()
+                .NotBeNull()
+                .And.BeEquivalentTo(target);
+        }
+
+        /// <summary>
+        /// Получение зала по идентификатору возвращает null
+        /// </summary>
+        [Fact]
+        public async Task GetNotDeletedByIdShouldReturnNull()
+        {
+            //Arrange
+            var target = TestDataGenerator.Hall(x => x.DeletedAt = DateTimeOffset.Now);
+            await Context.Halls.AddAsync(target);
+            await Context.SaveChangesAsync(CancellationToken);
+
+            // Act
+            var result = await hallReadRepository.GetNotDeletedByIdAsync(target.Id, CancellationToken);
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Получение зала по идентификатору возвращает данные
+        /// </summary>
+        [Fact]
+        public async Task GetNotDeletedByIdShouldReturnValue()
+        {
+            //Arrange
+            var target = TestDataGenerator.Hall();
+            await Context.Halls.AddAsync(target);
+            await Context.SaveChangesAsync(CancellationToken);
+
+            // Act
+            var result = await hallReadRepository.GetNotDeletedByIdAsync(target.Id, CancellationToken);
 
             // Assert
             result.Should()
@@ -126,6 +164,54 @@ namespace TicketSelling.Repositories.Tests.Tests
 
             // Act
             var result = await hallReadRepository.GetByIdsAsync(new[] { target1.Id, target2.Id, target4.Id }, CancellationToken);
+
+            // Assert
+            result.Should()
+                .NotBeNull()
+                .And.HaveCount(3)
+                .And.ContainKey(target1.Id)
+                .And.ContainKey(target4.Id)
+                .And.ContainKey(target2.Id);
+        }
+
+        /// <summary>
+        /// Получение списка залов по идентификаторам возвращает пустую коллекцию
+        /// </summary>
+        [Fact]
+        public async Task GetNotDeletedByIdsShouldReturnEmpty()
+        {
+            //Arrange
+            var target1 = TestDataGenerator.Hall(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            var target2 = TestDataGenerator.Hall(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            var target3 = TestDataGenerator.Hall(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            await Context.Halls.AddRangeAsync(target1, target2, target3);
+            await Context.SaveChangesAsync(CancellationToken);
+
+            // Act
+            var result = await hallReadRepository.GetNotDeletedByIdsAsync(new[] { target1.Id, target1.Id, target3.Id }, CancellationToken);
+
+            // Assert
+            result.Should()
+                .NotBeNull()
+                .And.BeEmpty();
+        }
+
+        /// <summary>
+        /// Получение списка залов по идентификаторам возвращает данные
+        /// </summary>
+        [Fact]
+        public async Task GetNotDeletedByIdsShouldReturnValue()
+        {
+            //Arrange
+            var target1 = TestDataGenerator.Hall();
+            var target2 = TestDataGenerator.Hall(x => x.DeletedAt = DateTimeOffset.UtcNow);
+            var target3 = TestDataGenerator.Hall();
+            var target4 = TestDataGenerator.Hall();
+            await Context.Halls.AddRangeAsync(target1, target2, target3, target4);
+            await Context.SaveChangesAsync(CancellationToken);
+
+            // Act
+            var result = await hallReadRepository.GetNotDeletedByIdsAsync(new[] { target1.Id, target2.Id, target4.Id }, CancellationToken);
 
             // Assert
             result.Should()

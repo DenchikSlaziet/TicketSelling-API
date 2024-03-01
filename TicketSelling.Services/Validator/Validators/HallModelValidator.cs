@@ -10,11 +10,14 @@ namespace TicketSelling.Services.Validator.Validators
     {
         public HallModelValidator()
         {
-            RuleFor(x => (int)x.Number)
+            RuleFor(x => x.Number)
               .InclusiveBetween(1, 999).WithMessage(MessageForValidation.InclusiveBetweenMessage);
 
-            RuleFor(x => (int)x.NumberOfSeats)
-              .InclusiveBetween(15, 200).WithMessage(MessageForValidation.InclusiveBetweenMessage);
+            RuleFor(x => x.CountPlaceInRow)
+              .InclusiveBetween(3, 10).WithMessage(MessageForValidation.InclusiveBetweenMessage);
+
+            RuleFor(x => x.CountRow)
+              .InclusiveBetween(1, 7).WithMessage(MessageForValidation.InclusiveBetweenMessage);
         }
     }
 }
