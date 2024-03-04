@@ -6,6 +6,11 @@
     public enum PostResponse
     {
         /// <summary>
+        /// Билетер
+        /// </summary>
+        Usher,
+
+        /// <summary>
         /// Кассир
         /// </summary>
         Cashier,
