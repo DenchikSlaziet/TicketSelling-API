@@ -1,4 +1,6 @@
-﻿namespace TicketSelling.API.Models.Response
+﻿using TicketSelling.API.Enums;
+
+namespace TicketSelling.API.Models.Response
 {
     public class TicketResponse
     {
@@ -41,5 +43,10 @@
         /// Дата и время покупки билета
         /// </summary>
         public DateTimeOffset DatePayment { get; set; }
+
+        /// <summary>
+        /// Способ оплаты
+        /// </summary>
+        public PaymentMethodResponse PaymentMethod { get; set; }
     }
 }

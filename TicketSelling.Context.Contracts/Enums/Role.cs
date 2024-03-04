@@ -3,11 +3,6 @@
     public enum Role
     {
         /// <summary>
-        /// Гость
-        /// </summary>
-        Quest,
-
-        /// <summary>
         /// Пользователь
         /// </summary>
         User,

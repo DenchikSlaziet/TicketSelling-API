@@ -3,11 +3,6 @@
     public enum RoleModel
     {
         /// <summary>
-        /// Гость
-        /// </summary>
-        Quest,
-
-        /// <summary>
         /// Пользователь
         /// </summary>
         User,

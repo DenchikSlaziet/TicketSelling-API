@@ -62,7 +62,7 @@ namespace TicketSelling.Test.Extensions
                 Email = $"{Guid.NewGuid():N}@gmail.com",
                 Login = $"{Guid.NewGuid():N}",
                 Password = string.Join("", Guid.NewGuid().ToString().Take(10)),
-                Role = Context.Contracts.Enums.Role.Quest
+                Role = Context.Contracts.Enums.Role.User
             };
             result.BaseAuditSetParamtrs();
 
@@ -93,7 +93,8 @@ namespace TicketSelling.Test.Extensions
                 DatePayment = DateTimeOffset.Now,
                 Place = random.Next(1, 11),
                 Row = random.Next(1, 8),
-                Price = random.Next(100, 4500)
+                Price = random.Next(100, 4500),
+                PaymentMethod = Context.Contracts.Enums.PaymentMethod.Card
             };
             result.BaseAuditSetParamtrs();
 
@@ -142,7 +143,7 @@ namespace TicketSelling.Test.Extensions
                 Email = $"{Guid.NewGuid():N}@gmail.com",
                 Login = $"{Guid.NewGuid():N}",
                 Password = string.Join("",Guid.NewGuid().ToString().Take(10)),
-                Role = RoleModel.Quest
+                Role = RoleModel.User
             };
 
             settings?.Invoke(result);
@@ -173,7 +174,8 @@ namespace TicketSelling.Test.Extensions
                 DatePayment = DateTimeOffset.Now,
                 Place = random.Next(1, 10),
                 Row = random.Next(1, 7),
-                Price = random.Next(500, 4500)               
+                Price = random.Next(500, 4500),
+                PaymentMethod = PaymentMethodModel.Card
             };
 
             settings?.Invoke(result);

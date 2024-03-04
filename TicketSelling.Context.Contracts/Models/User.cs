@@ -42,7 +42,7 @@ namespace TicketSelling.Context.Contracts.Models
         /// </summary>
         public string Password { get; set; } = string.Empty;
 
-        public Role Role { get; set; } = Role.Quest;
+        public Role Role { get; set; } = Role.User;
 
         public ICollection<Ticket> Tickets { get; set; }
     }
