@@ -38,6 +38,7 @@ namespace TicketSelling.Repositories.ReadRepositories
         Task<Dictionary<Guid, User>> IUserReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) 
             => reader.Read<User>()
                 .ByIds(ids)
+                .NotDeletedAt()
                 .OrderBy(x => x.FirstName)
                 .ThenBy(x => x.LastName)
                 .ThenBy(x => x.Patronymic)

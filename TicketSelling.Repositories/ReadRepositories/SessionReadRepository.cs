@@ -33,6 +33,7 @@ namespace TicketSelling.Repositories.ReadRepositories
         Task<Dictionary<Guid, Session>> ISessionReadRepository.GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
             => reader.Read<Session>()
                 .ByIds(ids)
+                .NotDeletedAt()
                 .OrderBy(x => x.StartDateTime)
                 .ToDictionaryAsync(x => x.Id, cancellationToken);
 

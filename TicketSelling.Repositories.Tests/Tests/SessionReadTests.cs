@@ -168,10 +168,9 @@ namespace TicketSelling.Repositories.Tests.Tests
             // Assert
             result.Should()
                 .NotBeNull()
-                .And.HaveCount(3)
+                .And.HaveCount(2)
                 .And.ContainKey(target1.Id)
-                .And.ContainKey(target4.Id)
-                .And.ContainKey(target2.Id);
+                .And.ContainKey(target4.Id);
         }
 
         /// <summary>
