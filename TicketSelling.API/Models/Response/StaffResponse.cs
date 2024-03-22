@@ -18,6 +18,11 @@ namespace TicketSelling.API.Models.Response
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
+        /// Возраст
+        /// </summary>
+        public int Age { get; set; }
+
+        /// <summary>
         /// Должность
         /// </summary>
         public PostResponse Post { get; set; }

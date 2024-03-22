@@ -21,6 +21,7 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
             builder.Property(x => x.Price).HasPrecision(8,2).IsRequired();
             builder.Property(x => x.UserId).IsRequired();
             builder.Property(x => x.SessionId).IsRequired();
+            builder.Property(x => x.PaymentMethod).IsRequired();
         }
     }
 }

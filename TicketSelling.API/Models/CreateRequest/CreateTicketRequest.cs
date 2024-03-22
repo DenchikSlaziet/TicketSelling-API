@@ -1,4 +1,6 @@
-﻿namespace TicketSelling.API.Models.CreateRequest
+﻿using TicketSelling.API.Enums;
+
+namespace TicketSelling.API.Models.CreateRequest
 {
     /// <summary>
     /// Модель запроса создания билета
@@ -39,5 +41,10 @@
         /// Дата и время покупки билета
         /// </summary>
         public DateTimeOffset DatePayment { get; set; }
+
+        /// <summary>
+        /// Способ оплаты
+        /// </summary>
+        public PaymentMethodResponse PaymentMethod { get; set; }
     }
 }

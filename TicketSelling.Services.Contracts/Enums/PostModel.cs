@@ -6,6 +6,11 @@
     public enum PostModel
     {
         /// <summary>
+        /// Билетер
+        /// </summary>
+        Usher,
+
+        /// <summary>
         /// Кассир
         /// </summary>
         Cashier,

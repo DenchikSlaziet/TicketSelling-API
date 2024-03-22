@@ -55,7 +55,7 @@ namespace TicketSelling.Services.ReadServices
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             var ticketModel = mapper.Map<TicketModel>(ticket);
-            var session = await sessionReadRepository.GetByIdAsync(model.SessionId, cancellationToken);
+            var session = await sessionReadRepository.GetNotDeletedByIdAsync(model.SessionId, cancellationToken);
 
             if (session == null)
             {
@@ -63,11 +63,11 @@ namespace TicketSelling.Services.ReadServices
             }
 
             var staff = model.StaffId.HasValue
-                ? await staffReadRepository.GetByIdAsync(model.StaffId.Value, cancellationToken)
+                ? await staffReadRepository.GetNotDeletedByIdAsync(model.StaffId.Value, cancellationToken)
                 : null;
-            var user = await userReadRepository.GetByIdAsync(model.UserId, cancellationToken);
-            var hall = await hallReadRepository.GetByIdAsync(session!.HallId, cancellationToken);
-            var film = await filmReadRepository.GetByIdAsync(session!.FilmId, cancellationToken);
+            var user = await userReadRepository.GetNotDeletedByIdAsync(model.UserId, cancellationToken);
+            var hall = await hallReadRepository.GetNotDeletedByIdAsync(session!.HallId, cancellationToken);
+            var film = await filmReadRepository.GetNotDeletedByIdAsync(session!.FilmId, cancellationToken);
             var sessionModel = mapper.Map<SessionModel>(session);
 
             sessionModel.Film = mapper.Map<FilmModel>(film);
@@ -109,7 +109,7 @@ namespace TicketSelling.Services.ReadServices
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             var ticketModel = mapper.Map<TicketModel>(ticket);
-            var session = await sessionReadRepository.GetByIdAsync(model.SessionId, cancellationToken);
+            var session = await sessionReadRepository.GetNotDeletedByIdAsync(model.SessionId, cancellationToken);
 
             if (session == null)
             {
@@ -117,11 +117,11 @@ namespace TicketSelling.Services.ReadServices
             }
 
             var staff = model.StaffId.HasValue
-                ? await staffReadRepository.GetByIdAsync(model.StaffId.Value, cancellationToken)
+                ? await staffReadRepository.GetNotDeletedByIdAsync(model.StaffId.Value, cancellationToken)
                 : null;
-            var user = await userReadRepository.GetByIdAsync(model.UserId, cancellationToken);
-            var hall = await hallReadRepository.GetByIdAsync(session!.HallId, cancellationToken);
-            var film = await filmReadRepository.GetByIdAsync(session!.FilmId, cancellationToken);
+            var user = await userReadRepository.GetNotDeletedByIdAsync(model.UserId, cancellationToken);
+            var hall = await hallReadRepository.GetNotDeletedByIdAsync(session!.HallId, cancellationToken);
+            var film = await filmReadRepository.GetNotDeletedByIdAsync(session!.FilmId, cancellationToken);
             var sessionModel = mapper.Map<SessionModel>(session);
 
             sessionModel.Film = mapper.Map<FilmModel>(film);
@@ -158,11 +158,16 @@ namespace TicketSelling.Services.ReadServices
                     continue;
                 }
                 else
-                {
+                {               
+                    var hall = await hallReadRepository.GetNotDeletedByIdAsync(session!.HallId, cancellationToken);
+                    var film = await filmReadRepository.GetNotDeletedByIdAsync(session!.FilmId, cancellationToken);
+
+                    if(hall == null || film == null)
+                    {
+                        continue;
+                    }
+
                     var ticketModel = mapper.Map<TicketModel>(ticket);
-                   
-                    var hall = await hallReadRepository.GetByIdAsync(session!.HallId, cancellationToken);
-                    var film = await filmReadRepository.GetByIdAsync(session!.FilmId, cancellationToken);
                     var sessionModel = mapper.Map<SessionModel>(session);
                     var staffModel = ticket.StaffId.HasValue && staffIds.TryGetValue(ticket.StaffId.Value, out var staff)
                         ? mapper.Map<StaffModel>(staff) : null;
@@ -193,20 +198,20 @@ namespace TicketSelling.Services.ReadServices
 
             var ticketModel = mapper.Map<TicketModel>(item);
 
-            var session = await sessionReadRepository.GetByIdAsync(item.SessionId, cancellationToken);
+            var session = await sessionReadRepository.GetNotDeletedByIdAsync(item.SessionId, cancellationToken);
 
             if(session == null)
             {
                 throw new TicketSellingEntityNotFoundException<Session>(item.SessionId);
             }
 
-            var hall = await hallReadRepository.GetByIdAsync(session!.HallId, cancellationToken);
-            var film = await filmReadRepository.GetByIdAsync(session!.FilmId, cancellationToken);
+            var hall = await hallReadRepository.GetNotDeletedByIdAsync(session!.HallId, cancellationToken);
+            var film = await filmReadRepository.GetNotDeletedByIdAsync(session!.FilmId, cancellationToken);
             var sessionModel = mapper.Map<SessionModel>(session);
             var staff = item.StaffId.HasValue
-                ? await staffReadRepository.GetByIdAsync(item.StaffId.Value, cancellationToken)
+                ? await staffReadRepository.GetNotDeletedByIdAsync(item.StaffId.Value, cancellationToken)
                 : null;
-            var user = await userReadRepository.GetByIdAsync(item.UserId, cancellationToken);
+            var user = await userReadRepository.GetNotDeletedByIdAsync(item.UserId, cancellationToken);
 
             sessionModel.Film = mapper.Map<FilmModel>(film);
             sessionModel.Hall = mapper.Map<HallModel>(hall);

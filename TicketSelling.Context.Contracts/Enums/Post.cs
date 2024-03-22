@@ -6,6 +6,11 @@
     public enum Post
     {
         /// <summary>
+        /// Билетер
+        /// </summary>
+        Usher,
+
+        /// <summary>
         /// Кассир
         /// </summary>
         Cashier,

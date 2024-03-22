@@ -42,6 +42,6 @@ namespace TicketSelling.API.Models.CreateRequest
         /// </summary>
         public string Password { get; set; } = string.Empty;
 
-        public Role Role { get; set; } = Role.Quest;
+        public Role Role { get; set; }
     }
 }

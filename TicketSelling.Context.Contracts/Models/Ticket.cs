@@ -1,4 +1,6 @@
-﻿namespace TicketSelling.Context.Contracts.Models
+﻿using TicketSelling.Context.Contracts.Enums;
+
+namespace TicketSelling.Context.Contracts.Models
 {
     /// <summary>
     /// Билет
@@ -42,5 +44,10 @@
         /// Дата и время покупки билета
         /// </summary>
         public DateTimeOffset DatePayment { get; set; }
+
+        /// <summary>
+        /// Способ оплаты
+        /// </summary>
+        public PaymentMethod PaymentMethod { get; set; }
     }
 }
