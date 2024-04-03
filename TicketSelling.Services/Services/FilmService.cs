@@ -66,7 +66,10 @@ namespace TicketSelling.Services.ReadServices
                 throw new TicketSellingEntityNotFoundException<Film>(source.Id);
             }
 
+            var times = new { targetFilm.CreatedAt, targetFilm.CreatedBy };
             targetFilm = mapper.Map<Film>(source);
+            targetFilm.CreatedAt = times.CreatedAt;
+            targetFilm.CreatedBy = times.CreatedBy;
 
             filmWriteRepository.Update(targetFilm);
             await unitOfWork.SaveChangesAsync(cancellationToken);

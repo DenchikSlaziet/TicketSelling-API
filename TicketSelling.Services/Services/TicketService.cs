@@ -104,7 +104,11 @@ namespace TicketSelling.Services.ReadServices
                 throw new TicketSellingEntityNotFoundException<Ticket>(model.Id);
             }
 
-            ticket = mapper.Map<Ticket>(model);       
+            var times = new { ticket.CreatedAt, ticket.CreatedBy };
+            ticket = mapper.Map<Ticket>(model);  
+            ticket.CreatedAt = times.CreatedAt;
+            ticket.CreatedBy = times.CreatedBy;
+
             ticketWriteRepository.Update(ticket);
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
