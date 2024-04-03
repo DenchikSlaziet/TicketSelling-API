@@ -80,7 +80,11 @@ namespace TicketSelling.Services.Services
                 throw new TicketSellingEntityNotFoundException<Session>(source.Id);
             }
 
+            var times = new { session.CreatedAt, session.CreatedBy };
             session = mapper.Map<Session>(source);
+            session.CreatedAt = times.CreatedAt;
+            session.CreatedBy = times.CreatedBy;
+
             sessionWriteRepository.Update(session);
             await unitOfWork.SaveChangesAsync(cancellationToken);
 

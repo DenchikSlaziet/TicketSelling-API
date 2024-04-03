@@ -66,7 +66,10 @@ namespace TicketSelling.Services.ReadServices
                 throw new TicketSellingEntityNotFoundException<Hall>(source.Id);
             }
 
+            var times = new { targetHall.CreatedAt, targetHall.CreatedBy };
             targetHall = mapper.Map<Hall>(source);
+            targetHall.CreatedAt = times.CreatedAt;
+            targetHall.CreatedBy = times.CreatedBy;
 
             hallWriteRepository.Update(targetHall);
             await unitOfWork.SaveChangesAsync(cancellationToken);
