@@ -25,7 +25,7 @@ namespace TicketSelling.Context.Contracts.Configuration.Configurations
                 .IsUnique()
                 .HasDatabaseName($"{nameof(User)}_{nameof(User.Login)}")
                 .HasFilter($"{nameof(User.DeletedAt)} is null");
-            builder.Property(x => x.Password).HasMaxLength(20).IsRequired();
+            builder.Property(x => x.Password).HasMaxLength(200).IsRequired();
             builder.Property(x => x.Age).IsRequired();
             builder.HasMany(x => x.Tickets).WithOne(x => x.User).HasForeignKey(x => x.UserId);
         }

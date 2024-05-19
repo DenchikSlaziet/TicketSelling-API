@@ -35,7 +35,7 @@ namespace TicketSelling.Services.Validator.Validators
                 .Length(5, 100).WithMessage(MessageForValidation.LengthMessage);
 
             RuleFor(x => x.Password)
-                .Length(5, 20).WithMessage(MessageForValidation.LengthMessage);
+                .Length(5, 200).WithMessage(MessageForValidation.LengthMessage);
 
             RuleFor(x => x.Role).IsInEnum().WithMessage(MessageForValidation.DefaultMessage);
 
